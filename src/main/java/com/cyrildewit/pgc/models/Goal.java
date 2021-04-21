@@ -1,24 +1,25 @@
-package com.cyrildewit.pcg.models;
+package com.cyrildewit.pgc.models;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Goal {
     protected int id;
-    protected String uuid;
+    protected UUID uuid;
     protected String title;
     protected String description;
     protected LocalDateTime deadline;
 
     public Goal() {}
 
-    public Goal(String uuid, String title, String description, LocalDateTime deadline) {
+    public Goal(UUID uuid, String title, String description, LocalDateTime deadline) {
         this.uuid = uuid;
         this.title = title;
         this.description = description;
         this.deadline = deadline;
     }
 
-    public Goal(int id, String uuid, String title, String description, LocalDateTime deadline) {
+    public Goal(int id, UUID uuid, String title, String description, LocalDateTime deadline) {
         this.id = id;
         this.uuid = uuid;
         this.title = title;
@@ -34,11 +35,11 @@ public class Goal {
         this.id = id;
     }
 
-    public String getUuid() {
+    public UUID getUuid() {
         return uuid;
     }
 
-    public void setUuid(String uuid) {
+    public void setUuid(UUID uuid) {
         this.uuid = uuid;
     }
 
