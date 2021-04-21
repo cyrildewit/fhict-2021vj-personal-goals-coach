@@ -18,21 +18,22 @@
             </a>
 
             <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="#" class="nav-link px-2 link-secondary">Dashboard</a></li>
-                <li><a href="#" class="nav-link px-2 link-dark">Goals</a></li>
+                <li><a href="/" class="nav-link px-2 link-secondary">Dashboard</a></li>
+                <li><a href="/goals" class="nav-link px-2 link-dark">Goals</a></li>
                 <li><a href="#" class="nav-link px-2 link-dark">Statistics</a></li>
             </ul>
 
-            <div class="col-md-3 text-end">
+            <div class="d-flex col-md-3 justify-content-end">
 <!--                <button type="button" class="btn btn-outline-primary me-2">Login</button>-->
 <!--                <button type="button" class="btn btn-primary">Sign-up</button>-->
+
+                <a href="/goals/create" class="btn btn-secondary me-4">Create Goal</a>
 
                 <div class="dropdown text-end">
                     <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="https://github.com/cyrildewit.png" alt="mdo" width="32" height="32" class="rounded-circle">
                     </a>
                     <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
-                        <li><a class="dropdown-item" href="#">New goal...</a></li>
                         <li><a class="dropdown-item" href="#">Settings</a></li>
                         <li><a class="dropdown-item" href="#">Profile</a></li>
                         <li><hr class="dropdown-divider"></li>
@@ -46,7 +47,7 @@
 
 <main class="main-content">
     <div class="container-fluid pb-3">
-        <div layout:fragment="content"></div>
+        <th:block layout:fragment="content"></th:block>
     </div>
 </main>
 
