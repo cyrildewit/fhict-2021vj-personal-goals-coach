@@ -7,8 +7,38 @@
 <body>
 
 <th:block layout:fragment="content">
+
     <div class="container">
-        <h1>Goals</h1>
+        <div class="mb-4">
+            <h1>Your Goals</h1>
+        </div>
+
+        <div th:if="${goals.empty}">
+            <h3>You haven't defined any goals yet!</h3>
+            <a href="#" class="btn btn-sm btn-primary">Start with creating one!</a>
+        </div>
+
+        <div>
+            <div class="col-md-6" th:each="goal, goalsStat: ${goals}">
+                <!--                ${goalsStat.count}-->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${goal.title}"></h5>
+                        <!--                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>-->
+                        <p class="card-text" th:text="${goal.description}"></p>
+                    </div>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Subgoals:</strong> <th:block>10</th:block></li>
+                    </ul>
+
+                    <div class="card-body">
+                        <a href="#" class="btn btn-sm ">View Goal Overview</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 </th:block>
 
