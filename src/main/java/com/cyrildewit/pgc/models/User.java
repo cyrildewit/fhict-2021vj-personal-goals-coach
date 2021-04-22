@@ -1,4 +1,4 @@
-package com.cyrildewit.pcg.models;
+package com.cyrildewit.pgc.models;
 
 import java.time.LocalDateTime;
 
