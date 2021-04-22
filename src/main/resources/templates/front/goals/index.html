@@ -15,17 +15,17 @@
 
         <div th:if="${goals.empty}">
             <h3>You haven't defined any goals yet!</h3>
-            <a href="#" class="btn btn-sm btn-primary">Start with creating one!</a>
+            <a href="/goals/create" class="btn btn-sm btn-primary">Start with creating one!</a>
         </div>
 
-        <div>
+        <div class="row">
             <div class="col-md-6" th:each="goal, goalsStat: ${goals}">
                 <!--                ${goalsStat.count}-->
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title" th:text="${goal.title}"></h5>
+                        <h5 class="card-title" th:text="${goal.getTitle()}"></h5>
                         <!--                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>-->
-                        <p class="card-text" th:text="${goal.description}"></p>
+                        <p class="card-text" th:text="${goal.getDescription()}"></p>
                     </div>
 
                     <ul class="list-group list-group-flush">
@@ -33,7 +33,7 @@
                     </ul>
 
                     <div class="card-body">
-                        <a href="#" class="btn btn-sm ">View Goal Overview</a>
+                        <a th:href="@{'/goals/' + ${goal.uuid.toString()}}" class="btn btn-sm ">View Goal Overview</a>
                     </div>
                 </div>
             </div>
