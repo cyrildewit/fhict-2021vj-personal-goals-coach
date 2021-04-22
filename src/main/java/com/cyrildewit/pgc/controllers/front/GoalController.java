@@ -5,13 +5,18 @@ import java.util.UUID;
 import java.util.Optional;
 import java.time.LocalDateTime;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.validation.BindingResult;
 
 import com.cyrildewit.pgc.models.Goal;
 import com.cyrildewit.pgc.services.GoalService;
@@ -34,8 +39,22 @@ public class GoalController {
         return "front/goals/index";
     }
 
-    @GetMapping("/create/{uuid}")
-    public String create() {
+    @PostMapping("")
+    public String store(@Valid @ModelAttribute("goal") Goal goal, BindingResult result) {
+        if (result.hasErrors()) {
+            return "front/goals/create";
+        }
+
+        goal.setId(4L);
+        goal.setUuid(UUID.randomUUID());
+
+        goalService.addGoal(goal);
+
+        return "redirect:goals";
+    }
+
+    @GetMapping("/create")
+    public String create(Goal goal) {
         return "front/goals/create";
     }
 

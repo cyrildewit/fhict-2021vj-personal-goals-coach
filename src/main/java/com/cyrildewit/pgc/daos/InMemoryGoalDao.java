@@ -20,7 +20,7 @@ public class InMemoryGoalDao implements GoalDao {
 
     public InMemoryGoalDao() {
         goals.add(new Goal(
-                1,
+                1L,
                 UUID.fromString("2fa2bee2-968c-4de6-a171-989560d80701"),
                 "Six Summit",
                 "Lorem ipsum",
@@ -28,7 +28,7 @@ public class InMemoryGoalDao implements GoalDao {
         ));
 
         goals.add(new Goal(
-                2,
+                2L,
                 UUID.randomUUID(),
                 "Six Summit",
                 "Lorem ipsum",

@@ -3,14 +3,31 @@ package com.cyrildewit.pgc.models;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class Goal {
-    protected int id;
-    protected UUID uuid;
-    protected String title;
-    protected String description;
-    protected LocalDateTime deadline;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
-    public Goal() {}
+import org.springframework.format.annotation.DateTimeFormat;
+
+//@Entity
+public class Goal {
+//    @Id
+//    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Long id;
+
+    @NotNull
+    private UUID uuid;
+
+    @NotBlank
+    private String title;
+
+    @NotBlank
+    private String description;
+
+    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    private LocalDateTime deadline;
+
+    public Goal() {
+    }
 
     public Goal(UUID uuid, String title, String description, LocalDateTime deadline) {
         this.uuid = uuid;
@@ -19,7 +36,7 @@ public class Goal {
         this.deadline = deadline;
     }
 
-    public Goal(int id, UUID uuid, String title, String description, LocalDateTime deadline) {
+    public Goal(Long id, UUID uuid, String title, String description, LocalDateTime deadline) {
         this.id = id;
         this.uuid = uuid;
         this.title = title;
@@ -27,11 +44,11 @@ public class Goal {
         this.deadline = deadline;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -9,8 +9,31 @@
 <th:block layout:fragment="content">
 
     <div class="container">
-        <h1>Create Goal</h1>
+        <h1 class="mb-4">Create new Goal</h1>
 
+        <form class="row g-3" th:action="@{/goals}" th:object="${goal}" method="post">
+            <div class="col-md-12">
+                <label for="inputTitle" class="form-label">Title</label>
+                <input type="text" class="form-control" id="inputTitle" th:field="*{title}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+            </div>
+
+            <div class="col-12">
+                <label for="inputDescription" class="form-label">Description</label>
+                <textarea type="text" class="form-control" id="inputDescription" rows="4" th:field="*{description}">></textarea>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+            </div>
+
+            <div class="col-12">
+                <label for="inputDeadline" class="form-label">Deadline</label>
+                <input type="date" class="form-control" id="inputDeadline" th:field="*{deadline}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('deadline')}" th:errors="*{deadline}"></div>
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">Create goal</button>
+            </div>
+        </form>
     </div>
 </th:block>
 
