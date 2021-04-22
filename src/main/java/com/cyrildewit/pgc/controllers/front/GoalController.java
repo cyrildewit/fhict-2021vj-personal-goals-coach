@@ -26,18 +26,9 @@ public class GoalController {
 
     @GetMapping("")
     public String index(Model model) {
-        ArrayList<Goal> goals = new ArrayList<Goal>();
-        goals.add(new Goal(
-                2,
-                UUID.randomUUID(),
-                "Six Summit",
-                "Lorem ipsum",
-                LocalDateTime.now()
-        ));
+        model.addAttribute("goals", goalService.getAllGoals());
 
-        model.addAttribute("goals", goals);
-
-        return "front/goal/index";
+        return "front/goals/index";
     }
 
 }
