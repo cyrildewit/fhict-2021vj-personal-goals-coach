@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{front/common/layouts/plain/index.html}">
+<head>
+    <title>Goals</title>
+</head>
+<body>
+
+<th:block layout:fragment="content">
+
+    <div class="container">
+        <h1 th:text="${goal.getTitle()}"></h1>
+    </div>
+</th:block>
+
+</body>
+</html>
