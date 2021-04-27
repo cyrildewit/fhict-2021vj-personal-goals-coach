@@ -40,7 +40,7 @@ public class GoalController {
     }
 
     @PostMapping("")
-    public String store(@Valid @ModelAttribute("goal") Goal goal, BindingResult result) {
+    public String store(@ModelAttribute("goal") @Valid Goal goal, BindingResult result) {
         if (result.hasErrors()) {
             return "front/goals/create";
         }

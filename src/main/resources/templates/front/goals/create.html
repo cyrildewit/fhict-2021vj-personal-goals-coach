@@ -11,27 +11,46 @@
     <div class="container">
         <h1 class="mb-4">Create new Goal</h1>
 
-        <form class="row g-3" th:action="@{/goals}" th:object="${goal}" method="post">
+        <form class="row g-3" action="#" th:action="@{/goals}" th:object="${goal}" method="post">
             <div class="col-md-12">
                 <label for="inputTitle" class="form-label">Title</label>
-                <input type="text" class="form-control" id="inputTitle" th:field="*{title}">
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></div>
+                <input type="text" class="form-control" id="inputTitle" th:field="*{title}" th:classappend="${#fields.hasErrors('title') ? 'is-invalid' : ''}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('title')}" th:text="${err}" class="error" />
+                    </ul>
+                </div>
             </div>
 
             <div class="col-12">
                 <label for="inputDescription" class="form-label">Description</label>
-                <textarea type="text" class="form-control" id="inputDescription" rows="4" th:field="*{description}">></textarea>
+                <textarea type="text" class="form-control" id="inputDescription" rows="4" th:field="*{description}" th:classappend="${#fields.hasErrors('title') ? 'is-invalid' : ''}"></textarea>
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('description')}" th:text="${err}" class="error" />
+                    </ul>
+                </div>
             </div>
 
             <div class="col-12">
                 <label for="inputDeadline" class="form-label">Deadline</label>
-                <input type="date" class="form-control" id="inputDeadline" th:field="*{deadline}">
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('deadline')}" th:errors="*{deadline}"></div>
+                <input type="datetime-local" class="form-control" id="inputDeadline" th:field="*{deadline}" th:classappend="${#fields.hasErrors('title') ? 'is-invalid' : ''}">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('deadline')}">
+                    <ul>
+                        <li th:each="err : ${#fields.errors('deadline')}" th:text="${err}" class="error" />
+                    </ul>
+                </div>
             </div>
 
             <div class="col-12">
                 <button type="submit" class="btn btn-primary">Create goal</button>
+            </div>
+
+            <div th:if="${#fields.hasAnyErrors()}">
+                <ul>
+                    <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+                </ul>
             </div>
         </form>
     </div>
