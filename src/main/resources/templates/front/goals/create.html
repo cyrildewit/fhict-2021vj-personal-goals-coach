@@ -11,8 +11,8 @@
     <div class="container">
         <h1 class="mb-4">Create new Goal</h1>
 
-        <form class="row g-3" action="#" th:action="@{/goals}" th:object="${goal}" method="post">
-            <div class="col-md-12">
+        <form class="row g-3" id="createGoalForm" action="#" th:action="@{/goals}" th:object="${goal}" method="post">
+            <div class="col-md-8">
                 <label for="inputTitle" class="form-label">Title</label>
                 <input type="text" class="form-control" id="inputTitle" th:field="*{title}" th:classappend="${#fields.hasErrors('title') ? 'is-invalid' : ''}">
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('title')}">
@@ -20,12 +20,24 @@
                         <li th:each="err : ${#fields.errors('title')}" th:text="${err}" class="error" />
                     </ul>
                 </div>
+
+                <div class="alert alert-info d-none" role="alert" id="titleHelpTextWrapper">
+                    <h4 class="alert-heading">Need some help with defining your goal?</h4>
+                    <p>Check out these resources:</p>
+                    <ul>
+                        <li><a href="https://www.desteven.nl/leerdoelen/smart-leerdoelen" target="_blank"></a>SMART leerdoelen of SMART doelstellingen</li>
+                        <li><a href="https://www.randstad.nl/ontwikkelen/persoonlijke-ontwikkeling/smart-doelen" target="_blank">Smart-doelen formuleren</a></li>
+                    </ul>
+                </div>
             </div>
 
-            <div class="col-12">
+            <div class="col-md-4">
+
+            </div>
+
+            <div class="col-8">
                 <label for="inputDescription" class="form-label">Description</label>
                 <textarea type="text" class="form-control" id="inputDescription" rows="4" th:field="*{description}" th:classappend="${#fields.hasErrors('title') ? 'is-invalid' : ''}"></textarea>
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}">
                     <ul>
                         <li th:each="err : ${#fields.errors('description')}" th:text="${err}" class="error" />
@@ -33,7 +45,9 @@
                 </div>
             </div>
 
-            <div class="col-12">
+            <div class="col-md-4"></div>
+
+            <div class="col-8">
                 <label for="inputDeadline" class="form-label">Deadline</label>
                 <input type="datetime-local" class="form-control" id="inputDeadline" th:field="*{deadline}" th:classappend="${#fields.hasErrors('title') ? 'is-invalid' : ''}">
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('deadline')}">
@@ -47,11 +61,11 @@
                 <button type="submit" class="btn btn-primary">Create goal</button>
             </div>
 
-            <div th:if="${#fields.hasAnyErrors()}">
-                <ul>
-                    <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />
-                </ul>
-            </div>
+<!--            <div th:if="${#fields.hasAnyErrors()}">-->
+<!--                <ul>-->
+<!--                    <li th:each="err : ${#fields.allErrors()}" th:text="${err}" />-->
+<!--                </ul>-->
+<!--            </div>-->
         </form>
     </div>
 </th:block>
