@@ -7,10 +7,47 @@
 <body>
 
 <th:block layout:fragment="content">
-
-    <div class="container">
-        <h1 th:text="${goal.getTitle()}"></h1>
+    <div class="py-5 bg-light border">
+        <div class="container">
+            <h1 th:text="${goal.getTitle()}"></h1>
+<!--            <p th:text="${goal.getDescriptionExcerpt()}"></p>-->
+        </div>
     </div>
+
+    <div class="container mt-4">
+        <div class="mb-4">
+            <h2>Subgoals</h2>
+            <p th:text="${goal.getDescription()}"></p>
+        </div>
+
+        <div class="mb-4">
+            <h2>Subgoals <span class="badge rounded-pill bg-primary" th:text="${subgoalsCountFormatted}"></span></h2>
+        </div>
+
+        <div th:if="${subgoals.empty}">
+            <h3>You haven't defined any goals yet!</h3>
+            <a href="/goals/create" class="btn btn-sm btn-primary">Start with creating one!</a>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6" th:each="subgoal, subgoalsStat: ${subgoals}">
+                <!--                ${goalsStat.count}-->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${subgoal.getTitle()}"></h5>
+                        <!--                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>-->
+                        <p class="card-text" th:text="${subgoal.getDescription()}"></p>
+                    </div>
+                    <div class="card-body">
+                        <a th:href="@{'/goals/' + ${goal.uuid.toString()}}" class="btn btn-sm btn-primary ">View Subgoal
+                            Overview</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </th:block>
 
 </body>

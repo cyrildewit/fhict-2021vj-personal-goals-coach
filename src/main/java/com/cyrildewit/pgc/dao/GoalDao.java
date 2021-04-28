@@ -1,4 +1,4 @@
-package com.cyrildewit.pgc.daos;
+package com.cyrildewit.pgc.dao;
 
 import java.util.UUID;
 import java.util.Optional;

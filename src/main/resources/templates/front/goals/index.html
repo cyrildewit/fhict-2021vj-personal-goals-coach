@@ -7,8 +7,7 @@
 <body>
 
 <th:block layout:fragment="content">
-
-    <div class="container">
+    <div class="container mt-4">
         <div class="mb-4">
             <h1>Your Goals</h1>
         </div>
@@ -28,17 +27,19 @@
                         <p class="card-text" th:text="${goal.getDescription()}"></p>
                     </div>
 
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><strong>Subgoals:</strong> <th:block>10</th:block></li>
-                    </ul>
+<!--                    <ul class="list-group list-group-flush">-->
+<!--                        <li class="list-group-item"><strong>Subgoals:</strong>-->
+<!--                            <th:block>10</th:block>-->
+<!--                        </li>-->
+<!--                    </ul>-->
 
                     <div class="card-body">
-                        <a th:href="@{'/goals/' + ${goal.uuid.toString()}}" class="btn btn-sm btn-primary ">View Goal Overview</a>
+                        <a th:href="@{'/goals/' + ${goal.uuid.toString()}}" class="btn btn-sm btn-primary ">View Goal
+                            Overview</a>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </th:block>
 

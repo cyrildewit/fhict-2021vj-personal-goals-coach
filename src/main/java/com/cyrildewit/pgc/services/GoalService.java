@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cyrildewit.pgc.models.Goal;
 import com.cyrildewit.pgc.models.User;
-import com.cyrildewit.pgc.daos.GoalDao;
-import com.cyrildewit.pgc.daos.InMemoryGoalDao;
+import com.cyrildewit.pgc.dao.GoalDao;
+import com.cyrildewit.pgc.dao.InMemoryGoalDao;
 
 @Service
 public class GoalService
