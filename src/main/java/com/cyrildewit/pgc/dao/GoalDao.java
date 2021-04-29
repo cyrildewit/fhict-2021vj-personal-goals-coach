@@ -27,4 +27,6 @@ public interface GoalDao
     public void deleteGoalById(Integer id);
 
     public void deleteGoal(Goal goal);
+
+    public Long getTotalGoalsCountForUser(User user);
 }

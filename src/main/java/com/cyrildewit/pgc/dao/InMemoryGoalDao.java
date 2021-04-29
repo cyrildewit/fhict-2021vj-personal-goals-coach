@@ -82,4 +82,9 @@ public class InMemoryGoalDao implements GoalDao {
     public void deleteGoal(Goal goal) {
         goals.remove(goal);
     }
+
+    public Long getTotalGoalsCountForUser(User user)
+    {
+        return goals.stream().count();
+    }
 }

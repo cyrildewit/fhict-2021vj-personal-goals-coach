@@ -63,4 +63,9 @@ public class GoalService
     {
         goalDao.deleteGoal(goal);
     }
+
+    public Long getTotalGoalsCountForUser(User user)
+    {
+        return goalDao.getTotalGoalsCountForUser(user);
+    }
 }

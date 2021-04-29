@@ -83,4 +83,14 @@ public class SubgoalService
     {
         return true;
     }
+
+    /**
+     * Level must be >= 1.
+     *
+     * 0 is reserverd for goal.
+     */
+    public Integer determineSubgoalLevel(Subgoal subgoal)
+    {
+        return subgoalDao.determineSubgoalLevel(subgoal);
+    }
 }
