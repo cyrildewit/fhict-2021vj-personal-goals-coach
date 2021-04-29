@@ -2,6 +2,7 @@ package com.cyrildewit.pgc.models;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.Optional;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.NotBlank;
@@ -18,12 +19,15 @@ public class Subgoal {
 //    @NotNull
     private UUID uuid;
 
+    private Long parentSubgoalId;
+
     @NotBlank
     private String title;
 
     @NotBlank
     private String description;
 
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime deadline;
 
@@ -59,6 +63,19 @@ public class Subgoal {
 
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
+    }
+
+    public Long getParentSubgoalId() {
+        return parentSubgoalId;
+    }
+
+    public void setParentSubgoalId(Long id) {
+        this.parentSubgoalId = id;
+    }
+
+    public boolean hasParentSubgoal()
+    {
+        return parentSubgoalId != null;
     }
 
     public String getTitle() {

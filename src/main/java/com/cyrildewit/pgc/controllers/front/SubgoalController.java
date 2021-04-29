@@ -69,31 +69,40 @@ public class SubgoalController {
         return "redirect:/goals/" + goal.getUuid().toString() + "/subgoals/" + subgoal.getUuid().toString();
     }
 
-//    @PostMapping("{goalUuid}/subgoals/{parentSubgoalUuid}")
-//    public String storeChildSubgoal(@PathVariable("goalUuid") UUID goalUuid, @PathVariable("parentSubgoalUuid") UUID parentSubgoalUuid, @ModelAttribute("subgoal") @Valid Subgoal subgoal, BindingResult result) {
-//        Optional<Goal> optionalGoal = goalService.findGoalByUuid(goalUuid);
-//        optionalGoal.orElseThrow(() -> new GoalNotFoundException(goalUuid));
-//        Goal goal = optionalGoal.get();
-//
-//        Optional<Subgoal> optionalParentSubgoal = subgoalService.findSubgoalByUuid(parentSubgoalUuid);
-//        optionalParentSubgoal.orElseThrow(() -> new SubgoalNotFoundException(parentSubgoalUuid));
-//        Subgoal parentSubgoal = optionalParentSubgoal.get();
-//
-//        if (!subgoalService.determineIfSubgoalBelongsToGoal(subgoal, goal)) {
-//            throw new SubgoalNotFoundException(subgoalUuid);
-//        }
-//
-//        if (result.hasErrors()) {
-//            return "front/goals/subgoals/create";
-//        }
-//
-//        subgoal.setId(4L);
-//        subgoal.setUuid(UUID.randomUUID());
-//
-//        subgoalService.addSubgoal(subgoal);
-//
-//        return "redirect:goals/" + goal.getUuid().toString() + "/subgoals/" + subgoal.getUuid().toString();
-//    }
+    @PostMapping("{goalUuid}/subgoals/{parentSubgoalUuid}/subgoals")
+    public String storeChildSubgoal(
+            @PathVariable("goalUuid") UUID goalUuid,
+            @PathVariable("parentSubgoalUuid") UUID parentSubgoalUuid,
+            @ModelAttribute("subgoal") @Valid Subgoal subgoal,
+            BindingResult result,
+            RedirectAttributes redirectAttributes
+    ) {
+        Optional<Goal> optionalGoal = goalService.findGoalByUuid(goalUuid);
+        optionalGoal.orElseThrow(() -> new GoalNotFoundException(goalUuid));
+        Goal goal = optionalGoal.get();
+
+        Optional<Subgoal> optionalParentSubgoal = subgoalService.findSubgoalByUuid(parentSubgoalUuid);
+        optionalParentSubgoal.orElseThrow(() -> new SubgoalNotFoundException(parentSubgoalUuid));
+        Subgoal parentSubgoal = optionalParentSubgoal.get();
+
+        if (!subgoalService.determineIfSubgoalBelongsToGoal(subgoal, goal)) {
+            throw new SubgoalNotFoundException(parentSubgoalUuid);
+        }
+
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.subgoal", result);
+            redirectAttributes.addFlashAttribute("subgoal", subgoal);
+
+            return "redirect:/goals/" + goal.getUuid() + "/subgoals/" + parentSubgoal.getUuid() + "/subgoals/create";
+        }
+
+        subgoal.setId(4L);
+        subgoal.setUuid(UUID.randomUUID());
+
+        subgoalService.addSubgoal(subgoal);
+
+        return "redirect:/goals/" + goal.getUuid().toString() + "/subgoals/" + subgoal.getUuid().toString();
+    }
 
     @GetMapping("{goalUuid}/subgoals/create")
     public String create(@PathVariable("goalUuid") UUID goalUuid, Model model) {
@@ -104,10 +113,33 @@ public class SubgoalController {
         model.addAttribute("goal", goal);
         if (!model.containsAttribute("subgoal")) {
             model.addAttribute("subgoal", new Subgoal());
-//            model.addAttribute("subgoal", subgoal);
         }
 
         return "front/goals/subgoals/create";
+    }
+
+    @GetMapping("{goalUuid}/subgoals/{parentSubgoalUuid}/subgoals/create")
+    public String create(@PathVariable("goalUuid") UUID goalUuid, @PathVariable("parentSubgoalUuid") UUID parentSubgoalUuid, Model model) {
+        Optional<Goal> optionalGoal = goalService.findGoalByUuid(goalUuid);
+        optionalGoal.orElseThrow(() -> new GoalNotFoundException(goalUuid));
+        Goal goal = optionalGoal.get();
+
+        Optional<Subgoal> optionalParentSubgoal = subgoalService.findSubgoalByUuid(parentSubgoalUuid);
+        optionalParentSubgoal.orElseThrow(() -> new SubgoalNotFoundException(parentSubgoalUuid));
+        Subgoal parentSubgoal = optionalParentSubgoal.get();
+
+        if (!subgoalService.determineIfSubgoalBelongsToGoal(parentSubgoal, goal)) {
+            throw new SubgoalNotFoundException(parentSubgoalUuid);
+        }
+
+        model.addAttribute("goal", goal);
+        if (!model.containsAttribute("subgoal")) {
+            model.addAttribute("subgoal", new Subgoal());
+        }
+
+        model.addAttribute("parentSubgoal", parentSubgoal);
+
+        return "front/goals/subgoals/subgoals/create";
     }
 
     @GetMapping("/{goalUuid}/subgoals/{subgoalUuid}")

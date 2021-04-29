@@ -11,7 +11,7 @@
     <div class="container mt-4">
         <h1 class="mb-4">Create new Subgoal</h1>
 
-        <form class="row g-3" id="createSubgoalForm" action="#" th:action="@{/goals/{goalUuid}/subgoals(goalUuid=${goal.getUuid().toString()})}" th:object="${subgoal}" method="post">
+        <form class="row g-3" id="createSubgoalForm" action="#" th:action="@{~/goals/{goalUuid}/subgoals/{parentSubgoalUuid}/subgoals(goalUuid=${goal.getUuid().toString()}, parentSubgoalUuid=${parentSubgoal.getUuid().toString()})}" th:object="${subgoal}" method="post">
             <div class="col-md-8">
                 <label for="inputTitle" class="form-label">Title</label>
                 <input type="text" class="form-control" id="inputTitle" th:field="*{title}" th:classappend="${#fields.hasErrors('title') ? 'is-invalid' : ''}">

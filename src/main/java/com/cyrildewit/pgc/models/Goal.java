@@ -24,6 +24,7 @@ public class Goal {
     @NotBlank
     private String description;
 
+    @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime deadline;
 

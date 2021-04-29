@@ -37,7 +37,7 @@
 
             <div class="col-8">
                 <label for="inputDescription" class="form-label">Description</label>
-                <textarea type="text" class="form-control" id="inputDescription" rows="4" th:field="*{description}" th:classappend="${#fields.hasErrors('title') ? 'is-invalid' : ''}"></textarea>
+                <textarea type="text" class="form-control" id="inputDescription" rows="4" th:field="*{description}" th:classappend="${#fields.hasErrors('description') ? 'is-invalid' : ''}"></textarea>
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}">
                     <ul>
                         <li th:each="err : ${#fields.errors('description')}" th:text="${err}" class="error" />
@@ -49,7 +49,7 @@
 
             <div class="col-8">
                 <label for="inputDeadline" class="form-label">Deadline</label>
-                <input type="datetime-local" class="form-control" id="inputDeadline" th:field="*{deadline}" th:classappend="${#fields.hasErrors('title') ? 'is-invalid' : ''}">
+                <input type="datetime-local" class="form-control" id="inputDeadline" th:field="*{deadline}" th:classappend="${#fields.hasErrors('deadline') ? 'is-invalid' : ''}">
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('deadline')}">
                     <ul>
                         <li th:each="err : ${#fields.errors('deadline')}" th:text="${err}" class="error" />
