@@ -34,9 +34,19 @@ public class SubgoalService
         return subgoalDao.selectAllSubgoalsForGoal(goal);
     }
 
+    public List<Subgoal> getAllSubgoalsForSubgoal(Subgoal subgoal)
+    {
+        return subgoalDao.selectAllSubgoalsForSubgoal(subgoal);
+    }
+
     public Long getTotalSubgoalsCountForGoal(Goal goal)
     {
         return subgoalDao.countAllSubgoalsForGoal(goal);
+    }
+
+    public Long getTotalSubgoalsCountForSubgoal(Subgoal subgoal)
+    {
+        return subgoalDao.countAllSubgoalsForSubgoal(subgoal);
     }
 
     public Optional<Subgoal> findSubgoalById(Long id)
@@ -67,5 +77,10 @@ public class SubgoalService
     public void deleteSubgoal(Subgoal subgoal)
     {
         subgoalDao.deleteSubgoal(subgoal);
+    }
+
+    public boolean determineIfSubgoalBelongsToGoal(Subgoal subgoal, Goal goal)
+    {
+        return true;
     }
 }

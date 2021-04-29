@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.validation.BindingResult;
 
+import com.cyrildewit.pgc.util.DateTimeFormatters;
 import com.cyrildewit.pgc.models.Goal;
 import com.cyrildewit.pgc.models.Subgoal;
 import com.cyrildewit.pgc.services.GoalService;
@@ -28,6 +29,9 @@ import com.cyrildewit.pgc.exceptions.GoalNotFoundException;
 @Controller
 @RequestMapping("/goals")
 public class GoalController {
+    @Autowired
+    private DateTimeFormatters dateTimeFormatters;
+
     private final GoalService goalService;
     private final SubgoalService subgoalService;
 
@@ -76,6 +80,7 @@ public class GoalController {
         model.addAttribute("subgoals", subgoals);
 
         model.addAttribute("subgoalsCountFormatted", subgoalService.getTotalSubgoalsCountForGoal(goal));
+        model.addAttribute("goalDeadlineFormatted", goal.getDeadline().format(dateTimeFormatters.getDayMonthYearFormatter()));
 
         return "front/goals/show";
     }

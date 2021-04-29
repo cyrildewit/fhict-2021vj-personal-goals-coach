@@ -11,8 +11,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
-                    <h1 class="h2" th:text="${goal.getTitle()}"></h1>
-                    <p><span class="badge bg-primary" th:text="${goalDeadlineFormatted}"></span></p>
+                    <h2 class="h5"><a th:href="@{'/goals/' + ${goal.uuid.toString()}}" th:text="${goal.getTitle()}"></a></h2>
+                    <h1 class="h2 mt-2" th:text="${subgoal.getTitle()}"></h1>
+                    <p><span class="badge bg-primary" th:text="${subgoalDeadlineFormatted}"></span></p>
                 </div>
             </div>
         </div>
@@ -21,15 +22,13 @@
     <div class="container mt-4">
         <div class="mb-4">
             <h2 class="h3">Description</h2>
-            <p th:text="${goal.getDescription()}"></p>
+            <p th:text="${subgoal.getDescription()}"></p>
         </div>
 
         <div class="mb-4">
             <div class="d-flex justify-content-between align-items-center">
-                <h2 class="h3">Subgoals <span class="badge rounded-pill bg-primary"
-                                              th:text="${subgoalsCountFormatted}"></span></h2>
-                <a th:href="@{/goals/{goalUuid}/subgoals/create(goalUuid=${goal.getUuid().toString()})}"
-                   class="btn btn-sm btn-primary">Create Subgoal</a>
+                <h2 class="h3">Subgoals <span class="badge rounded-pill bg-primary" th:text="${subgoalsCountFormatted}"></span></h2>
+                <a th:href="@{/goals/{goalUuid}/subgoals/{subgoalUuid}/subgoals/create(goalUuid=${goal.getUuid().toString()}, subgoalUuid=${subgoal.getUuid().toString()})}" class="btn btn-sm btn-primary">Create Subgoal</a>
             </div>
         </div>
 
@@ -48,16 +47,13 @@
                         <p class="card-text" th:text="${subgoal.getDescription()}"></p>
                     </div>
                     <div class="card-body">
-                        <a th:href="@{'/goals/' + ${goal.uuid.toString()} + '/subgoals/' + ${subgoal.uuid.toString()}}"
-                           class="btn btn-sm btn-primary ">View Subgoal
+                        <a th:href="@{'/goals/' + ${goal.uuid.toString()} + '/subgoals/' + ${subgoal.uuid.toString()}}" class="btn btn-sm btn-primary ">View Subgoal
                             Overview</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-
 </th:block>
 
 </body>

@@ -16,7 +16,11 @@ public interface SubgoalServiceInterface
 
     public List<Goal> getAllGoalsForGoal(Goal goal);
 
+    public List<Subgoal> getAllSubgoalsForSubgoal(Subgoal subgoal);
+
     public Long getTotalSubgoalsCountForGoal(Goal goal);
+
+    public Long getTotalSubgoalsCountForSubgoal(Subgoal subgoal);
 
     public Optional<Goal> findGoalById(Integer id);
 
@@ -29,4 +33,6 @@ public interface SubgoalServiceInterface
     public void deleteGoalById(Long id);
 
     public void deleteSubgoal(Subgoal subgoal);
+
+    public boolean determineIfSubgoalBelongsToGoal(Subgoal subgoal, Goal goal);
 }

@@ -27,15 +27,38 @@ const CreateGoalFormModule = {
     onTitleKeydownHandler: function(event) {
         if (event.target.value.length > 130) {
             this.el.titleHelpTextWrapper.classList.remove('d-none');
-            this.el.titleHelpText.innerHTML = "title is too long"
         } else {
             this.el.titleHelpTextWrapper.classList.add('d-none');
-            this.el.titleHelpText.innerHTML = ""
         }
-//        console.log(event)
+    },
+}
+
+const CreateSubgoalFormModule = {
+    el: {
+        createSubgoalForm: document.getElementById('createSubgoalForm'),
+        titleInput: document.querySelector('#createSubgoalForm [name=title]'),
+        titleHelpTextWrapper: document.querySelector('#createSubgoalForm #titleHelpTextWrapper'),
+        titleHelpText: document.querySelector('#createSubgoalForm #titleHelpText'),
+    },
+
+    init: function () {
+        this.bindEventListeners()
+    },
+
+    bindEventListeners: function() {
+        this.el.titleInput.addEventListener('keydown', this.onTitleKeydownHandler.bind(this))
+    },
+
+    onTitleKeydownHandler: function(event) {
+        if (event.target.value.length > 130) {
+            this.el.titleHelpTextWrapper.classList.remove('d-none');
+        } else {
+            this.el.titleHelpTextWrapper.classList.add('d-none');
+        }
     },
 }
 
 docReady(function () {
     CreateGoalFormModule.init();
+    CreateSubgoalFormModule.init();
 })

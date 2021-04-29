@@ -9,9 +9,9 @@
 <th:block layout:fragment="content">
 
     <div class="container mt-4">
-        <h1 class="mb-4">Create new Goal</h1>
+        <h1 class="mb-4">Create new Subgoal</h1>
 
-        <form class="row g-3" id="createGoalForm" action="#" th:action="@{/goals}" th:object="${goal}" method="post">
+        <form class="row g-3" id="createSubgoalForm" action="#" th:action="@{/goals/{goalUuid}/subgoals(goalUuid=${goal.getUuid().toString()})}" th:object="${subgoal}" method="post">
             <div class="col-md-8">
                 <label for="inputTitle" class="form-label">Title</label>
                 <input type="text" class="form-control" id="inputTitle" th:field="*{title}" th:classappend="${#fields.hasErrors('title') ? 'is-invalid' : ''}">
@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="alert alert-info d-none" role="alert" id="titleHelpTextWrapper">
-                    <h4 class="alert-heading">Need some help with defining your goal title?</h4>
+                    <h4 class="alert-heading">Need some help with defining your subgoal title?</h4>
                     <p>Check out these resources:</p>
                     <ul>
                         <li><a href="https://www.desteven.nl/leerdoelen/smart-leerdoelen" target="_blank"></a>SMART leerdoelen of SMART doelstellingen</li>
@@ -58,7 +58,7 @@
             </div>
 
             <div class="col-12">
-                <button type="submit" class="btn btn-primary">Create goal</button>
+                <button type="submit" class="btn btn-primary">Create subgoal</button>
             </div>
 
 <!--            <div th:if="${#fields.hasAnyErrors()}">-->
