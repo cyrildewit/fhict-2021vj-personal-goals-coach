@@ -11,14 +11,18 @@ function docReady(fn) {
 const CreateGoalFormModule = {
     el: {
         createGoalForm: document.getElementById('createGoalForm'),
-        titleInput: document.querySelector('#createGoalForm [name=title]'),
+        titleInput: document.querySelector('#createGoalForm #inputTitle'),
         titleHelpTextWrapper: document.querySelector('#createGoalForm #titleHelpTextWrapper'),
-        titleHelpText: document.querySelector('#createGoalForm #titleHelpText'),
     },
 
     init: function () {
-        this.bindEventListeners()
-    },
+            // Abort if form element is not found
+                     if (!this.el.createGoalForm) {
+                         return;
+                     }
+
+            this.bindEventListeners()
+        },
 
     bindEventListeners: function() {
         this.el.titleInput.addEventListener('keydown', this.onTitleKeydownHandler.bind(this))
@@ -36,12 +40,16 @@ const CreateGoalFormModule = {
 const CreateSubgoalFormModule = {
     el: {
         createSubgoalForm: document.getElementById('createSubgoalForm'),
-        titleInput: document.querySelector('#createSubgoalForm [name=title]'),
+        titleInput: document.querySelector('#createSubgoalForm #inputTitle'),
         titleHelpTextWrapper: document.querySelector('#createSubgoalForm #titleHelpTextWrapper'),
-        titleHelpText: document.querySelector('#createSubgoalForm #titleHelpText'),
     },
 
     init: function () {
+        // Abort if form element is not found
+        if (!this.el.createSubgoalForm) {
+            return;
+        }
+
         this.bindEventListeners()
     },
 

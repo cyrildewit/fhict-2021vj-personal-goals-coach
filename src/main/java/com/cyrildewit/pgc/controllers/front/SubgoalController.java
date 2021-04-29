@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.cyrildewit.pgc.util.DateTimeFormatters;
 import com.cyrildewit.pgc.models.Goal;
@@ -34,6 +35,9 @@ import com.cyrildewit.pgc.exceptions.SubgoalNotFoundException;
 public class SubgoalController {
     @Autowired
     private DateTimeFormatters dateTimeFormatters;
+
+    @Value("${subgoal.subgoalLevelIsDeepMinimumLevel}")
+    private Integer subgoalLevelIsDeepMinimumLevel;
 
     private final GoalService goalService;
     private final SubgoalService subgoalService;
@@ -136,6 +140,9 @@ public class SubgoalController {
         if (!model.containsAttribute("subgoal")) {
             model.addAttribute("subgoal", new Subgoal());
         }
+
+        boolean parentSubgoalIsWithinDeepLevel = subgoalService.determineSubgoalLevel(parentSubgoal) >= subgoalLevelIsDeepMinimumLevel;
+        model.addAttribute("parentSubgoalIsWithinDeepLevel", parentSubgoalIsWithinDeepLevel);
 
         model.addAttribute("parentSubgoal", parentSubgoal);
 

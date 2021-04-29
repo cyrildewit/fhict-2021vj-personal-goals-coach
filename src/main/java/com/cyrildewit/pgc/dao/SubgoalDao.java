@@ -33,4 +33,11 @@ public interface SubgoalDao
     public void deleteSubgoalById(Long id);
 
     public void deleteSubgoal(Subgoal subgoal);
+
+    /**
+     * Level must be >= 1.
+     *
+     * 0 is reserverd for goal.
+     */
+    public Integer determineSubgoalLevel(Subgoal subgoal);
 }

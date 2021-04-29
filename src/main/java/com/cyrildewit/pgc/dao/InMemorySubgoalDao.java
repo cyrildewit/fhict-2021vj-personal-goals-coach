@@ -96,4 +96,9 @@ public class InMemorySubgoalDao implements SubgoalDao {
     public void deleteSubgoal(Subgoal subgoal) {
         subgoals.remove(subgoal);
     }
+
+    public Integer determineSubgoalLevel(Subgoal subgoal)
+    {
+        return 10;
+    }
 }

@@ -35,4 +35,11 @@ public interface SubgoalServiceInterface
     public void deleteSubgoal(Subgoal subgoal);
 
     public boolean determineIfSubgoalBelongsToGoal(Subgoal subgoal, Goal goal);
+
+    /**
+     * Level must be >= 1.
+     *
+     * 0 is reserverd for goal.
+     */
+    public Integer determineSubgoalLevel();
 }
