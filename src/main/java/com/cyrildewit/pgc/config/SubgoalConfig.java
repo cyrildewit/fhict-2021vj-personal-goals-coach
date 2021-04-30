@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-//@Configuration
 @ConfigurationProperties(prefix = "subgoal")
 public class SubgoalConfig
 {
