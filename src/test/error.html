@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{front/common/layouts/plain/index.html}">
+<head>
+    <title>Something went wrong!</title>
+</head>
+<body>
+
+<th:block layout:fragment="content">
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="p-5 bg-light border rounded-3 text-center">
+                    <h1>Something went wrong!</h1>
+                    <h2 class="h3">Our Engineers are on it</h2>
+                    <a href="/" class="btn btn-primary mt-3">Go to homepage</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</body>
+</html>

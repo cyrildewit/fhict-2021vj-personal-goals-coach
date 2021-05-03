@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  mariadb:
+    container_name: pgc-mariadb
+    image: mariadb:10.6
+    command: --init-file /data/application/init.sql
+    volumes:
+      - ./docker/mariadb/sql/init.sql:/data/application/init.sql
+      - mariadb:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+      MYSQL_DATABASE: "${DB_DATABASE}"
+      MYSQL_USER: "${DB_USERNAME}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+    ports:
+      - "${FORWARD_DB_PORT:-3306}:3306"
+
+volumes:
+  mariadb:
+    driver: local
