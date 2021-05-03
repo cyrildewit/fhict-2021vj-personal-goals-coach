@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{front/common/layouts/plain/index.html}">
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+
+<th:block layout:fragment="content">
+    <div class="container mt-4">
+        <div class="mb-4">
+            <h1>Dashboard</h1>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="py-4 px-5 bg-light border rounded-3">
+                    <div class="mt-4">
+                        <h3 th:text="${goalsCountFormatted}"></h3>
+                        <h5 class="text-secondary">Goals</h5>
+                    </div>
+
+                    <div class="mt-3 d-flex justify-content-end">
+                        <a href="/goals" class="link-secondary">View all goals</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+
+</body>
+</html>
