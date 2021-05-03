@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   mariadb:
-    container_name: pgc-mariadb
+    container_name: pgc-mariadb2
     image: mariadb:10.6
     command: --init-file /data/application/init.sql
     volumes:
