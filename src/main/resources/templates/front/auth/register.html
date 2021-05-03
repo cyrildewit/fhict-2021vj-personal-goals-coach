@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{front/common/layouts/plain/index.html}">
+<head>
+    <title>Register</title>
+</head>
+<body>
+
+<th:block layout:fragment="content">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <h1 class="h3 mb-3 fw-normal">Sign up</h1>
+                <form class="row g-3" th:action="@{/register}" th:object="${userRegisterFormRequest}" method="post">
+                    <div class="col-md-6">
+                        <label for="exampleInputFirstname" class="form-label">Firstname</label>
+                        <input type="text" class="form-control" id="exampleInputFirstname" th:field="*{firstName}"
+                               th:classappend="${#fields.hasErrors('firstName') ? 'is-invalid' : ''}">
+
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('firstName')}">
+                            <ul>
+                                <li th:each="err : ${#fields.errors('firstName')}" th:text="${err}" class="error" />
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="exampleInputLastname" class="form-label">Lastname</label>
+                        <input type="text" class="form-control" id="exampleInputLastname" th:field="*{lastName}"
+                               th:classappend="${#fields.hasErrors('lastName') ? 'is-invalid' : ''}">
+
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('lastName')}">
+                            <ul>
+                                <li th:each="err : ${#fields.errors('lastName')}" th:text="${err}" class="error" />
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label for="exampleInputEmail" class="form-label">Email address</label>
+                        <input type="text" class="form-control" id="exampleInputEmail" th:field="*{email}"
+                               th:classappend="${#fields.hasErrors('email') ? 'is-invalid' : ''}">
+
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}">
+                            <ul>
+                                <li th:each="err : ${#fields.errors('email')}" th:text="${err}" class="error" />
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label for="exampleInputPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword" th:field="*{password}"
+                               th:classappend="${#fields.hasErrors('password') ? 'is-invalid' : ''}">
+
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}">
+                            <ul>
+                                <li th:each="err : ${#fields.errors('password')}" th:text="${err}" class="error" />
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">Sign up</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!--        <form class="form-signin">-->
+
+
+        <!--            <div class="form-floating">-->
+        <!--                <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com"-->
+        <!--                       >-->
+        <!--                <label for="floatingInput">Email address</label>-->
+        <!--            </div>-->
+
+        <!--            <div class="form-floating">-->
+        <!--                <input type="password" class="form-control" id="floatingPassword" placeholder="Password"-->
+        <!--                       th:field="*{password}" th:classappend="${#fields.hasErrors('password') ? 'is-invalid' : ''}">-->
+        <!--                <label for="floatingPassword">Password</label>-->
+        <!--            </div>-->
+
+        <!--            <div class="checkbox mb-3">-->
+        <!--                <label>-->
+        <!--                    <input type="checkbox" value="remember-me"> Remember me-->
+        <!--                </label>-->
+        <!--            </div>-->
+        <!--            <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>-->
+        <!--        </form>-->
+    </div>
+</th:block>
+
+</body>
+</html>
