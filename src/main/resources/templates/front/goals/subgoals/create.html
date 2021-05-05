@@ -37,7 +37,7 @@
 
             <div class="col-8">
                 <label for="inputDescription" class="form-label">Description</label>
-                <textarea type="text" class="form-control" id="inputDescription" rows="4" th:field="*{description}" th:classappend="${#fields.hasErrors('description') ? 'is-invalid' : ''}"></textarea>
+                <textarea type="text" class="form-control" id="inputDescription" rows="8" th:field="*{description}" th:classappend="${#fields.hasErrors('description') ? 'is-invalid' : ''}"></textarea>
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}">
                     <ul>
                         <li th:each="err : ${#fields.errors('description')}" th:text="${err}" class="error" />

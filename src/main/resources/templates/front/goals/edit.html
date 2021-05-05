@@ -9,9 +9,9 @@
 <th:block layout:fragment="content">
 
     <div class="container mt-4">
-        <h1 class="mb-4">Create new Goal</h1>
+        <h1 class="h3 mb-4">Edit goal: <span th:text="${goal.getTitle()}"></span></h1>
 
-        <form class="row g-3" id="createGoalForm" action="#" th:action="@{/goals}" th:object="${goal}" method="post">
+        <form class="row g-3" id="editGoalForm" action="#" th:action="@{/goals/{goalUuid}/edit(goalUuid=${goal.getUuid().toString()})}" th:object="${goal}" th:method="put">
             <div class="col-md-8">
                 <label for="inputTitle" class="form-label">Title</label>
                 <input type="text" class="form-control" id="inputTitle" th:field="*{title}" th:classappend="${#fields.hasErrors('title') ? 'is-invalid' : ''}">
@@ -31,9 +31,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4">
-
-            </div>
+            <div class="col-md-4"></div>
 
             <div class="col-8">
                 <label for="inputDescription" class="form-label">Description</label>
