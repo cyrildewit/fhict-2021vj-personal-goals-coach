@@ -64,7 +64,7 @@ public class SubgoalService
         subgoalDao.insertSubgoal(subgoal);
     }
 
-    public void updateSubgoal(Subgoal subgoal, String[] params)
+    public void updateSubgoal(Subgoal subgoal)
     {
         subgoalDao.insertSubgoal(subgoal);
     }

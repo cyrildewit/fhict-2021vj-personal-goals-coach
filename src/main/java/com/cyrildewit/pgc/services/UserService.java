@@ -28,7 +28,7 @@ public class UserService
         return userDao.selectAllUsers();
     }
 
-    public Optional<User> findUserById(Integer id)
+    public Optional<User> findUserById(Long id)
     {
         return userDao.findUserById(id);
     }
@@ -43,12 +43,12 @@ public class UserService
         userDao.insertUser(user);
     }
 
-    public void updateUser(User user, String[] params)
+    public void updateUser(User user)
     {
         userDao.insertUser(user);
     }
 
-    public void deleteUserById(Integer id)
+    public void deleteUserById(Long id)
     {
         userDao.deleteUserById(id);
     }

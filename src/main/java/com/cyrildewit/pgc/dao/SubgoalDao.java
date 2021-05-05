@@ -28,7 +28,7 @@ public interface SubgoalDao
 
     public void insertSubgoal(Subgoal subgoal);
 
-    public void updateSubgoal(Subgoal subgoal, String[] params);
+    public void updateSubgoal(Subgoal subgoal);
 
     public void deleteSubgoalById(Long id);
 

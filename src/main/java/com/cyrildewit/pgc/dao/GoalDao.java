@@ -22,7 +22,7 @@ public interface GoalDao
 
     public void insertGoal(Goal goal);
 
-    public void updateGoal(Goal goal, String[] params);
+    public boolean updateGoal(Goal goal);
 
     public void deleteGoalById(Long id);
 

@@ -37,30 +37,18 @@ public class SqlGoalDao implements GoalDao {
     private static final String SELECT_ALL_GOALS_FOR_USER = "select * from goals where user_id = ?;";
     private static final String SELECT_GOAL_BY_ID = "select * from goals where id = ?;";
     private static final String SELECT_GOAL_BY_UUID = "select * from goals where uuid = ?;";
+    private static final String UPDATE_GOAL = "update goals set title = ?, description = ?, deadline = ?, user_id = ? where id = ?;";
 
     private List<Goal> goals = new ArrayList<>();
 
     public List<Goal> selectAllGoals() {
-
-        List<Goal> goals = new ArrayList<>();
+        List<Goal> goals = new ArrayList<Goal>();
 
         try (Connection connection = mariaDBDriver.getConnection();
-
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_GOALS);) {
-             System.out.println(preparedStatement);
-             ResultSet rs = preparedStatement.executeQuery();
+             ResultSet result = preparedStatement.executeQuery();
 
-            // Step 4: Process the ResultSet object.
-            while (rs.next()) {
-                Long id = rs.getLong("id");
-                String uuidString = rs.getString("uuid");
-                UUID uuid = UUID.fromString(uuidString);
-                String title = rs.getString("title");
-                String description = rs.getString("description");
-                String deadlineString = rs.getString("deadline");
-                LocalDateTime deadline = LocalDateTime.parse(deadlineString, dateTimeFormatters.getMariaDbDateTimeFormatter());
-                goals.add(new Goal(id, uuid, title, description, deadline));
-            }
+            goals = resolveGoalsFromResultSet(result);
         } catch (SQLException e) {
             mariaDBDriver.printSQLException(e);
         }
@@ -69,26 +57,15 @@ public class SqlGoalDao implements GoalDao {
     }
 
     public List<Goal> selectAllGoalsForUser(User user) {
-        List<Goal> goals = new ArrayList<>();
+        List<Goal> goals = new ArrayList<Goal>();
 
         try (Connection connection = mariaDBDriver.getConnection();
 
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_GOALS_FOR_USER);) {
             preparedStatement.setLong(1, user.getId());
-            System.out.println(preparedStatement);
-            ResultSet rs = preparedStatement.executeQuery();
+            ResultSet result = preparedStatement.executeQuery();
 
-            // Step 4: Process the ResultSet object.
-            while (rs.next()) {
-                Long id = rs.getLong("id");
-                String uuidString = rs.getString("uuid");
-                UUID uuid = UUID.fromString(uuidString);
-                String title = rs.getString("title");
-                String description = rs.getString("description");
-                String deadlineString = rs.getString("deadline");
-                LocalDateTime deadline = LocalDateTime.parse(deadlineString, dateTimeFormatters.getMariaDbDateTimeFormatter());
-                goals.add(new Goal(id, uuid, title, description, deadline));
-            }
+            goals = resolveGoalsFromResultSet(result);
         } catch (SQLException e) {
             mariaDBDriver.printSQLException(e);
         }
@@ -97,72 +74,57 @@ public class SqlGoalDao implements GoalDao {
     }
 
     public Optional<Goal> findGoalById(Long id) {
-        Goal goal = null;
+        Optional<Goal> goal = Optional.empty();
 
         try (Connection connection = mariaDBDriver.getConnection();
-
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_GOAL_BY_ID);) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_GOAL_BY_ID);) {
             preparedStatement.setLong(1, id);
-            System.out.println(preparedStatement);
-            ResultSet rs = preparedStatement.executeQuery();
+            ResultSet result = preparedStatement.executeQuery();
 
-            // Step 4: Process the ResultSet object.
-            while (rs.next()) {
-                Long goalId = rs.getLong("id");
-                String uuidString = rs.getString("uuid");
-                UUID uuid = UUID.fromString(uuidString);
-                String title = rs.getString("title");
-                String description = rs.getString("description");
-                String deadlineString = rs.getString("deadline");
-                LocalDateTime deadline = LocalDateTime.parse(deadlineString, dateTimeFormatters.getMariaDbDateTimeFormatter());
-                goal = new Goal(goalId, uuid, title, description, deadline);
-            }
+            goal = resolveFirstGoalFromResultSet(result);
         } catch (SQLException e) {
             mariaDBDriver.printSQLException(e);
         }
 
-        return Optional.of(goal);
+        return goal;
     }
 
     public Optional<Goal> findGoalByUuid(UUID uuid) {
-        Goal goal = null;
+        Optional<Goal> goal = Optional.empty();
 
         try (Connection connection = mariaDBDriver.getConnection();
-
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_GOAL_BY_UUID);) {
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_GOAL_BY_UUID);) {
             preparedStatement.setString(1, uuid.toString());
-            System.out.println(preparedStatement);
-            ResultSet rs = preparedStatement.executeQuery();
+            ResultSet result = preparedStatement.executeQuery();
 
-            // Step 4: Process the ResultSet object.
-            while (rs.next()) {
-                Long id = rs.getLong("id");
-                String uuidString = rs.getString("uuid");
-                UUID goalUuid = UUID.fromString(uuidString);
-                String title = rs.getString("title");
-                String description = rs.getString("description");
-                String deadlineString = rs.getString("deadline");
-                LocalDateTime deadline = LocalDateTime.parse(deadlineString, dateTimeFormatters.getMariaDbDateTimeFormatter());
-                goal = new Goal(id, goalUuid, title, description, deadline);
-            }
+            goal = resolveFirstGoalFromResultSet(result);
         } catch (SQLException e) {
             mariaDBDriver.printSQLException(e);
         }
 
-        return Optional.of(goal);
+        return goal;
     }
 
     public void insertGoal(Goal goal) {
         goals.add(goal);
     }
 
-    public void updateGoal(Goal goal, String[] params) {
-//        goal.setName(Objects.requireNonNull(
-//                params[0], "Name cannot be null"));
-//        goal.setEmail(Objects.requireNonNull(
-//                params[1], "Email cannot be null"));
+    public boolean updateGoal(Goal goal) {
+        boolean rowUpdated = false;
 
-        goals.add(goal);
+        try (Connection connection = mariaDBDriver.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_GOAL);) {
+            preparedStatement.setString(1, goal.getTitle());
+            preparedStatement.setString(2, goal.getDescription());
+            preparedStatement.setString(3, goal.getDeadline().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+
+            rowUpdated = preparedStatement.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            mariaDBDriver.printSQLException(e);
+        }
+
+        return rowUpdated;
     }
 
     public void deleteGoalById(Long id) {
@@ -181,5 +143,37 @@ public class SqlGoalDao implements GoalDao {
 
     public Long getTotalGoalsCountForUser(User user) {
         return goals.stream().count();
+    }
+
+    private Optional<Goal> resolveFirstGoalFromResultSet(ResultSet result) throws SQLException {
+        Goal goal = null;
+
+        while (result.next()) {
+            goal = mapResultSetToGoal(result);
+        }
+
+        return Optional.of(goal);
+    }
+
+    private List<Goal> resolveGoalsFromResultSet(ResultSet result) throws SQLException {
+        List<Goal> goals = new ArrayList<Goal>();
+
+        while (result.next()) {
+            goals.add(mapResultSetToGoal(result));
+        }
+
+        return goals;
+    }
+
+    private Goal mapResultSetToGoal(ResultSet result) throws SQLException {
+        Long id = result.getLong("id");
+        String uuidString = result.getString("uuid");
+        UUID uuid = UUID.fromString(uuidString);
+        String title = result.getString("title");
+        String description = result.getString("description");
+        String deadlineString = result.getString("deadline");
+        LocalDateTime deadline = LocalDateTime.parse(deadlineString, dateTimeFormatters.getMariaDbDateTimeFormatter());
+
+        return new Goal(id, uuid, title, description, deadline);
     }
 }

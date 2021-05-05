@@ -60,13 +60,15 @@ public class InMemoryGoalDao implements GoalDao {
         goals.add(goal);
     }
 
-    public void updateGoal(Goal goal, String[] params) {
+    public boolean updateGoal(Goal goal) {
 //        goal.setName(Objects.requireNonNull(
 //                params[0], "Name cannot be null"));
 //        goal.setEmail(Objects.requireNonNull(
 //                params[1], "Email cannot be null"));
 
         goals.add(goal);
+
+        return true;
     }
 
     public void deleteGoalById(Long id) {

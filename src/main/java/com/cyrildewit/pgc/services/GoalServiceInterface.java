@@ -16,15 +16,15 @@ public interface GoalServiceInterface
 
     public List<Goal> getAllGoalsForUser(User user);
 
-    public Optional<Goal> findGoalById(Integer id);
+    public Optional<Goal> findGoalById(Long id);
 
     public Optional<Goal> findGoalByUuid(UUID uuid);
 
     public void addGoal(Goal goal);
 
-    public void updateGoal(Goal goal, String[] params);
+    public boolean updateGoal(Goal goal);
 
-    public void deleteGoalById(Integer id);
+    public void deleteGoalById(Long id);
 
     public void deleteGoal(Goal goal);
 

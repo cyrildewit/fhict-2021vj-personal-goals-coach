@@ -49,9 +49,11 @@ public class GoalService
         goalDao.insertGoal(goal);
     }
 
-    public void updateGoal(Goal goal, String[] params)
+    public boolean updateGoal(Goal goal)
     {
         goalDao.insertGoal(goal);
+
+        return true;
     }
 
     public void deleteGoalById(Long id)

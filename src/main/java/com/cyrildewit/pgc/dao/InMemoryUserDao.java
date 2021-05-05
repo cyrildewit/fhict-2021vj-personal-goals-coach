@@ -45,7 +45,7 @@ public class InMemoryUserDao implements UserDao {
         return users;
     }
 
-    public Optional<User> findUserById(Integer id) {
+    public Optional<User> findUserById(Long id) {
         return users.stream()
                 .filter(user -> id.equals(user.getId()))
                 .findAny();
@@ -61,11 +61,11 @@ public class InMemoryUserDao implements UserDao {
         users.add(user);
     }
 
-    public void updateUser(User user, String[] params) {
+    public void updateUser(User user) {
         users.add(user);
     }
 
-    public void deleteUserById(Integer id) {
+    public void deleteUserById(Long id) {
         Optional<User> user = users.stream()
                 .filter(streamUser -> id.equals(streamUser.getId()))
                 .findAny();

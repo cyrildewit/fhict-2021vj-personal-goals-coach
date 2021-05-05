@@ -22,13 +22,13 @@ public interface SubgoalServiceInterface
 
     public Long getTotalSubgoalsCountForSubgoal(Subgoal subgoal);
 
-    public Optional<Goal> findGoalById(Integer id);
+    public Optional<Goal> findGoalById(Long id);
 
     public Optional<Goal> findGoalByUuid(UUID uuid);
 
     public void addGoal(Subgoal subgoal);
 
-    public void updateGoal(Subgoal subgoal, String[] params);
+    public void updateGoal(Subgoal subgoal);
 
     public void deleteGoalById(Long id);
 

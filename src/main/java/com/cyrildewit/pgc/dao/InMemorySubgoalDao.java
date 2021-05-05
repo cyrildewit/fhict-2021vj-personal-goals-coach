@@ -74,7 +74,7 @@ public class InMemorySubgoalDao implements SubgoalDao {
         subgoals.add(subgoal);
     }
 
-    public void updateSubgoal(Subgoal subgoal, String[] params) {
+    public void updateSubgoal(Subgoal subgoal) {
 //        goal.setName(Objects.requireNonNull(
 //                params[0], "Name cannot be null"));
 //        goal.setEmail(Objects.requireNonNull(

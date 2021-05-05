@@ -10,15 +10,15 @@ import com.cyrildewit.pgc.models.User;
 public interface UserDao {
     public List<User> selectAllUsers();
 
-    public Optional<User> findUserById(Integer id);
+    public Optional<User> findUserById(Long id);
 
     public Optional<User> findUserByUuid(UUID uuid);
 
     public void insertUser(User user);
 
-    public void updateUser(User user, String[] params);
+    public void updateUser(User user);
 
-    public void deleteUserById(Integer id);
+    public void deleteUserById(Long id);
 
     public void deleteUser(User user);
 }
