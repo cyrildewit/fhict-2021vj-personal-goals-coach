@@ -22,6 +22,7 @@ import org.springframework.validation.BindingResult;
 import com.cyrildewit.pgc.util.DateTimeFormatters;
 import com.cyrildewit.pgc.models.Goal;
 import com.cyrildewit.pgc.models.Subgoal;
+import com.cyrildewit.pgc.models.User;
 import com.cyrildewit.pgc.services.GoalService;
 import com.cyrildewit.pgc.services.SubgoalService;
 import com.cyrildewit.pgc.exceptions.GoalNotFoundException;
@@ -34,16 +35,28 @@ public class GoalController {
 
     private final GoalService goalService;
     private final SubgoalService subgoalService;
+    private final User user;
 
     @Autowired
     public GoalController(GoalService goalService, SubgoalService subgoalService) {
         this.goalService = goalService;
         this.subgoalService = subgoalService;
+
+        this.user = new User(
+                1L,
+                UUID.fromString("2fa2bee2-968c-4de6-a171-989560d80701"),
+                "Jane",
+                "Doe",
+                "+31 6 2772 3737",
+                "jane@example.com",
+                LocalDateTime.now(),
+                "password"
+        );
     }
 
     @GetMapping("")
     public String index(Model model) {
-        model.addAttribute("goals", goalService.getAllGoals());
+        model.addAttribute("goals", goalService.getAllGoalsForUser(user));
 
         return "front/goals/index";
     }

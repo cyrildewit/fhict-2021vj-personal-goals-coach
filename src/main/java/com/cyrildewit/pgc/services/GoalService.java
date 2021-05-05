@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.cyrildewit.pgc.models.Goal;
 import com.cyrildewit.pgc.models.User;
 import com.cyrildewit.pgc.dao.GoalDao;
-import com.cyrildewit.pgc.dao.InMemoryGoalDao;
+import com.cyrildewit.pgc.dao.SqlGoalDao;
 
 @Service
 public class GoalService
@@ -19,7 +19,7 @@ public class GoalService
     private final GoalDao goalDao;
 
     @Autowired
-    public GoalService(InMemoryGoalDao goalDao)
+    public GoalService(SqlGoalDao goalDao)
     {
         this.goalDao = goalDao;
     }
@@ -34,7 +34,7 @@ public class GoalService
         return goalDao.selectAllGoalsForUser(user);
     }
 
-    public Optional<Goal> findGoalById(Integer id)
+    public Optional<Goal> findGoalById(Long id)
     {
         return goalDao.findGoalById(id);
     }
@@ -54,7 +54,7 @@ public class GoalService
         goalDao.insertGoal(goal);
     }
 
-    public void deleteGoalById(Integer id)
+    public void deleteGoalById(Long id)
     {
         goalDao.deleteGoalById(id);
     }

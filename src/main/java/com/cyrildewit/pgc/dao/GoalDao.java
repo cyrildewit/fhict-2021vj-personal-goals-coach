@@ -16,7 +16,7 @@ public interface GoalDao
 
     public List<Goal> selectAllGoalsForUser(User user);
 
-    public Optional<Goal> findGoalById(Integer id);
+    public Optional<Goal> findGoalById(Long id);
 
     public Optional<Goal> findGoalByUuid(UUID uuid);
 
@@ -24,7 +24,7 @@ public interface GoalDao
 
     public void updateGoal(Goal goal, String[] params);
 
-    public void deleteGoalById(Integer id);
+    public void deleteGoalById(Long id);
 
     public void deleteGoal(Goal goal);
 

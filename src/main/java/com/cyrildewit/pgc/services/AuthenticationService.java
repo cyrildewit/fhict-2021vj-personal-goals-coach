@@ -34,7 +34,7 @@ public class AuthenticationService
         return goalDao.selectAllGoalsForUser(user);
     }
 
-    public Optional<Goal> findGoalById(Integer id)
+    public Optional<Goal> findGoalById(Long id)
     {
         return goalDao.findGoalById(id);
     }
@@ -54,7 +54,7 @@ public class AuthenticationService
         goalDao.insertGoal(goal);
     }
 
-    public void deleteGoalById(Integer id)
+    public void deleteGoalById(Long id)
     {
         goalDao.deleteGoalById(id);
     }
