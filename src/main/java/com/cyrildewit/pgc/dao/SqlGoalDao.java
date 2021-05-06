@@ -39,6 +39,7 @@ public class SqlGoalDao implements GoalDao {
     private static final String SELECT_GOAL_BY_UUID = "SELECT * FROM goals WHERE uuid = ?;";
     private static final String UPDATE_GOAL = "UPDATE goals SET title = ?, description = ?, deadline = ?, user_id = ? WHERE id = ?;";
     private static final String INSERT_GOAL = "INSERT INTO goals (uuid, title, description, deadline, user_id) VALUES (?, ?, ?, ?, ?);";
+    private static final String DELETE_GOAL_BY_ID = "DELETE FROM goals WHERE id = ?;";
 
     private List<Goal> goals = new ArrayList<>();
 
@@ -141,17 +142,19 @@ public class SqlGoalDao implements GoalDao {
     }
 
     public void deleteGoalById(Long id) {
-        Optional<Goal> goal = goals.stream()
-                .filter(streamGoal -> id.equals(streamGoal.getId()))
-                .findAny();
+        try (Connection connection = mariaDBDriver.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_GOAL_BY_ID);) {
+            preparedStatement.setLong(1, id);
 
-        if (goal.isPresent()) {
-            goals.remove(goal);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            mariaDBDriver.printSQLException(e);
         }
     }
 
     public void deleteGoal(Goal goal) {
-        goals.remove(goal);
+        deleteGoalById(goal.getId());
     }
 
     public Long getTotalGoalsCountForUser(User user) {

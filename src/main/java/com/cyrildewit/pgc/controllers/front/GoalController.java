@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -152,5 +153,16 @@ public class GoalController {
         System.out.println("sfdsffaakjfkfl;dsjkl;");
 
         return "redirect:/goals/" + goal.getUuid().toString();
+    }
+
+    @DeleteMapping("/{uuid}")
+    public String destroy(@PathVariable("uuid") UUID uuid, Model model) {
+        Optional<Goal> optionalGoal = goalService.findGoalByUuid(uuid);
+        optionalGoal.orElseThrow(() -> new GoalNotFoundException(uuid));
+        Goal goal = optionalGoal.get();
+
+        goalService.deleteGoal(goal);
+
+        return "redirect:/goals";
     }
 }
