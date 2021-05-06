@@ -40,6 +40,7 @@ public class SqlGoalDao implements GoalDao {
     private static final String UPDATE_GOAL = "UPDATE goals SET title = ?, description = ?, deadline = ?, user_id = ? WHERE id = ?;";
     private static final String INSERT_GOAL = "INSERT INTO goals (uuid, title, description, deadline, user_id) VALUES (?, ?, ?, ?, ?);";
     private static final String DELETE_GOAL_BY_ID = "DELETE FROM goals WHERE id = ?;";
+    private static final String SELECT_COUNT_GOALS_FOR_USER = "SELECT count(*) AS count FROM goals WHERE user_id = ?;";
 
     public List<Goal> selectAllGoals() {
         List<Goal> goals = new ArrayList<Goal>();
@@ -158,7 +159,21 @@ public class SqlGoalDao implements GoalDao {
     }
 
     public Long getTotalGoalsCountForUser(User user) {
-        return goals.stream().count();
+        long goalsCount = 0;
+
+        try (Connection connection = mariaDBDriver.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COUNT_GOALS_FOR_USER);) {
+            preparedStatement.setLong(1, user.getId());
+            ResultSet result = preparedStatement.executeQuery();
+
+            while(result.next()) {
+                goalsCount = result.getLong("count");
+            }
+        } catch (SQLException e) {
+            mariaDBDriver.printSQLException(e);
+        }
+
+        return goalsCount;
     }
 
     private Optional<Goal> resolveFirstGoalFromResultSet(ResultSet result) throws SQLException {

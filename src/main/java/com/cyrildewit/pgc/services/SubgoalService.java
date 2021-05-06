@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.cyrildewit.pgc.model.Goal;
 import com.cyrildewit.pgc.model.Subgoal;
 import com.cyrildewit.pgc.dao.SubgoalDao;
-import com.cyrildewit.pgc.dao.InMemorySubgoalDao;
+import com.cyrildewit.pgc.dao.SqlSubgoalDao;
 
 @Service
 public class SubgoalService
@@ -19,7 +19,7 @@ public class SubgoalService
     private final SubgoalDao subgoalDao;
 
     @Autowired
-    public SubgoalService(InMemorySubgoalDao subgoalDao)
+    public SubgoalService(SqlSubgoalDao subgoalDao)
     {
         this.subgoalDao = subgoalDao;
     }

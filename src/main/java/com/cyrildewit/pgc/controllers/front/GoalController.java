@@ -115,21 +115,6 @@ public class GoalController {
         return "front/goals/edit";
     }
 
-//    @GetMapping("{goalUuid}/subgoals/create")
-//    public String create(@PathVariable("goalUuid") UUID goalUuid, Model model) {
-//        Optional<Goal> optionalGoal = goalService.findGoalByUuid(goalUuid);
-//        optionalGoal.orElseThrow(() -> new GoalNotFoundException(goalUuid));
-//        Goal goal = optionalGoal.get();
-//
-//        model.addAttribute("goal", goal);
-//        if (!model.containsAttribute("subgoal")) {
-//            model.addAttribute("subgoal", new Subgoal());
-//        }
-//
-//        return "front/goals/subgoals/create";
-//    }
-
-
     @PutMapping("/{uuid}/edit")
     public String update(
             @PathVariable("uuid") UUID uuid,
@@ -166,5 +151,12 @@ public class GoalController {
         goalService.deleteGoal(goal);
 
         return "redirect:/goals";
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        System.out.println("UUID: " + UUID.randomUUID());
+        return "redirect:/goals";
+
     }
 }

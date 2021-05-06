@@ -31,16 +31,27 @@ import com.cyrildewit.pgc.exceptions.GoalNotFoundException;
 public class DashboardController {
     private final GoalService goalService;
     private final SubgoalService subgoalService;
+    private final User user;
 
     @Autowired
     public DashboardController(GoalService goalService, SubgoalService subgoalService) {
         this.goalService = goalService;
         this.subgoalService = subgoalService;
+
+        this.user = new User(
+                1L,
+                UUID.fromString("2fa2bee2-968c-4de6-a171-989560d80701"),
+                "Jane",
+                "Doe",
+                "+31 6 2772 3737",
+                "jane@example.com",
+                LocalDateTime.now(),
+                "password"
+        );
     }
 
     @GetMapping("/")
     public String show(Model model) {
-        User user = new User();
         model.addAttribute("goalsCountFormatted", goalService.getTotalGoalsCountForUser(user));
 
         return "front/dashboard/index";
