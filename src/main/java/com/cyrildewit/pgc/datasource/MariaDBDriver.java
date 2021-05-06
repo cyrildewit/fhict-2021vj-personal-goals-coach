@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Component
-public class MariaDBDriver {
+public class MariaDBDriver implements SqlDataSourceDriver {
     private String jdbcURL = "jdbc:mariadb://localhost:33068/pgc?useSSL=false";
     private String jdbcUsername = "pgc";
     private String jdbcPassword = "pgc";
