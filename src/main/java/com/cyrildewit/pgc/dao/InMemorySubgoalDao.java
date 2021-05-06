@@ -11,8 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.stereotype.Component;
 
-import com.cyrildewit.pgc.models.Goal;
-import com.cyrildewit.pgc.models.Subgoal;
+import com.cyrildewit.pgc.model.Goal;
+import com.cyrildewit.pgc.model.Subgoal;
 
 @Component
 public class InMemorySubgoalDao implements SubgoalDao {

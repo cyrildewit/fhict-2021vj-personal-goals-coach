@@ -7,8 +7,8 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.cyrildewit.pgc.models.Subgoal;
-import com.cyrildewit.pgc.models.Goal;
+import com.cyrildewit.pgc.model.Subgoal;
+import com.cyrildewit.pgc.model.Goal;
 
 public interface SubgoalDao
 {

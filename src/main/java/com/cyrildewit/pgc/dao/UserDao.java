@@ -5,7 +5,7 @@ import java.util.UUID;
 import java.util.List;
 import java.util.Optional;
 
-import com.cyrildewit.pgc.models.User;
+import com.cyrildewit.pgc.model.User;
 
 public interface UserDao {
     public List<User> selectAllUsers();

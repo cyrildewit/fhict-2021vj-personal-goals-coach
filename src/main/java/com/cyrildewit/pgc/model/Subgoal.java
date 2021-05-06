@@ -1,4 +1,4 @@
-package com.cyrildewit.pgc.models;
+package com.cyrildewit.pgc.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

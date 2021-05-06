@@ -21,9 +21,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cyrildewit.pgc.util.DateTimeFormatters;
-import com.cyrildewit.pgc.models.Goal;
-import com.cyrildewit.pgc.models.Subgoal;
-import com.cyrildewit.pgc.models.User;
+import com.cyrildewit.pgc.model.Goal;
+import com.cyrildewit.pgc.model.Subgoal;
+import com.cyrildewit.pgc.model.User;
 import com.cyrildewit.pgc.services.GoalService;
 import com.cyrildewit.pgc.services.SubgoalService;
 import com.cyrildewit.pgc.services.AuthenticationService;
