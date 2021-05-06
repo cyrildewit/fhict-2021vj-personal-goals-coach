@@ -12,14 +12,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 //@Entity
 public class Subgoal {
-//    @Id
-//    @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-//    @NotNull
     private UUID uuid;
-
-    private Long parentSubgoalId;
 
     @NotBlank
     private String title;
@@ -34,8 +29,10 @@ public class Subgoal {
     @NotNull
     private long goalId;
 
-    public Subgoal() {
-    }
+    @NotNull
+    private long parentSubgoalId;
+
+    public Subgoal() {}
 
     public Subgoal(UUID uuid, String title, String description, LocalDateTime deadline, long goalId) {
         this.uuid = uuid;
@@ -70,19 +67,6 @@ public class Subgoal {
         this.uuid = uuid;
     }
 
-    public Long getParentSubgoalId() {
-        return parentSubgoalId;
-    }
-
-    public void setParentSubgoalId(Long id) {
-        this.parentSubgoalId = id;
-    }
-
-    public boolean hasParentSubgoal()
-    {
-        return parentSubgoalId != null;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -113,5 +97,18 @@ public class Subgoal {
 
     public void setGoalId(Long goalId) {
         this.goalId = goalId;
+    }
+
+    public Long getParentSubgoalId() {
+        return parentSubgoalId;
+    }
+
+    public void setParentSubgoalId(Long parentSubgoalId) {
+        this.parentSubgoalId = parentSubgoalId;
+    }
+
+    public boolean hasParentSubgoal()
+    {
+        return parentSubgoalId > 0;
     }
 }

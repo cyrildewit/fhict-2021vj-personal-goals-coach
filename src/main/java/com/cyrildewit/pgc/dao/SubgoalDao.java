@@ -16,11 +16,17 @@ public interface SubgoalDao
 
     public List<Subgoal> selectAllSubgoalsForGoal(Goal goal);
 
+    public List<Subgoal> selectAllFirstLevelSubgoalsForGoal(Goal goal);
+
     public List<Subgoal> selectAllSubgoalsForSubgoal(Subgoal subgoal);
 
     public Long countAllSubgoalsForGoal(Goal goal);
 
+    public Long countAllFistLevelSubgoalsForGoal(Goal goal);
+
     public Long countAllSubgoalsForSubgoal(Subgoal subgoal);
+
+    public Long countAllFistLevelSubgoalsForSubgoal(Subgoal subgoal);
 
     public Optional<Subgoal> findSubgoalById(Long id);
 

@@ -14,6 +14,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -36,14 +37,17 @@ public class SqlSubgoalDao implements SubgoalDao {
 
     private static final String SELECT_ALL_SUBGOALS = "SELECT * FROM subgoals";
     private static final String SELECT_ALL_SUBGOALS_FOR_GOAL = "SELECT * FROM subgoals WHERE goal_id = ?;";
+    private static final String SELECT_ALL_FIRST_LEVEL_SUBGOALS_FOR_GOAL = "SELECT * FROM subgoals WHERE goal_id = ? AND parent_subgoal_id IS NULL;";
     private static final String SELECT_ALL_SUBGOALS_FOR_SUBGOAL = "SELECT * FROM subgoals WHERE parent_subgoal_id = ?;";
     private static final String SELECT_COUNT_SUBGOALS = "SELECT count(*) AS count FROM subgoals;";
+    private static final String SELECT_COUNT_FIRST_LEVEL_SUBGOALS_FOR_GOAL = "SELECT count(*) AS count FROM subgoals WHERE goal_id = ? AND parent_subgoal_id IS NULL;";
     private static final String SELECT_COUNT_SUBGOALS_FOR_GOAL = "SELECT count(*) AS count FROM subgoals WHERE goal_id = ?;";
     private static final String SELECT_COUNT_SUBGOALS_FOR_SUBGOAL = "SELECT count(*) AS count FROM subgoals WHERE parent_subgoal_id = ?;";
+    private static final String SELECT_COUNT_FIRST_LEVEL_SUBGOALS_FOR_SUBGOAL = "SELECT count(*) AS count FROM subgoals WHERE parent_subgoal_id = ? AND parent_subgoal_id IS NUL;";
     private static final String SELECT_SUBGOAL_BY_ID = "SELECT * FROM subgoals WHERE id = ?;";
     private static final String SELECT_SUBGOAL_BY_UUID = "SELECT * FROM subgoals WHERE uuid = ?;";
-    private static final String UPDATE_SUBGOAL = "UPDATE subgoals SET title = ?, description = ?, deadline = ?, user_id = ? WHERE id = ?;";
-    private static final String INSERT_SUBGOAL = "INSERT INTO subgoals (uuid, title, description, deadline, user_id) VALUES (?, ?, ?, ?, ?);";
+    private static final String UPDATE_SUBGOAL = "UPDATE subgoals SET title = ?, description = ?, deadline = ?, goal_id = ?, parent_subgoal_id = ? WHERE id = ?;";
+    private static final String INSERT_SUBGOAL = "INSERT INTO subgoals (uuid, title, description, deadline, goal_id, parent_subgoal_id) VALUES (?, ?, ?, ?, ?, ?);";
     private static final String DELETE_SUBGOAL_BY_ID = "DELETE FROM subgoals WHERE id = ?;";
 
     public List<Subgoal> selectAllSubgoals() {
@@ -67,6 +71,23 @@ public class SqlSubgoalDao implements SubgoalDao {
         try (Connection connection = mariaDBDriver.getConnection();
 
             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_SUBGOALS_FOR_GOAL);) {
+            preparedStatement.setLong(1, goal.getId());
+            ResultSet result = preparedStatement.executeQuery();
+
+            subgoals = resolveSubgoalsFromResultSet(result);
+        } catch (SQLException e) {
+            mariaDBDriver.printSQLException(e);
+        }
+
+        return subgoals;
+    }
+
+    public List<Subgoal> selectAllFirstLevelSubgoalsForGoal(Goal goal)
+    {
+        List<Subgoal> subgoals = new ArrayList<Subgoal>();
+
+        try (Connection connection = mariaDBDriver.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_FIRST_LEVEL_SUBGOALS_FOR_GOAL);) {
             preparedStatement.setLong(1, goal.getId());
             ResultSet result = preparedStatement.executeQuery();
 
@@ -135,6 +156,11 @@ public class SqlSubgoalDao implements SubgoalDao {
             preparedStatement.setString(3, subgoal.getDescription());
             preparedStatement.setString(4, subgoal.getDeadline().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
             preparedStatement.setLong(5, subgoal.getGoalId());
+            if (subgoal.hasParentSubgoal()) {
+                preparedStatement.setLong(6, subgoal.getParentSubgoalId());
+            } else {
+                preparedStatement.setNull(6, Types.INTEGER);
+            }
 
             preparedStatement.executeUpdate();
 
@@ -153,7 +179,11 @@ public class SqlSubgoalDao implements SubgoalDao {
             preparedStatement.setString(2, subgoal.getDescription());
             preparedStatement.setString(3, subgoal.getDeadline().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
             preparedStatement.setLong(4, subgoal.getGoalId());
-            preparedStatement.setLong(5, subgoal.getId());
+            if (subgoal.hasParentSubgoal()) {
+                preparedStatement.setLong(5, subgoal.getParentSubgoalId());
+            } else {
+                preparedStatement.setNull(5, Types.INTEGER);
+            }
 
             rowUpdated = preparedStatement.executeUpdate() > 0;
 
@@ -203,11 +233,48 @@ public class SqlSubgoalDao implements SubgoalDao {
         return subgoalsCount;
     }
 
+    public Long countAllFistLevelSubgoalsForGoal(Goal goal)
+    {
+        long subgoalsCount = 0;
+
+        try (Connection connection = mariaDBDriver.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COUNT_FIRST_LEVEL_SUBGOALS_FOR_GOAL);) {
+            preparedStatement.setLong(1, goal.getId());
+            ResultSet result = preparedStatement.executeQuery();
+
+            while(result.next()) {
+                subgoalsCount = result.getLong("count");
+            }
+        } catch (SQLException e) {
+            mariaDBDriver.printSQLException(e);
+        }
+
+        return subgoalsCount;
+    }
+
     public Long countAllSubgoalsForSubgoal(Subgoal subgoal) {
         long subgoalsCount = 0;
 
         try (Connection connection = mariaDBDriver.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COUNT_SUBGOALS_FOR_SUBGOAL);) {
+            preparedStatement.setLong(1, subgoal.getId());
+            ResultSet result = preparedStatement.executeQuery();
+
+            while(result.next()) {
+                subgoalsCount = result.getLong("count");
+            }
+        } catch (SQLException e) {
+            mariaDBDriver.printSQLException(e);
+        }
+
+        return subgoalsCount;
+    }
+
+    public Long countAllFistLevelSubgoalsForSubgoal(Subgoal subgoal) {
+        long subgoalsCount = 0;
+
+        try (Connection connection = mariaDBDriver.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COUNT_FIRST_LEVEL_SUBGOALS_FOR_SUBGOAL);) {
             preparedStatement.setLong(1, subgoal.getId());
             ResultSet result = preparedStatement.executeQuery();
 

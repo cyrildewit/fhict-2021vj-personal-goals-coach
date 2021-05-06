@@ -46,6 +46,10 @@ public class InMemorySubgoalDao implements SubgoalDao {
         return subgoals;
     }
 
+    public List<Subgoal> selectAllFirstLevelSubgoalsForGoal(Goal goal) {
+        return subgoals;
+    }
+
     public List<Subgoal> selectAllSubgoalsForSubgoal(Subgoal subgoal) {
         return subgoals;
     }
@@ -55,10 +59,14 @@ public class InMemorySubgoalDao implements SubgoalDao {
         return subgoals.stream().count();
     }
 
+    public Long countAllFistLevelSubgoalsForGoal(Goal goal) {return subgoals.stream().count();}
+
     public Long countAllSubgoalsForSubgoal(Subgoal subgoal)
     {
         return subgoals.stream().count();
     }
+
+    public Long countAllFistLevelSubgoalsForSubgoal(Subgoal subgoal) {return subgoals.stream().count();}
 
     public Optional<Subgoal> findSubgoalById(Long id) {
         return subgoals.stream()

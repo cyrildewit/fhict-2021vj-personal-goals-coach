@@ -15,6 +15,22 @@
                     <h1 class="h2 mt-2" th:text="${subgoal.getTitle()}"></h1>
                     <p><span class="badge bg-primary" th:text="${subgoalDeadlineFormatted}"></span></p>
                 </div>
+
+                <div class="col-md-4">
+                    <div class="d-flex justify-content-end">
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="goalSettingsDropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-gear"></i>
+                            </button>
+
+                            <ul class="dropdown-menu" aria-labelledby="goalSettingsDropdownMenuButton">
+                                <li><a class="dropdown-item" th:href="@{/goals/{goalUuid}/subgoals/{subgoalUuid}/edit(goalUuid=${goal.getUuid().toString()}, subgoalUuid=${subgoal.getUuid().toString()})}">Edit Subgoal</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteSubgoalModal">Delete Subgoal</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -50,6 +66,27 @@
                         <a th:href="@{'/goals/' + ${goal.uuid.toString()} + '/subgoals/' + ${subgoal.uuid.toString()}}" class="btn btn-sm btn-primary ">View Subgoal
                             Overview</a>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Goal Modal -->
+    <div class="modal fade" id="deleteSubgoalModal" tabindex="-1" aria-labelledby="deleteSubgoalModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteSubgoalModalLabel">Are you sure?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Do you want to delete this subgoal? This action cannot be undone.
+
+                    <form class="d-none" id="deleteGoalForm" action="#" th:action="@{/goals/{goalUuid}/subgoals/{subgoalUuid}(goalUuid=${goal.getUuid().toString()}, subgoalUuid=${subgoal.getUuid().toString()})}" th:method="delete"></form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-danger" form="deleteGoalForm">Delete</button>
                 </div>
             </div>
         </div>

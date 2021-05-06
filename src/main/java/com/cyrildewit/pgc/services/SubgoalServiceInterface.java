@@ -16,11 +16,17 @@ public interface SubgoalServiceInterface
 
     public List<Goal> getAllGoalsForGoal(Goal goal);
 
+    public List<Subgoal> getAllFirstLevelSubgoals(Goal goal);
+
     public List<Subgoal> getAllSubgoalsForSubgoal(Subgoal subgoal);
 
     public Long getTotalSubgoalsCountForGoal(Goal goal);
 
+    public Long getTotalFirstLevelSubgoalsCountForGoal(Goal goal);
+
     public Long getTotalSubgoalsCountForSubgoal(Subgoal subgoal);
+
+    public Long getTotalFirstLevelSubgoalsCountForSubgoal(Subgoal subgoal);
 
     public Optional<Goal> findGoalById(Long id);
 

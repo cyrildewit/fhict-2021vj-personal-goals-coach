@@ -90,10 +90,10 @@ public class GoalController {
 
         model.addAttribute("goal", goal);
 
-        List<Subgoal> subgoals = subgoalService.getAllSubgoalsForGoal(goal);
+        List<Subgoal> subgoals = subgoalService.getAllFirstLevelSubgoals(goal);
         model.addAttribute("subgoals", subgoals);
 
-        model.addAttribute("subgoalsCountFormatted", subgoalService.getTotalSubgoalsCountForGoal(goal));
+        model.addAttribute("subgoalsCountFormatted", subgoalService.getTotalFirstLevelSubgoalsCountForGoal(goal));
         model.addAttribute("goalDeadlineFormatted", goal.getDeadline().format(dateTimeFormatters.getDayMonthYearFormatter()));
 
         return "front/goals/show";

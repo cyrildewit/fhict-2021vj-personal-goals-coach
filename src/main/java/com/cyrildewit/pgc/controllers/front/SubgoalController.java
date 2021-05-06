@@ -15,6 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -66,8 +68,8 @@ public class SubgoalController {
             return "redirect:/goals/" + goal.getUuid() + "/subgoals/create";
         }
 
-        subgoal.setId(4L);
         subgoal.setUuid(UUID.randomUUID());
+        subgoal.setGoalId(goal.getId());
         subgoalService.addSubgoal(subgoal);
 
         return "redirect:/goals/" + goal.getUuid().toString() + "/subgoals/" + subgoal.getUuid().toString();
@@ -100,8 +102,9 @@ public class SubgoalController {
             return "redirect:/goals/" + goal.getUuid() + "/subgoals/" + parentSubgoal.getUuid() + "/subgoals/create";
         }
 
-        subgoal.setId(4L);
         subgoal.setUuid(UUID.randomUUID());
+        subgoal.setGoalId(goal.getId());
+        subgoal.setParentSubgoalId(parentSubgoal.getId());
 
         subgoalService.addSubgoal(subgoal);
 
@@ -150,7 +153,11 @@ public class SubgoalController {
     }
 
     @GetMapping("/{goalUuid}/subgoals/{subgoalUuid}")
-    public String show(@PathVariable("goalUuid") UUID goalUuid, @PathVariable("subgoalUuid") UUID subgoalUuid, Model model) {
+    public String show(
+            @PathVariable("goalUuid") UUID goalUuid,
+            @PathVariable("subgoalUuid") UUID subgoalUuid,
+            Model model
+    ) {
         Optional<Goal> optionalGoal = goalService.findGoalByUuid(goalUuid);
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(goalUuid));
         Goal goal = optionalGoal.get();
@@ -172,5 +179,83 @@ public class SubgoalController {
         model.addAttribute("subgoalDeadlineFormatted", subgoal.getDeadline().format(dateTimeFormatters.getDayMonthYearFormatter()));
 
         return "front/goals/subgoals/show";
+    }
+
+    @GetMapping("/{goalUuid}/subgoals/{subgoalUuid}/edit")
+    public String edit(
+            @PathVariable("goalUuid") UUID goalUuid,
+            @PathVariable("subgoalUuid") UUID subgoalUuid,
+            Model model
+    ) {
+        Optional<Goal> optionalGoal = goalService.findGoalByUuid(goalUuid);
+        optionalGoal.orElseThrow(() -> new GoalNotFoundException(goalUuid));
+        Goal goal = optionalGoal.get();
+
+        Optional<Subgoal> optionalSubgoal = subgoalService.findSubgoalByUuid(subgoalUuid);
+        optionalSubgoal.orElseThrow(() -> new SubgoalNotFoundException(subgoalUuid));
+        Subgoal subgoal = optionalSubgoal.get();
+
+        if (!subgoalService.determineIfSubgoalBelongsToGoal(subgoal, goal)) {
+            throw new SubgoalNotFoundException(subgoalUuid);
+        }
+
+        model.addAttribute("goal", goal);
+        model.addAttribute("subgoal", subgoal);
+
+        return "front/goals/subgoals/edit";
+    }
+
+    @PutMapping("/{goalUuid}/subgoals/{subgoalUuid}/edit")
+    public String update(
+            @PathVariable("goalUuid") UUID goalUuid,
+            @PathVariable("subgoalUuid") UUID subgoalUuid,
+            @ModelAttribute("subgoal") @Valid Subgoal formSubgoal,
+            BindingResult result,
+            RedirectAttributes redirectAttributes
+    ) {
+        Optional<Goal> optionalGoal = goalService.findGoalByUuid(goalUuid);
+        optionalGoal.orElseThrow(() -> new GoalNotFoundException(goalUuid));
+        Goal goal = optionalGoal.get();
+
+        Optional<Subgoal> optionalSubgoal = subgoalService.findSubgoalByUuid(subgoalUuid);
+        optionalSubgoal.orElseThrow(() -> new SubgoalNotFoundException(subgoalUuid));
+        Subgoal subgoal = optionalSubgoal.get();
+
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.subgoal", result);
+            redirectAttributes.addFlashAttribute("subgoal", formSubgoal);
+
+            return "redirect:/goals/" + goal.getUuid() + "/subgoals/" + subgoal.getUuid() + "/edit";
+        }
+
+        subgoal.setTitle(formSubgoal.getTitle());
+        subgoal.setDescription(formSubgoal.getDescription());
+        subgoal.setDeadline(formSubgoal.getDeadline());
+
+        subgoalService.updateSubgoal(subgoal);
+
+        return "redirect:/goals/" + goal.getUuid() + "/subgoals/" + subgoal.getUuid();
+    }
+
+    @DeleteMapping("/{goalUuid}/subgoals/{subgoalUuid}")
+    public String destroy(
+            @PathVariable("goalUuid") UUID goalUuid,
+            @PathVariable("subgoalUuid") UUID subgoalUuid
+    ) {
+        Optional<Goal> optionalGoal = goalService.findGoalByUuid(goalUuid);
+        optionalGoal.orElseThrow(() -> new GoalNotFoundException(goalUuid));
+        Goal goal = optionalGoal.get();
+
+        Optional<Subgoal> optionalSubgoal = subgoalService.findSubgoalByUuid(subgoalUuid);
+        optionalSubgoal.orElseThrow(() -> new SubgoalNotFoundException(subgoalUuid));
+        Subgoal subgoal = optionalSubgoal.get();
+
+        if (!subgoalService.determineIfSubgoalBelongsToGoal(subgoal, goal)) {
+            throw new SubgoalNotFoundException(subgoalUuid);
+        }
+
+        subgoalService.deleteSubgoal(subgoal);
+
+        return "redirect:/goals/" + goal.getUuid();
     }
 }
