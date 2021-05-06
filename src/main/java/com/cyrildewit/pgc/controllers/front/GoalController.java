@@ -69,9 +69,8 @@ public class GoalController {
             return "front/goals/create";
         }
 
-        goal.setId(4L);
         goal.setUuid(UUID.randomUUID());
-
+        goal.setUserId(user.getId());
         goalService.addGoal(goal);
 
         return "redirect:goals/" + goal.getUuid().toString();
@@ -85,7 +84,6 @@ public class GoalController {
     @GetMapping("/{uuid}")
     public String show(@PathVariable("uuid") UUID uuid, Model model) {
         Optional<Goal> optionalGoal = goalService.findGoalByUuid(uuid);
-
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(uuid));
         Goal goal = optionalGoal.get();
 
