@@ -34,7 +34,14 @@ public class Goal {
     public Goal() {
     }
 
-    public Goal(UUID uuid, String title, String description, LocalDateTime deadline) {
+    public Goal(String title, String description, LocalDateTime deadline, long userId) {
+        this.title = title;
+        this.description = description;
+        this.deadline = deadline;
+        this.userId = userId;
+    }
+
+    public Goal(UUID uuid, String title, String description, LocalDateTime deadline, long userId) {
         this.uuid = uuid;
         this.title = title;
         this.description = description;
