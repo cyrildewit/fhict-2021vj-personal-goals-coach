@@ -33,11 +33,12 @@ public class SqlGoalDao implements GoalDao {
     @Autowired
     private MariaDBDriver mariaDBDriver;
 
-    private static final String SELECT_ALL_GOALS = "select * from goals";
-    private static final String SELECT_ALL_GOALS_FOR_USER = "select * from goals where user_id = ?;";
-    private static final String SELECT_GOAL_BY_ID = "select * from goals where id = ?;";
-    private static final String SELECT_GOAL_BY_UUID = "select * from goals where uuid = ?;";
-    private static final String UPDATE_GOAL = "update goals set title = ?, description = ?, deadline = ?, user_id = ? where id = ?;";
+    private static final String SELECT_ALL_GOALS = "SELECT * FROM goals";
+    private static final String SELECT_ALL_GOALS_FOR_USER = "SELECT * from goals WHERE user_id = ?;";
+    private static final String SELECT_GOAL_BY_ID = "SELECT * FROM goals WHERE id = ?;";
+    private static final String SELECT_GOAL_BY_UUID = "SELECT * FROM goals WHERE uuid = ?;";
+    private static final String UPDATE_GOAL = "UPDATE goals SET title = ?, description = ?, deadline = ?, user_id = ? WHERE id = ?;";
+    private static final String INSERT_GOAL = "INSERT INTO goals (uuid, title, description, deadline, user_id) VALUES (?, ?, ?, ?, ?);";
 
     private List<Goal> goals = new ArrayList<>();
 
@@ -106,7 +107,19 @@ public class SqlGoalDao implements GoalDao {
     }
 
     public void insertGoal(Goal goal) {
-        goals.add(goal);
+        try (Connection connection = mariaDBDriver.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_GOAL);) {
+            preparedStatement.setString(1, goal.getUuid().toString());
+            preparedStatement.setString(2, goal.getTitle());
+            preparedStatement.setString(3, goal.getDescription());
+            preparedStatement.setString(4, goal.getDeadline().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+            preparedStatement.setLong(5, goal.getUserId());
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            mariaDBDriver.printSQLException(e);
+        }
     }
 
     public boolean updateGoal(Goal goal) {
@@ -146,13 +159,13 @@ public class SqlGoalDao implements GoalDao {
     }
 
     private Optional<Goal> resolveFirstGoalFromResultSet(ResultSet result) throws SQLException {
-        Goal goal = null;
+        Optional<Goal> goal = Optional.empty();
 
         while (result.next()) {
-            goal = mapResultSetToGoal(result);
+            goal = Optional.of(mapResultSetToGoal(result));
         }
 
-        return Optional.of(goal);
+        return goal;
     }
 
     private List<Goal> resolveGoalsFromResultSet(ResultSet result) throws SQLException {
