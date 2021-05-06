@@ -41,8 +41,6 @@ public class SqlGoalDao implements GoalDao {
     private static final String INSERT_GOAL = "INSERT INTO goals (uuid, title, description, deadline, user_id) VALUES (?, ?, ?, ?, ?);";
     private static final String DELETE_GOAL_BY_ID = "DELETE FROM goals WHERE id = ?;";
 
-    private List<Goal> goals = new ArrayList<>();
-
     public List<Goal> selectAllGoals() {
         List<Goal> goals = new ArrayList<Goal>();
 
