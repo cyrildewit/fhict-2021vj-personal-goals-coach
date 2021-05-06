@@ -49,12 +49,13 @@ public class Goal {
         this.userId = userId;
     }
 
-    public Goal(Long id, UUID uuid, String title, String description, LocalDateTime deadline) {
+    public Goal(Long id, UUID uuid, String title, String description, LocalDateTime deadline, long userId) {
         this.id = id;
         this.uuid = uuid;
         this.title = title;
         this.description = description;
         this.deadline = deadline;
+        this.userId = userId;
     }
 
     public Long getId() {

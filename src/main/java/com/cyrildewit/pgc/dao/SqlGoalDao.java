@@ -131,6 +131,8 @@ public class SqlGoalDao implements GoalDao {
             preparedStatement.setString(1, goal.getTitle());
             preparedStatement.setString(2, goal.getDescription());
             preparedStatement.setString(3, goal.getDeadline().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+            preparedStatement.setLong(4, goal.getUserId());
+            preparedStatement.setLong(5, goal.getId());
 
             rowUpdated = preparedStatement.executeUpdate() > 0;
 
@@ -189,7 +191,8 @@ public class SqlGoalDao implements GoalDao {
         String description = result.getString("description");
         String deadlineString = result.getString("deadline");
         LocalDateTime deadline = LocalDateTime.parse(deadlineString, dateTimeFormatters.getMariaDbDateTimeFormatter());
+        Long userId = result.getLong("user_id");
 
-        return new Goal(id, uuid, title, description, deadline);
+        return new Goal(id, uuid, title, description, deadline, userId);
     }
 }

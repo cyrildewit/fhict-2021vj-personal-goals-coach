@@ -148,9 +148,11 @@ public class GoalController {
             return "redirect:/goals/" + goal.getUuid() + "/edit";
         }
 
-        goalService.updateGoal(formGoal);
+        goal.setTitle(formGoal.getTitle());
+        goal.setDescription(formGoal.getDescription());
+        goal.setDeadline(formGoal.getDeadline());
 
-        System.out.println("sfdsffaakjfkfl;dsjkl;");
+        goalService.updateGoal(goal);
 
         return "redirect:/goals/" + goal.getUuid().toString();
     }
