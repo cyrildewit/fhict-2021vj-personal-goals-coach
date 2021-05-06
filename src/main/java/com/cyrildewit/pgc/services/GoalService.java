@@ -51,9 +51,7 @@ public class GoalService
 
     public boolean updateGoal(Goal goal)
     {
-        goalDao.insertGoal(goal);
-
-        return true;
+        return goalDao.updateGoal(goal);
     }
 
     public void deleteGoalById(Long id)
