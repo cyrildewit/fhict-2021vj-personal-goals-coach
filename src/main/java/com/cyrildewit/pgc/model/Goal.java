@@ -96,4 +96,12 @@ public class Goal {
     public void setDeadline(LocalDateTime deadline) {
         this.deadline = deadline;
     }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long id) {
+        this.userId = userId;
+    }
 }
