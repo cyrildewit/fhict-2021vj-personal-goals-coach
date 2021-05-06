@@ -28,6 +28,9 @@ public class Goal {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime deadline;
 
+    @NotNull
+    private long userId;
+
     public Goal() {
     }
 
@@ -36,6 +39,7 @@ public class Goal {
         this.title = title;
         this.description = description;
         this.deadline = deadline;
+        this.userId = userId;
     }
 
     public Goal(Long id, UUID uuid, String title, String description, LocalDateTime deadline) {
