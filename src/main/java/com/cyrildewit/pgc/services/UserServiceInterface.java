@@ -19,6 +19,8 @@ public interface UserServiceInterface
 
     public Optional<User> findUserByUuid(UUID uuid);
 
+    public Optional<User> findUserByEmail(String email);
+
     public void addUser(User user);
 
     public void updateUser(User user, String[] params);

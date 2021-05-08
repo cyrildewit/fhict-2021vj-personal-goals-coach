@@ -14,9 +14,11 @@ public interface UserDao {
 
     public Optional<User> findUserByUuid(UUID uuid);
 
+    public Optional<User> findUserByEmail(String email);
+
     public void insertUser(User user);
 
-    public void updateUser(User user);
+    public boolean updateUser(User user);
 
     public void deleteUserById(Long id);
 

@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cyrildewit.pgc.model.User;
 import com.cyrildewit.pgc.dao.UserDao;
-import com.cyrildewit.pgc.dao.InMemoryUserDao;
+import com.cyrildewit.pgc.dao.SqlUserDao;
 
 @Service
 public class UserService
@@ -18,7 +18,7 @@ public class UserService
     private final UserDao userDao;
 
     @Autowired
-    public UserService(InMemoryUserDao userDao)
+    public UserService(SqlUserDao userDao)
     {
         this.userDao = userDao;
     }
@@ -36,6 +36,11 @@ public class UserService
     public Optional<User> findUserByUuid(UUID uuid)
     {
         return userDao.findUserByUuid(uuid);
+    }
+
+    public Optional<User> findUserByEmail(String email)
+    {
+        return userDao.findUserByEmail(email);
     }
 
     public void addUser(User user)

@@ -53,7 +53,7 @@ public class User {
         this.password = password;
     }
 
-    public User(Long id, UUID uuid, String firstName, String lasttName, String phoneNumber, String email, LocalDateTime emailVerifiedAt, String password) {
+    public User(Long id, UUID uuid, String firstName, String lasttName, String phoneNumber, String email, LocalDateTime emailVerifiedAt, String password, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.uuid = uuid;
         this.firstName = firstName;
@@ -62,6 +62,8 @@ public class User {
         this.email = email;
         this.emailVerifiedAt = emailVerifiedAt;
         this.password = password;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public Long getId() {

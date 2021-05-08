@@ -59,6 +59,16 @@ public class LoginController {
             return "redirect:/login";
         }
 
+        boolean authenticated = authenticationService.attemptLogin(userLoginFormRequest.getEmail(), userLoginFormRequest.getPassword());
+
+        if (!authenticated) {
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userLoginFormRequest", result);
+            redirectAttributes.addFlashAttribute("userLoginFormRequest", userLoginFormRequest);
+            redirectAttributes.addFlashAttribute("message", "These credentials do not match our records.");
+            redirectAttributes.addFlashAttribute("messageType", "danger");
+
+            return "redirect:/login";
+        }
 
         return "redirect:/";
     }

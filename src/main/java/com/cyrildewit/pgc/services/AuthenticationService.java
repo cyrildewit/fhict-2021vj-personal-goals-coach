@@ -8,66 +8,63 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.cyrildewit.pgc.model.Goal;
 import com.cyrildewit.pgc.model.User;
-import com.cyrildewit.pgc.dao.GoalDao;
-import com.cyrildewit.pgc.dao.InMemoryGoalDao;
+import com.cyrildewit.pgc.services.UserService;
+import com.cyrildewit.pgc.exceptions.UserNotFoundException;
+import com.cyrildewit.pgc.exceptions.NotAuthenticatedException;
 
 @Service
-public class AuthenticationService
-{
-    private final GoalDao goalDao;
+public class AuthenticationService {
+    private final UserService userService;
+
+    private User currentUser;
 
     @Autowired
-    public AuthenticationService(InMemoryGoalDao goalDao)
-    {
-        this.goalDao = goalDao;
+    public AuthenticationService(UserService userService) {
+        this.userService = userService;
+//        System.out.println("DDDDDDDDDDDDDDDDDD: " +UUID.randomUUID());
     }
 
-    public List<Goal> getAllGoals()
-    {
-        return goalDao.selectAllGoals();
+    public void fetchFakeUser() {
+
+        Optional<User> optionalUser = userService.findUserById(1L);
+        optionalUser.orElseThrow(() -> new UserNotFoundException());
+        currentUser = optionalUser.get();
     }
 
-    public List<Goal> getAllGoalsForUser(User user)
-    {
-        return goalDao.selectAllGoalsForUser(user);
+    /**
+     * Unfinished implementation and therefore obviously not secure.
+     */
+    public boolean attemptLogin(String email, String password) {
+        Optional<User> optionalUser = userService.findUserByEmail(email);
+        if (!optionalUser.isPresent()) {
+            return false;
+        }
+        User user = optionalUser.get();
+
+        if (user.getPassword().trim().equals(password.trim())) {
+            this.currentUser = user;
+
+            return true;
+        }
+
+        return false;
     }
 
-    public Optional<Goal> findGoalById(Long id)
-    {
-        return goalDao.findGoalById(id);
+    public void logout() {
+        currentUser = null;
     }
 
-    public Optional<Goal> findGoalByUuid(UUID uuid)
+    public User getCurrentUser()
     {
-        return goalDao.findGoalByUuid(uuid);
+        if (currentUser == null) {
+            throw new NotAuthenticatedException();
+        }
+
+        return currentUser;
     }
 
-    public void addGoal(Goal goal)
-    {
-        goalDao.insertGoal(goal);
-    }
-
-    public boolean updateGoal(Goal goal)
-    {
-        goalDao.insertGoal(goal);
-
-        return true;
-    }
-
-    public void deleteGoalById(Long id)
-    {
-        goalDao.deleteGoalById(id);
-    }
-
-    public void deleteGoal(Goal goal)
-    {
-        goalDao.deleteGoal(goal);
-    }
-
-    public Long getTotalGoalsCountForUser(User user)
-    {
-        return goalDao.getTotalGoalsCountForUser(user);
+    public boolean isAuthenticated() {
+        return currentUser != null;
     }
 }

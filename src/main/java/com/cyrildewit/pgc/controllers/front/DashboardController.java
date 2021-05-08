@@ -25,34 +25,29 @@ import com.cyrildewit.pgc.model.Subgoal;
 import com.cyrildewit.pgc.model.User;
 import com.cyrildewit.pgc.services.GoalService;
 import com.cyrildewit.pgc.services.SubgoalService;
+import com.cyrildewit.pgc.services.AuthenticationService;
 import com.cyrildewit.pgc.exceptions.GoalNotFoundException;
 
 @Controller
 public class DashboardController {
     private final GoalService goalService;
     private final SubgoalService subgoalService;
-    private final User user;
+    private final AuthenticationService authenticationService;
 
     @Autowired
-    public DashboardController(GoalService goalService, SubgoalService subgoalService) {
+    public DashboardController(
+            GoalService goalService,
+            SubgoalService subgoalService,
+            AuthenticationService authenticationService
+    ) {
         this.goalService = goalService;
         this.subgoalService = subgoalService;
-
-        this.user = new User(
-                1L,
-                UUID.fromString("2fa2bee2-968c-4de6-a171-989560d80701"),
-                "Jane",
-                "Doe",
-                "+31 6 2772 3737",
-                "jane@example.com",
-                LocalDateTime.now(),
-                "password"
-        );
+        this.authenticationService = authenticationService;
     }
 
     @GetMapping("/")
     public String show(Model model) {
-        model.addAttribute("goalsCountFormatted", goalService.getTotalGoalsCountForUser(user));
+        model.addAttribute("goalsCountFormatted", goalService.getTotalGoalsCountForUser(authenticationService.getCurrentUser()));
 
         return "front/dashboard/index";
     }

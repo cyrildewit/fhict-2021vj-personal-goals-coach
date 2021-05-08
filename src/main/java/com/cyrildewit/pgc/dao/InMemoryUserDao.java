@@ -26,7 +26,9 @@ public class InMemoryUserDao implements UserDao {
                 "+31 6 2772 3737",
                 "jane@example.com",
                 LocalDateTime.now(),
-                "password"
+                "password",
+                LocalDateTime.now(),
+                LocalDateTime.now()
         ));
 
         users.add(new User(
@@ -37,7 +39,9 @@ public class InMemoryUserDao implements UserDao {
                 "+31 6 2772 3737",
                 "jane@example.com",
                 LocalDateTime.now(),
-                "password"
+                "password",
+                LocalDateTime.now(),
+                LocalDateTime.now()
         ));
     }
 
@@ -57,12 +61,20 @@ public class InMemoryUserDao implements UserDao {
                 .findAny();
     }
 
+    public Optional<User> findUserByEmail(String email) {
+        return users.stream()
+                .filter(user -> email.equals(user.getEmail()))
+                .findAny();
+    }
+
     public void insertUser(User user) {
         users.add(user);
     }
 
-    public void updateUser(User user) {
+    public boolean updateUser(User user) {
         users.add(user);
+
+        return true;
     }
 
     public void deleteUserById(Long id) {
@@ -79,8 +91,7 @@ public class InMemoryUserDao implements UserDao {
         users.remove(user);
     }
 
-    public Long getTotalUsersCountForUser(User user)
-    {
+    public Long getTotalUsersCountForUser(User user) {
         return users.stream().count();
     }
 }
