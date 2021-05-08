@@ -25,7 +25,8 @@ public class InMemorySubgoalDao implements SubgoalDao {
                 "Afspraak inplannen",
                 "Fusce pretium sodales elit, quis imperdiet est laoreet at. Vestibulum ut ex nec lectus efficitur congue. Aliquam fermentum massa et leo dapibus aliquam. Nulla porttitor cursus dictum. Pellentesque finibus pharetra erat nec egestas. Integer porttitor lacus id sapien scelerisque lacinia. Phasellus iaculis scelerisque velit, et ornare felis molestie ac. Ut et ante hendrerit, dictum sapien id, suscipit odio. Pellentesque hendrerit est ac ex ullamcorper tristique. Cras vehicula vehicula turpis, et maximus ipsum. Fusce ut massa ut turpis viverra hendrerit. Nam ac lorem elit. Mauris ornare eu nunc sit amet pulvinar. Nullam iaculis erat quam, non scelerisque tellus laoreet vel.",
                 LocalDateTime.now(),
-                1L
+                1L,
+                0L
         ));
 
         subgoals.add(new Subgoal(
@@ -34,7 +35,8 @@ public class InMemorySubgoalDao implements SubgoalDao {
                 "Inlezen in materiaal",
                 "Fusce pretium sodales elit, quis imperdiet est laoreet at. Vestibulum ut ex nec lectus efficitur congue. Aliquam fermentum massa et leo dapibus aliquam. Nulla porttitor cursus dictum. Pellentesque finibus pharetra erat nec egestas. Integer porttitor lacus id sapien scelerisque lacinia. Phasellus iaculis scelerisque velit, et ornare felis molestie ac. Ut et ante hendrerit, dictum sapien id, suscipit odio. Pellentesque hendrerit est ac ex ullamcorper tristique. Cras vehicula vehicula turpis, et maximus ipsum. Fusce ut massa ut turpis viverra hendrerit. Nam ac lorem elit. Mauris ornare eu nunc sit amet pulvinar. Nullam iaculis erat quam, non scelerisque tellus laoreet vel.",
                 LocalDateTime.now(),
-                1L
+                1L,
+                0L
         ));
     }
 

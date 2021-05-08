@@ -11,7 +11,17 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
-                    <h2 class="h5"><a th:href="@{'/goals/' + ${goal.uuid.toString()}}" th:text="${goal.getTitle()}"></a></h2>
+                    <h2 class="h5">
+                        <th:block th:switch="${subgoalParentType}">
+                            <th:block th:case="${T(com.cyrildewit.pgc.enums.SubgoalParentType).GOAL}">
+                                <a th:href="@{'/goals/' + ${goal.uuid.toString()}}" th:text="${goal.getTitle()}"></a>
+                            </th:block>
+
+                            <th:block th:case="${T(com.cyrildewit.pgc.enums.SubgoalParentType).SUBGOAL}">
+                                <a th:href="@{~/goals/{goalUuid}/subgoals/{parentSubgoalUuid}(goalUuid=${goal.getUuid().toString()}, parentSubgoalUuid=${parentSubgoal.getUuid().toString()})}"><span th:text="${parentSubgoal.getTitle()}"></span></a>
+                            </th:block>
+                        </th:block>
+                    </h2>
                     <h1 class="h2 mt-2" th:text="${subgoal.getTitle()}"></h1>
                     <p><span class="badge bg-primary" th:text="${subgoalDeadlineFormatted}"></span></p>
                 </div>

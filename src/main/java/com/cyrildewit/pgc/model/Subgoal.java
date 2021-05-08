@@ -34,21 +34,23 @@ public class Subgoal {
 
     public Subgoal() {}
 
-    public Subgoal(UUID uuid, String title, String description, LocalDateTime deadline, long goalId) {
+    public Subgoal(UUID uuid, String title, String description, LocalDateTime deadline, long goalId, long parentSubgoalId) {
         this.uuid = uuid;
         this.title = title;
         this.description = description;
         this.deadline = deadline;
         this.goalId = goalId;
+        this.parentSubgoalId = parentSubgoalId;
     }
 
-    public Subgoal(Long id, UUID uuid, String title, String description, LocalDateTime deadline, long goalId) {
+    public Subgoal(Long id, UUID uuid, String title, String description, LocalDateTime deadline, long goalId, long parentSubgoalId) {
         this.id = id;
         this.uuid = uuid;
         this.title = title;
         this.description = description;
         this.deadline = deadline;
         this.goalId = goalId;
+        this.parentSubgoalId = parentSubgoalId;
     }
 
     public Long getId() {
@@ -105,6 +107,11 @@ public class Subgoal {
 
     public void setParentSubgoalId(Long parentSubgoalId) {
         this.parentSubgoalId = parentSubgoalId;
+    }
+
+    public boolean hasGoal()
+    {
+        return goalId > 0;
     }
 
     public boolean hasParentSubgoal()

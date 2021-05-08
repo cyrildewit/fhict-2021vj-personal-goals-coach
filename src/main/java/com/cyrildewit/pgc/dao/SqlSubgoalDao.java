@@ -317,7 +317,8 @@ public class SqlSubgoalDao implements SubgoalDao {
         String deadlineString = result.getString("deadline");
         LocalDateTime deadline = LocalDateTime.parse(deadlineString, dateTimeFormatters.getMariaDbDateTimeFormatter());
         Long goalId = result.getLong("goal_id");
+        Long parentSubgoalId = result.getLong("parent_subgoal_id");
 
-        return new Subgoal(id, uuid, title, description, deadline, goalId);
+        return new Subgoal(id, uuid, title, description, deadline, goalId, parentSubgoalId);
     }
 }

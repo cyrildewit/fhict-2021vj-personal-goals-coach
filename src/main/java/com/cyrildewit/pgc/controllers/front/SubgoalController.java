@@ -31,6 +31,7 @@ import com.cyrildewit.pgc.services.GoalService;
 import com.cyrildewit.pgc.services.SubgoalService;
 import com.cyrildewit.pgc.exceptions.GoalNotFoundException;
 import com.cyrildewit.pgc.exceptions.SubgoalNotFoundException;
+import com.cyrildewit.pgc.enums.SubgoalParentType;
 
 @RequestMapping("/goals")
 @Controller
@@ -126,7 +127,7 @@ public class SubgoalController {
     }
 
     @GetMapping("{goalUuid}/subgoals/{parentSubgoalUuid}/subgoals/create")
-    public String create(@PathVariable("goalUuid") UUID goalUuid, @PathVariable("parentSubgoalUuid") UUID parentSubgoalUuid, Model model) {
+    public String createChildSubgoal(@PathVariable("goalUuid") UUID goalUuid, @PathVariable("parentSubgoalUuid") UUID parentSubgoalUuid, Model model) {
         Optional<Goal> optionalGoal = goalService.findGoalByUuid(goalUuid);
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(goalUuid));
         Goal goal = optionalGoal.get();
@@ -170,6 +171,19 @@ public class SubgoalController {
             throw new SubgoalNotFoundException(subgoalUuid);
         }
 
+        SubgoalParentType subgoalParentType = subgoal.getParentSubgoalId() == 0 ? SubgoalParentType.GOAL : SubgoalParentType.SUBGOAL;
+
+        System.out.println("HIER:: " + subgoalParentType + " :::: " + subgoal.getParentSubgoalId());
+
+        if (subgoalParentType == SubgoalParentType.SUBGOAL) {
+            Optional<Subgoal> optionalParentSubgoal = subgoalService.findSubgoalById(subgoal.getParentSubgoalId());
+            optionalParentSubgoal.orElseThrow(() -> new SubgoalNotFoundException(subgoal.getParentSubgoalId()));
+            Subgoal parentSubgoal = optionalParentSubgoal.get();
+
+            model.addAttribute("parentSubgoal", parentSubgoal);
+        }
+
+
         List<Subgoal> subgoals = subgoalService.getAllSubgoalsForSubgoal(subgoal);
 
         model.addAttribute("goal", goal);
@@ -177,6 +191,7 @@ public class SubgoalController {
         model.addAttribute("subgoals", subgoals);
         model.addAttribute("subgoalsCountFormatted", subgoalService.getTotalSubgoalsCountForSubgoal(subgoal));
         model.addAttribute("subgoalDeadlineFormatted", subgoal.getDeadline().format(dateTimeFormatters.getDayMonthYearFormatter()));
+        model.addAttribute("subgoalParentType", subgoalParentType);
 
         return "front/goals/subgoals/show";
     }
