@@ -28,7 +28,7 @@ import com.cyrildewit.pgc.services.GoalService;
 import com.cyrildewit.pgc.services.SubgoalService;
 import com.cyrildewit.pgc.services.AuthenticationService;
 import com.cyrildewit.pgc.exceptions.GoalNotFoundException;
-import com.cyrildewit.pgc.validation.form.UserRegisterFormRequest;
+import com.cyrildewit.pgc.validation.form.auth.UserRegisterFormRequest;
 
 @Controller
 public class RegisterController {

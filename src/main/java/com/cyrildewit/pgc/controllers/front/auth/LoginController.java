@@ -26,7 +26,7 @@ import com.cyrildewit.pgc.model.Subgoal;
 import com.cyrildewit.pgc.model.User;
 import com.cyrildewit.pgc.services.AuthenticationService;
 import com.cyrildewit.pgc.exceptions.GoalNotFoundException;
-import com.cyrildewit.pgc.validation.form.UserLoginFormRequest;
+import com.cyrildewit.pgc.validation.form.auth.UserLoginFormRequest;
 
 @Controller
 public class LoginController {

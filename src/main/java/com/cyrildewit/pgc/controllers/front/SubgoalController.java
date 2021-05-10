@@ -32,6 +32,7 @@ import com.cyrildewit.pgc.services.SubgoalService;
 import com.cyrildewit.pgc.exceptions.GoalNotFoundException;
 import com.cyrildewit.pgc.exceptions.SubgoalNotFoundException;
 import com.cyrildewit.pgc.enums.SubgoalParentType;
+import com.cyrildewit.pgc.validation.form.CreateSubgoalFormRequest;
 
 @RequestMapping("/goals")
 @Controller
@@ -54,7 +55,7 @@ public class SubgoalController {
     @PostMapping("{goalUuid}/subgoals")
     public String store(
             @PathVariable("goalUuid") UUID goalUuid,
-            @ModelAttribute("subgoal") @Valid Subgoal subgoal,
+            @ModelAttribute("subgoal") @Valid CreateSubgoalFormRequest subgoalForm,
             BindingResult result,
             RedirectAttributes redirectAttributes
     ) {
@@ -64,13 +65,12 @@ public class SubgoalController {
 
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.subgoal", result);
-            redirectAttributes.addFlashAttribute("subgoal", subgoal);
+            redirectAttributes.addFlashAttribute("subgoal", subgoalForm);
 
             return "redirect:/goals/" + goal.getUuid() + "/subgoals/create";
         }
 
-        subgoal.setUuid(UUID.randomUUID());
-        subgoal.setGoalId(goal.getId());
+        Subgoal subgoal = new Subgoal(UUID.randomUUID(), subgoalForm.getTitle(), subgoalForm.getDescription(), subgoalForm.getDeadline(), 0, 0);
         subgoalService.addSubgoal(subgoal);
 
         return "redirect:/goals/" + goal.getUuid().toString() + "/subgoals/" + subgoal.getUuid().toString();
@@ -80,7 +80,7 @@ public class SubgoalController {
     public String storeChildSubgoal(
             @PathVariable("goalUuid") UUID goalUuid,
             @PathVariable("parentSubgoalUuid") UUID parentSubgoalUuid,
-            @ModelAttribute("subgoal") @Valid Subgoal subgoal,
+            @ModelAttribute("subgoal") @Valid CreateSubgoalFormRequest subgoalForm,
             BindingResult result,
             RedirectAttributes redirectAttributes
     ) {
@@ -92,21 +92,18 @@ public class SubgoalController {
         optionalParentSubgoal.orElseThrow(() -> new SubgoalNotFoundException(parentSubgoalUuid));
         Subgoal parentSubgoal = optionalParentSubgoal.get();
 
-        if (!subgoalService.determineIfSubgoalBelongsToGoal(subgoal, goal)) {
+        if (!subgoalService.determineIfSubgoalBelongsToGoal(parentSubgoal, goal)) {
             throw new SubgoalNotFoundException(parentSubgoalUuid);
         }
 
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.subgoal", result);
-            redirectAttributes.addFlashAttribute("subgoal", subgoal);
+            redirectAttributes.addFlashAttribute("subgoal", subgoalForm);
 
             return "redirect:/goals/" + goal.getUuid() + "/subgoals/" + parentSubgoal.getUuid() + "/subgoals/create";
         }
 
-        subgoal.setUuid(UUID.randomUUID());
-        subgoal.setGoalId(goal.getId());
-        subgoal.setParentSubgoalId(parentSubgoal.getId());
-
+        Subgoal subgoal = new Subgoal(UUID.randomUUID(), subgoalForm.getTitle(), subgoalForm.getDescription(), subgoalForm.getDeadline(), goal.getId(), parentSubgoal.getId());
         subgoalService.addSubgoal(subgoal);
 
         return "redirect:/goals/" + goal.getUuid().toString() + "/subgoals/" + subgoal.getUuid().toString();
@@ -182,7 +179,6 @@ public class SubgoalController {
 
             model.addAttribute("parentSubgoal", parentSubgoal);
         }
-
 
         List<Subgoal> subgoals = subgoalService.getAllSubgoalsForSubgoal(subgoal);
 

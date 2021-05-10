@@ -30,6 +30,8 @@ import com.cyrildewit.pgc.services.GoalService;
 import com.cyrildewit.pgc.services.SubgoalService;
 import com.cyrildewit.pgc.services.AuthenticationService;
 import com.cyrildewit.pgc.exceptions.GoalNotFoundException;
+import com.cyrildewit.pgc.validation.form.CreateGoalFormRequest;
+import com.cyrildewit.pgc.validation.form.UpdateGoalFormRequest;
 
 @Controller
 @RequestMapping("/goals")
@@ -60,22 +62,32 @@ public class GoalController {
     }
 
     @PostMapping("")
-    public String store(@ModelAttribute("goal") @Valid Goal goal, BindingResult result) {
+    public String store(
+            @ModelAttribute("goal") @Valid CreateGoalFormRequest goalForm,
+            BindingResult result,
+            RedirectAttributes redirectAttributes
+    ) {
         if (result.hasErrors()) {
-            return "front/goals/create";
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.goal", result);
+            redirectAttributes.addFlashAttribute("goal", goalForm);
+
+            return "redirect:/goals/create";
         }
 
         long currentUserId = authenticationService.getCurrentUser().getId();
 
-        goal.setUuid(UUID.randomUUID());
-        goal.setUserId(currentUserId);
+        Goal goal = new Goal(UUID.randomUUID(), goalForm.getTitle(), goalForm.getDescription(), goalForm.getDeadline(), currentUserId);
         goalService.addGoal(goal);
 
-        return "redirect:goals/" + goal.getUuid().toString();
+        return "redirect:/goals/" + goal.getUuid().toString();
     }
 
     @GetMapping("/create")
-    public String create(Goal goal) {
+    public String create(Model model) {
+        if (!model.containsAttribute("goal")) {
+            model.addAttribute("goal", new Goal());
+        }
+
         return "front/goals/create";
     }
 
@@ -115,7 +127,7 @@ public class GoalController {
     @PutMapping("/{uuid}/edit")
     public String update(
             @PathVariable("uuid") UUID uuid,
-            @ModelAttribute("goal") @Valid Goal formGoal,
+            @ModelAttribute("goal") @Valid UpdateGoalFormRequest formGoal,
             BindingResult result,
             RedirectAttributes redirectAttributes
     ) {

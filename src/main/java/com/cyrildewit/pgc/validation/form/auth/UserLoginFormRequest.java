@@ -1,4 +1,4 @@
-package com.cyrildewit.pgc.validation.form;
+package com.cyrildewit.pgc.validation.form.auth;
 
 import javax.validation.constraints.NotBlank;
 
