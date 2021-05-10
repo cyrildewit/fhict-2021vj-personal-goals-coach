@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.context.annotation.Scope;
 
 @Service
-@Scope("singleton")
 public class DateTimeFormatters
 {
     public static final String mariaDbDateTimePattern = "yyyy-LL-dd HH:mm:ss.S";
