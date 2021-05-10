@@ -55,7 +55,7 @@ public class SqlSubgoalDao implements SubgoalDao {
 
         try (Connection connection = mariaDBDriver.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_SUBGOALS);) {
-             ResultSet result = preparedStatement.executeQuery();
+            ResultSet result = preparedStatement.executeQuery();
 
             subgoals = resolveSubgoalsFromResultSet(result);
         } catch (SQLException e) {
@@ -70,7 +70,7 @@ public class SqlSubgoalDao implements SubgoalDao {
 
         try (Connection connection = mariaDBDriver.getConnection();
 
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_SUBGOALS_FOR_GOAL);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_SUBGOALS_FOR_GOAL);) {
             preparedStatement.setLong(1, goal.getId());
             ResultSet result = preparedStatement.executeQuery();
 
@@ -82,12 +82,11 @@ public class SqlSubgoalDao implements SubgoalDao {
         return subgoals;
     }
 
-    public List<Subgoal> selectAllFirstLevelSubgoalsForGoal(Goal goal)
-    {
+    public List<Subgoal> selectAllFirstLevelSubgoalsForGoal(Goal goal) {
         List<Subgoal> subgoals = new ArrayList<Subgoal>();
 
         try (Connection connection = mariaDBDriver.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_FIRST_LEVEL_SUBGOALS_FOR_GOAL);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_FIRST_LEVEL_SUBGOALS_FOR_GOAL);) {
             preparedStatement.setLong(1, goal.getId());
             ResultSet result = preparedStatement.executeQuery();
 
@@ -120,7 +119,7 @@ public class SqlSubgoalDao implements SubgoalDao {
         Optional<Subgoal> subgoal = Optional.empty();
 
         try (Connection connection = mariaDBDriver.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SUBGOAL_BY_ID);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SUBGOAL_BY_ID);) {
             preparedStatement.setLong(1, id);
             ResultSet result = preparedStatement.executeQuery();
 
@@ -136,7 +135,7 @@ public class SqlSubgoalDao implements SubgoalDao {
         Optional<Subgoal> subgoal = Optional.empty();
 
         try (Connection connection = mariaDBDriver.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SUBGOAL_BY_UUID);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_SUBGOAL_BY_UUID);) {
             preparedStatement.setString(1, uuid.toString());
             ResultSet result = preparedStatement.executeQuery();
 
@@ -150,7 +149,7 @@ public class SqlSubgoalDao implements SubgoalDao {
 
     public void insertSubgoal(Subgoal subgoal) {
         try (Connection connection = mariaDBDriver.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SUBGOAL);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_SUBGOAL);) {
             preparedStatement.setString(1, subgoal.getUuid().toString());
             preparedStatement.setString(2, subgoal.getTitle());
             preparedStatement.setString(3, subgoal.getDescription());
@@ -175,17 +174,18 @@ public class SqlSubgoalDao implements SubgoalDao {
         boolean rowUpdated = false;
 
         try (Connection connection = mariaDBDriver.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SUBGOAL);) {
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SUBGOAL);) {
             preparedStatement.setString(1, subgoal.getTitle());
             preparedStatement.setString(2, subgoal.getDescription());
             preparedStatement.setString(3, subgoal.getDeadline().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
             preparedStatement.setLong(4, subgoal.getGoalId());
-            preparedStatement.setString(5, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
             if (subgoal.hasParentSubgoal()) {
-                preparedStatement.setLong(6, subgoal.getParentSubgoalId());
+                preparedStatement.setLong(5, subgoal.getParentSubgoalId());
             } else {
-                preparedStatement.setNull(6, Types.INTEGER);
+                preparedStatement.setNull(5, Types.INTEGER);
             }
+            preparedStatement.setString(6, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+            preparedStatement.setLong(7, subgoal.getId());
 
             rowUpdated = preparedStatement.executeUpdate() > 0;
 
@@ -216,8 +216,7 @@ public class SqlSubgoalDao implements SubgoalDao {
         return 3;
     }
 
-    public long countAllSubgoalsForGoal(Goal goal)
-    {
+    public long countAllSubgoalsForGoal(Goal goal) {
         long subgoalsCount = 0;
 
         try (Connection connection = mariaDBDriver.getConnection();
@@ -225,7 +224,7 @@ public class SqlSubgoalDao implements SubgoalDao {
             preparedStatement.setLong(1, goal.getId());
             ResultSet result = preparedStatement.executeQuery();
 
-            while(result.next()) {
+            while (result.next()) {
                 subgoalsCount = result.getLong("count");
             }
         } catch (SQLException e) {
@@ -235,8 +234,7 @@ public class SqlSubgoalDao implements SubgoalDao {
         return subgoalsCount;
     }
 
-    public long countAllFistLevelSubgoalsForGoal(Goal goal)
-    {
+    public long countAllFistLevelSubgoalsForGoal(Goal goal) {
         long subgoalsCount = 0;
 
         try (Connection connection = mariaDBDriver.getConnection();
@@ -244,7 +242,7 @@ public class SqlSubgoalDao implements SubgoalDao {
             preparedStatement.setLong(1, goal.getId());
             ResultSet result = preparedStatement.executeQuery();
 
-            while(result.next()) {
+            while (result.next()) {
                 subgoalsCount = result.getLong("count");
             }
         } catch (SQLException e) {
@@ -262,7 +260,7 @@ public class SqlSubgoalDao implements SubgoalDao {
             preparedStatement.setLong(1, subgoal.getId());
             ResultSet result = preparedStatement.executeQuery();
 
-            while(result.next()) {
+            while (result.next()) {
                 subgoalsCount = result.getLong("count");
             }
         } catch (SQLException e) {
@@ -280,7 +278,7 @@ public class SqlSubgoalDao implements SubgoalDao {
             preparedStatement.setLong(1, subgoal.getId());
             ResultSet result = preparedStatement.executeQuery();
 
-            while(result.next()) {
+            while (result.next()) {
                 subgoalsCount = result.getLong("count");
             }
         } catch (SQLException e) {
