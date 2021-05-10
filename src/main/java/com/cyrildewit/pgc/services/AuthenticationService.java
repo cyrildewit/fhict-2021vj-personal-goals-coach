@@ -22,7 +22,6 @@ public class AuthenticationService {
     @Autowired
     public AuthenticationService(UserService userService) {
         this.userService = userService;
-//        System.out.println("DDDDDDDDDDDDDDDDDD: " +UUID.randomUUID());
     }
 
     public void fetchFakeUser() {

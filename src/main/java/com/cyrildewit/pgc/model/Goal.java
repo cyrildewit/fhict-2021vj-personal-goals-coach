@@ -9,13 +9,9 @@ import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-//@Entity
 public class Goal {
-//    @Id
-//    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long id;
+    private long id;
 
-//    @NotNull
     private UUID uuid;
 
     @NotBlank
