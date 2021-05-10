@@ -25,7 +25,9 @@ public class InMemoryGoalDao implements GoalDao {
                 "Aan de hand van mijn functioneringsgesprek ga ik een nieuw financieel plan opstellen voor de lunchkosten op kantoor",
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin elit nulla, dapibus vel neque a, pretium varius neque. Aliquam fermentum placerat mauris vitae egestas. Nam finibus urna ut nisl malesuada, sed blandit ipsum dignissim. Cras vestibulum hendrerit cursus. Etiam condimentum, ex posuere imperdiet ultrices, lacus sapien sagittis augue, vel rutrum elit mi vel leo. Donec eu porta massa, a ultrices ex. Suspendisse vel hendrerit lorem, a laoreet ipsum.",
                 LocalDateTime.now(),
-                1L
+                1L,
+                LocalDateTime.now(),
+                LocalDateTime.now()
         ));
 
         goals.add(new Goal(
@@ -34,7 +36,9 @@ public class InMemoryGoalDao implements GoalDao {
                 "Ik ga een uur per dag online artikelen lezen om me zo voor te bereiden op mijn de cursus op werk",
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin elit nulla, dapibus vel neque a, pretium varius neque. Aliquam fermentum placerat mauris vitae egestas. Nam finibus urna ut nisl malesuada, sed blandit ipsum dignissim. Cras vestibulum hendrerit cursus. Etiam condimentum, ex posuere imperdiet ultrices, lacus sapien sagittis augue, vel rutrum elit mi vel leo. Donec eu porta massa, a ultrices ex. Suspendisse vel hendrerit lorem, a laoreet ipsum.",
                 LocalDateTime.now(),
-                1L
+                1L,
+                LocalDateTime.now(),
+                LocalDateTime.now()
         ));
     }
 

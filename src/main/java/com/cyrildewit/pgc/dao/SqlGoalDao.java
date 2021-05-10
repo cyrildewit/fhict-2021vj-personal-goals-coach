@@ -37,8 +37,8 @@ public class SqlGoalDao implements GoalDao {
     private static final String SELECT_ALL_GOALS_FOR_USER = "SELECT * from goals WHERE user_id = ?;";
     private static final String SELECT_GOAL_BY_ID = "SELECT * FROM goals WHERE id = ?;";
     private static final String SELECT_GOAL_BY_UUID = "SELECT * FROM goals WHERE uuid = ?;";
-    private static final String UPDATE_GOAL = "UPDATE goals SET title = ?, description = ?, deadline = ?, user_id = ? WHERE id = ?;";
-    private static final String INSERT_GOAL = "INSERT INTO goals (uuid, title, description, deadline, user_id) VALUES (?, ?, ?, ?, ?);";
+    private static final String UPDATE_GOAL = "UPDATE goals SET title = ?, description = ?, deadline = ?, user_id = ?, updated_at = ? WHERE id = ?;";
+    private static final String INSERT_GOAL = "INSERT INTO goals (uuid, title, description, deadline, user_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?);";
     private static final String DELETE_GOAL_BY_ID = "DELETE FROM goals WHERE id = ?;";
     private static final String SELECT_COUNT_GOALS_FOR_USER = "SELECT count(*) AS count FROM goals WHERE user_id = ?;";
 
@@ -114,6 +114,8 @@ public class SqlGoalDao implements GoalDao {
             preparedStatement.setString(3, goal.getDescription());
             preparedStatement.setString(4, goal.getDeadline().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
             preparedStatement.setLong(5, goal.getUserId());
+            preparedStatement.setString(6, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+            preparedStatement.setString(7, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
 
             preparedStatement.executeUpdate();
 
@@ -131,7 +133,8 @@ public class SqlGoalDao implements GoalDao {
             preparedStatement.setString(2, goal.getDescription());
             preparedStatement.setString(3, goal.getDeadline().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
             preparedStatement.setLong(4, goal.getUserId());
-            preparedStatement.setLong(5, goal.getId());
+            preparedStatement.setString(5, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+            preparedStatement.setLong(6, goal.getId());
 
             rowUpdated = preparedStatement.executeUpdate() > 0;
 
@@ -205,7 +208,11 @@ public class SqlGoalDao implements GoalDao {
         String deadlineString = result.getString("deadline");
         LocalDateTime deadline = LocalDateTime.parse(deadlineString, dateTimeFormatters.getMariaDbDateTimeFormatter());
         long userId = result.getLong("user_id");
+        String createdAtString = result.getString("created_at");
+        LocalDateTime createdAt = LocalDateTime.parse(createdAtString, dateTimeFormatters.getMariaDbDateTimeFormatter());
+        String updatedAtString = result.getString("updated_at");
+        LocalDateTime updatedAt = LocalDateTime.parse(updatedAtString, dateTimeFormatters.getMariaDbDateTimeFormatter());
 
-        return new Goal(id, uuid, title, description, deadline, userId);
+        return new Goal(id, uuid, title, description, deadline, userId, createdAt, updatedAt);
     }
 }

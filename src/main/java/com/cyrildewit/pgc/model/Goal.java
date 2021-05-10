@@ -27,15 +27,15 @@ public class Goal {
     @NotNull
     private long userId;
 
-    public Goal() {
-    }
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime createdAt;
 
-    public Goal(String title, String description, LocalDateTime deadline, long userId) {
-        this.title = title;
-        this.description = description;
-        this.deadline = deadline;
-        this.userId = userId;
-    }
+    @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime updatedAt;
+
+    public Goal() {}
 
     public Goal(UUID uuid, String title, String description, LocalDateTime deadline, long userId) {
         this.uuid = uuid;
@@ -45,13 +45,15 @@ public class Goal {
         this.userId = userId;
     }
 
-    public Goal(long id, UUID uuid, String title, String description, LocalDateTime deadline, long userId) {
+    public Goal(long id, UUID uuid, String title, String description, LocalDateTime deadline, long userId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.uuid = uuid;
         this.title = title;
         this.description = description;
         this.deadline = deadline;
         this.userId = userId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public long getId() {
@@ -100,5 +102,21 @@ public class Goal {
 
     public void setUserId(long userId) {
         this.userId = userId;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
