@@ -32,6 +32,14 @@ public class Subgoal {
     @NotNull
     private long parentSubgoalId;
 
+//    @NotNull
+//    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime createdAt;
+
+//    @NotNull
+//    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime updatedAt;
+
     public Subgoal() {}
 
     public Subgoal(UUID uuid, String title, String description, LocalDateTime deadline, long goalId, long parentSubgoalId) {
@@ -43,7 +51,7 @@ public class Subgoal {
         this.parentSubgoalId = parentSubgoalId;
     }
 
-    public Subgoal(long id, UUID uuid, String title, String description, LocalDateTime deadline, long goalId, long parentSubgoalId) {
+    public Subgoal(long id, UUID uuid, String title, String description, LocalDateTime deadline, long goalId, long parentSubgoalId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.uuid = uuid;
         this.title = title;
@@ -51,6 +59,8 @@ public class Subgoal {
         this.deadline = deadline;
         this.goalId = goalId;
         this.parentSubgoalId = parentSubgoalId;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public long getId() {
@@ -117,5 +127,21 @@ public class Subgoal {
     public boolean hasParentSubgoal()
     {
         return parentSubgoalId > 0;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

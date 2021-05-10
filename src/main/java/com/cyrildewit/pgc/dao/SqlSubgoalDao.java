@@ -46,8 +46,8 @@ public class SqlSubgoalDao implements SubgoalDao {
     private static final String SELECT_COUNT_FIRST_LEVEL_SUBGOALS_FOR_SUBGOAL = "SELECT count(*) AS count FROM subgoals WHERE parent_subgoal_id = ? AND parent_subgoal_id IS NUL;";
     private static final String SELECT_SUBGOAL_BY_ID = "SELECT * FROM subgoals WHERE id = ?;";
     private static final String SELECT_SUBGOAL_BY_UUID = "SELECT * FROM subgoals WHERE uuid = ?;";
-    private static final String UPDATE_SUBGOAL = "UPDATE subgoals SET title = ?, description = ?, deadline = ?, goal_id = ?, parent_subgoal_id = ? WHERE id = ?;";
-    private static final String INSERT_SUBGOAL = "INSERT INTO subgoals (uuid, title, description, deadline, goal_id, parent_subgoal_id) VALUES (?, ?, ?, ?, ?, ?);";
+    private static final String UPDATE_SUBGOAL = "UPDATE subgoals SET title = ?, description = ?, deadline = ?, goal_id = ?, parent_subgoal_id = ?, updated_at = ? WHERE id = ?;";
+    private static final String INSERT_SUBGOAL = "INSERT INTO subgoals (uuid, title, description, deadline, goal_id, parent_subgoal_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String DELETE_SUBGOAL_BY_ID = "DELETE FROM subgoals WHERE id = ?;";
 
     public List<Subgoal> selectAllSubgoals() {
@@ -161,6 +161,8 @@ public class SqlSubgoalDao implements SubgoalDao {
             } else {
                 preparedStatement.setNull(6, Types.INTEGER);
             }
+            preparedStatement.setString(7, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+            preparedStatement.setString(8, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
 
             preparedStatement.executeUpdate();
 
@@ -172,17 +174,17 @@ public class SqlSubgoalDao implements SubgoalDao {
     public boolean updateSubgoal(Subgoal subgoal) {
         boolean rowUpdated = false;
 
-
         try (Connection connection = mariaDBDriver.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SUBGOAL);) {
             preparedStatement.setString(1, subgoal.getTitle());
             preparedStatement.setString(2, subgoal.getDescription());
             preparedStatement.setString(3, subgoal.getDeadline().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
             preparedStatement.setLong(4, subgoal.getGoalId());
+            preparedStatement.setString(5, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
             if (subgoal.hasParentSubgoal()) {
-                preparedStatement.setLong(5, subgoal.getParentSubgoalId());
+                preparedStatement.setLong(6, subgoal.getParentSubgoalId());
             } else {
-                preparedStatement.setNull(5, Types.INTEGER);
+                preparedStatement.setNull(6, Types.INTEGER);
             }
 
             rowUpdated = preparedStatement.executeUpdate() > 0;
@@ -318,7 +320,11 @@ public class SqlSubgoalDao implements SubgoalDao {
         LocalDateTime deadline = LocalDateTime.parse(deadlineString, dateTimeFormatters.getMariaDbDateTimeFormatter());
         long goalId = result.getLong("goal_id");
         long parentSubgoalId = result.getLong("parent_subgoal_id");
+        String createdAtString = result.getString("created_at");
+        LocalDateTime createdAt = LocalDateTime.parse(createdAtString, dateTimeFormatters.getMariaDbDateTimeFormatter());
+        String updatedAtString = result.getString("updated_at");
+        LocalDateTime updatedAt = LocalDateTime.parse(updatedAtString, dateTimeFormatters.getMariaDbDateTimeFormatter());
 
-        return new Subgoal(id, uuid, title, description, deadline, goalId, parentSubgoalId);
+        return new Subgoal(id, uuid, title, description, deadline, goalId, parentSubgoalId, createdAt, updatedAt);
     }
 }
