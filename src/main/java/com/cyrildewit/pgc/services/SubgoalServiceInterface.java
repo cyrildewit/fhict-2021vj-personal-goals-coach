@@ -20,15 +20,15 @@ public interface SubgoalServiceInterface
 
     public List<Subgoal> getAllSubgoalsForSubgoal(Subgoal subgoal);
 
-    public Long getTotalSubgoalsCountForGoal(Goal goal);
+    public long getTotalSubgoalsCountForGoal(Goal goal);
 
-    public Long getTotalFirstLevelSubgoalsCountForGoal(Goal goal);
+    public long getTotalFirstLevelSubgoalsCountForGoal(Goal goal);
 
-    public Long getTotalSubgoalsCountForSubgoal(Subgoal subgoal);
+    public long getTotalSubgoalsCountForSubgoal(Subgoal subgoal);
 
-    public Long getTotalFirstLevelSubgoalsCountForSubgoal(Subgoal subgoal);
+    public long getTotalFirstLevelSubgoalsCountForSubgoal(Subgoal subgoal);
 
-    public Optional<Goal> findGoalById(Long id);
+    public Optional<Goal> findGoalById(long id);
 
     public Optional<Goal> findGoalByUuid(UUID uuid);
 
@@ -36,7 +36,7 @@ public interface SubgoalServiceInterface
 
     public void updateGoal(Subgoal subgoal);
 
-    public void deleteGoalById(Long id);
+    public void deleteGoalById(long id);
 
     public void deleteSubgoal(Subgoal subgoal);
 

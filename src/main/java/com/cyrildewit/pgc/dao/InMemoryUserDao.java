@@ -49,9 +49,9 @@ public class InMemoryUserDao implements UserDao {
         return users;
     }
 
-    public Optional<User> findUserById(Long id) {
+    public Optional<User> findUserById(long id) {
         return users.stream()
-                .filter(user -> id.equals(user.getId()))
+                .filter(user -> id == user.getId())
                 .findAny();
     }
 
@@ -77,9 +77,9 @@ public class InMemoryUserDao implements UserDao {
         return true;
     }
 
-    public void deleteUserById(Long id) {
+    public void deleteUserById(long id) {
         Optional<User> user = users.stream()
-                .filter(streamUser -> id.equals(streamUser.getId()))
+                .filter(streamUser -> id == streamUser.getId())
                 .findAny();
 
         if (user.isPresent()) {
@@ -91,7 +91,7 @@ public class InMemoryUserDao implements UserDao {
         users.remove(user);
     }
 
-    public Long getTotalUsersCountForUser(User user) {
+    public long getTotalUsersCountForUser(User user) {
         return users.stream().count();
     }
 }

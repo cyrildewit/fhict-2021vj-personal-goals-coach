@@ -116,7 +116,7 @@ public class SqlSubgoalDao implements SubgoalDao {
         return subgoals;
     }
 
-    public Optional<Subgoal> findSubgoalById(Long id) {
+    public Optional<Subgoal> findSubgoalById(long id) {
         Optional<Subgoal> subgoal = Optional.empty();
 
         try (Connection connection = mariaDBDriver.getConnection();
@@ -194,7 +194,7 @@ public class SqlSubgoalDao implements SubgoalDao {
         return rowUpdated;
     }
 
-    public void deleteSubgoalById(Long id) {
+    public void deleteSubgoalById(long id) {
         try (Connection connection = mariaDBDriver.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SUBGOAL_BY_ID);) {
             preparedStatement.setLong(1, id);
@@ -214,7 +214,7 @@ public class SqlSubgoalDao implements SubgoalDao {
         return 3;
     }
 
-    public Long countAllSubgoalsForGoal(Goal goal)
+    public long countAllSubgoalsForGoal(Goal goal)
     {
         long subgoalsCount = 0;
 
@@ -233,7 +233,7 @@ public class SqlSubgoalDao implements SubgoalDao {
         return subgoalsCount;
     }
 
-    public Long countAllFistLevelSubgoalsForGoal(Goal goal)
+    public long countAllFistLevelSubgoalsForGoal(Goal goal)
     {
         long subgoalsCount = 0;
 
@@ -252,7 +252,7 @@ public class SqlSubgoalDao implements SubgoalDao {
         return subgoalsCount;
     }
 
-    public Long countAllSubgoalsForSubgoal(Subgoal subgoal) {
+    public long countAllSubgoalsForSubgoal(Subgoal subgoal) {
         long subgoalsCount = 0;
 
         try (Connection connection = mariaDBDriver.getConnection();
@@ -270,7 +270,7 @@ public class SqlSubgoalDao implements SubgoalDao {
         return subgoalsCount;
     }
 
-    public Long countAllFistLevelSubgoalsForSubgoal(Subgoal subgoal) {
+    public long countAllFistLevelSubgoalsForSubgoal(Subgoal subgoal) {
         long subgoalsCount = 0;
 
         try (Connection connection = mariaDBDriver.getConnection();
@@ -309,15 +309,15 @@ public class SqlSubgoalDao implements SubgoalDao {
     }
 
     private Subgoal mapResultSetToSubgoal(ResultSet result) throws SQLException {
-        Long id = result.getLong("id");
+        long id = result.getLong("id");
         String uuidString = result.getString("uuid");
         UUID uuid = UUID.fromString(uuidString);
         String title = result.getString("title");
         String description = result.getString("description");
         String deadlineString = result.getString("deadline");
         LocalDateTime deadline = LocalDateTime.parse(deadlineString, dateTimeFormatters.getMariaDbDateTimeFormatter());
-        Long goalId = result.getLong("goal_id");
-        Long parentSubgoalId = result.getLong("parent_subgoal_id");
+        long goalId = result.getLong("goal_id");
+        long parentSubgoalId = result.getLong("parent_subgoal_id");
 
         return new Subgoal(id, uuid, title, description, deadline, goalId, parentSubgoalId);
     }

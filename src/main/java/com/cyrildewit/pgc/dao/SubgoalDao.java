@@ -20,15 +20,15 @@ public interface SubgoalDao
 
     public List<Subgoal> selectAllSubgoalsForSubgoal(Subgoal subgoal);
 
-    public Long countAllSubgoalsForGoal(Goal goal);
+    public long countAllSubgoalsForGoal(Goal goal);
 
-    public Long countAllFistLevelSubgoalsForGoal(Goal goal);
+    public long countAllFistLevelSubgoalsForGoal(Goal goal);
 
-    public Long countAllSubgoalsForSubgoal(Subgoal subgoal);
+    public long countAllSubgoalsForSubgoal(Subgoal subgoal);
 
-    public Long countAllFistLevelSubgoalsForSubgoal(Subgoal subgoal);
+    public long countAllFistLevelSubgoalsForSubgoal(Subgoal subgoal);
 
-    public Optional<Subgoal> findSubgoalById(Long id);
+    public Optional<Subgoal> findSubgoalById(long id);
 
     public Optional<Subgoal> findSubgoalByUuid(UUID uuid);
 
@@ -36,7 +36,7 @@ public interface SubgoalDao
 
     public boolean updateSubgoal(Subgoal subgoal);
 
-    public void deleteSubgoalById(Long id);
+    public void deleteSubgoalById(long id);
 
     public void deleteSubgoal(Subgoal subgoal);
 

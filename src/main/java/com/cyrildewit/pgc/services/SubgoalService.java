@@ -43,27 +43,27 @@ public class SubgoalService
         return subgoalDao.selectAllSubgoalsForSubgoal(subgoal);
     }
 
-    public Long getTotalSubgoalsCountForGoal(Goal goal)
+    public long getTotalSubgoalsCountForGoal(Goal goal)
     {
         return subgoalDao.countAllSubgoalsForGoal(goal);
     }
 
-    public Long getTotalFirstLevelSubgoalsCountForGoal(Goal goal)
+    public long getTotalFirstLevelSubgoalsCountForGoal(Goal goal)
     {
         return subgoalDao.countAllFistLevelSubgoalsForGoal(goal);
     }
 
-    public Long getTotalSubgoalsCountForSubgoal(Subgoal subgoal)
+    public long getTotalSubgoalsCountForSubgoal(Subgoal subgoal)
     {
         return subgoalDao.countAllSubgoalsForSubgoal(subgoal);
     }
 
-    public Long getTotalFirstLevelSubgoalsCountForSubgoal(Subgoal subgoal)
+    public long getTotalFirstLevelSubgoalsCountForSubgoal(Subgoal subgoal)
     {
         return subgoalDao.countAllFistLevelSubgoalsForSubgoal(subgoal);
     }
 
-    public Optional<Subgoal> findSubgoalById(Long id)
+    public Optional<Subgoal> findSubgoalById(long id)
     {
         return subgoalDao.findSubgoalById(id);
     }
@@ -83,7 +83,7 @@ public class SubgoalService
         subgoalDao.insertSubgoal(subgoal);
     }
 
-    public void deleteSubgoalById(Long id)
+    public void deleteSubgoalById(long id)
     {
         subgoalDao.deleteSubgoalById(id);
     }

@@ -12,7 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 //@Entity
 public class Subgoal {
-    private Long id;
+    private long id;
 
     private UUID uuid;
 
@@ -43,7 +43,7 @@ public class Subgoal {
         this.parentSubgoalId = parentSubgoalId;
     }
 
-    public Subgoal(Long id, UUID uuid, String title, String description, LocalDateTime deadline, long goalId, long parentSubgoalId) {
+    public Subgoal(long id, UUID uuid, String title, String description, LocalDateTime deadline, long goalId, long parentSubgoalId) {
         this.id = id;
         this.uuid = uuid;
         this.title = title;
@@ -53,11 +53,11 @@ public class Subgoal {
         this.parentSubgoalId = parentSubgoalId;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -93,19 +93,19 @@ public class Subgoal {
         this.deadline = deadline;
     }
 
-    public Long getGoalId() {
+    public long getGoalId() {
         return goalId;
     }
 
-    public void setGoalId(Long goalId) {
+    public void setGoalId(long goalId) {
         this.goalId = goalId;
     }
 
-    public Long getParentSubgoalId() {
+    public long getParentSubgoalId() {
         return parentSubgoalId;
     }
 
-    public void setParentSubgoalId(Long parentSubgoalId) {
+    public void setParentSubgoalId(long parentSubgoalId) {
         this.parentSubgoalId = parentSubgoalId;
     }
 

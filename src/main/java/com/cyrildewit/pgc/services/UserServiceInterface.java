@@ -15,7 +15,7 @@ public interface UserServiceInterface
 {
     public List<User> getAllUsers();
 
-    public Optional<User> findUserById(Long id);
+    public Optional<User> findUserById(long id);
 
     public Optional<User> findUserByUuid(UUID uuid);
 
@@ -25,7 +25,7 @@ public interface UserServiceInterface
 
     public void updateUser(User user, String[] params);
 
-    public void deleteUserById(Long id);
+    public void deleteUserById(long id);
 
     public void deleteUser(User user);
 }

@@ -10,7 +10,7 @@ import com.cyrildewit.pgc.model.User;
 public interface UserDao {
     public List<User> selectAllUsers();
 
-    public Optional<User> findUserById(Long id);
+    public Optional<User> findUserById(long id);
 
     public Optional<User> findUserByUuid(UUID uuid);
 
@@ -20,7 +20,7 @@ public interface UserDao {
 
     public boolean updateUser(User user);
 
-    public void deleteUserById(Long id);
+    public void deleteUserById(long id);
 
     public void deleteUser(User user);
 }

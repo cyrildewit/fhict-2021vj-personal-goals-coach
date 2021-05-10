@@ -45,7 +45,7 @@ public class Goal {
         this.userId = userId;
     }
 
-    public Goal(Long id, UUID uuid, String title, String description, LocalDateTime deadline, long userId) {
+    public Goal(long id, UUID uuid, String title, String description, LocalDateTime deadline, long userId) {
         this.id = id;
         this.uuid = uuid;
         this.title = title;
@@ -54,11 +54,11 @@ public class Goal {
         this.userId = userId;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -94,11 +94,11 @@ public class Goal {
         this.deadline = deadline;
     }
 
-    public Long getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long id) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 }

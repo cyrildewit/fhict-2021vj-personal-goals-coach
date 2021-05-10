@@ -28,7 +28,7 @@ public class UserService
         return userDao.selectAllUsers();
     }
 
-    public Optional<User> findUserById(Long id)
+    public Optional<User> findUserById(long id)
     {
         return userDao.findUserById(id);
     }
@@ -53,7 +53,7 @@ public class UserService
         userDao.insertUser(user);
     }
 
-    public void deleteUserById(Long id)
+    public void deleteUserById(long id)
     {
         userDao.deleteUserById(id);
     }

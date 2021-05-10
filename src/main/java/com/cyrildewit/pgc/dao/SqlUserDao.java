@@ -58,7 +58,7 @@ public class SqlUserDao implements UserDao {
         return users;
     }
 
-    public Optional<User> findUserById(Long id) {
+    public Optional<User> findUserById(long id) {
         Optional<User> user = Optional.empty();
 
         try (Connection connection = mariaDBDriver.getConnection();
@@ -148,7 +148,7 @@ public class SqlUserDao implements UserDao {
         return rowUpdated;
     }
 
-    public void deleteUserById(Long id) {
+    public void deleteUserById(long id) {
         try (Connection connection = mariaDBDriver.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER_BY_ID);) {
             preparedStatement.setLong(1, id);
@@ -185,7 +185,7 @@ public class SqlUserDao implements UserDao {
     }
 
     private User mapResultSetToUser(ResultSet result) throws SQLException {
-        Long id = result.getLong("id");
+        long id = result.getLong("id");
         String uuidString = result.getString("uuid");
         UUID uuid = UUID.fromString(uuidString);
         String firstName = result.getString("first_name");

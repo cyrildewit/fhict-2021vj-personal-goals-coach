@@ -56,23 +56,23 @@ public class InMemorySubgoalDao implements SubgoalDao {
         return subgoals;
     }
 
-    public Long countAllSubgoalsForGoal(Goal goal)
+    public long countAllSubgoalsForGoal(Goal goal)
     {
         return subgoals.stream().count();
     }
 
-    public Long countAllFistLevelSubgoalsForGoal(Goal goal) {return subgoals.stream().count();}
+    public long countAllFistLevelSubgoalsForGoal(Goal goal) {return subgoals.stream().count();}
 
-    public Long countAllSubgoalsForSubgoal(Subgoal subgoal)
+    public long countAllSubgoalsForSubgoal(Subgoal subgoal)
     {
         return subgoals.stream().count();
     }
 
-    public Long countAllFistLevelSubgoalsForSubgoal(Subgoal subgoal) {return subgoals.stream().count();}
+    public long countAllFistLevelSubgoalsForSubgoal(Subgoal subgoal) {return subgoals.stream().count();}
 
-    public Optional<Subgoal> findSubgoalById(Long id) {
+    public Optional<Subgoal> findSubgoalById(long id) {
         return subgoals.stream()
-                .filter(subgoal -> id.equals(subgoal.getId()))
+                .filter(subgoal -> id == subgoal.getId())
                 .findAny();
     }
 
@@ -97,9 +97,9 @@ public class InMemorySubgoalDao implements SubgoalDao {
         return true;
     }
 
-    public void deleteSubgoalById(Long id) {
+    public void deleteSubgoalById(long id) {
         Optional<Subgoal> subgoal = subgoals.stream()
-                .filter(streamSubgoal -> id.equals(streamSubgoal.getId()))
+                .filter(streamSubgoal -> id == streamSubgoal.getId())
                 .findAny();
 
         if (subgoal.isPresent()) {

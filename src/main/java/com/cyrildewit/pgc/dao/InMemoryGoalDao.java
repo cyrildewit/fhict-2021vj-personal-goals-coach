@@ -46,9 +46,9 @@ public class InMemoryGoalDao implements GoalDao {
         return goals;
     }
 
-    public Optional<Goal> findGoalById(Long id) {
+    public Optional<Goal> findGoalById(long id) {
         return goals.stream()
-                .filter(goal -> id.equals(goal.getId()))
+                .filter(goal -> id == goal.getId())
                 .findAny();
     }
 
@@ -73,9 +73,9 @@ public class InMemoryGoalDao implements GoalDao {
         return true;
     }
 
-    public void deleteGoalById(Long id) {
+    public void deleteGoalById(long id) {
         Optional<Goal> goal = goals.stream()
-                .filter(streamGoal -> id.equals(streamGoal.getId()))
+                .filter(streamGoal -> id == streamGoal.getId())
                 .findAny();
 
         if (goal.isPresent()) {
@@ -87,7 +87,7 @@ public class InMemoryGoalDao implements GoalDao {
         goals.remove(goal);
     }
 
-    public Long getTotalGoalsCountForUser(User user)
+    public long getTotalGoalsCountForUser(User user)
     {
         return goals.stream().count();
     }

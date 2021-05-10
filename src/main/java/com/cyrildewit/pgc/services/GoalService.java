@@ -34,7 +34,7 @@ public class GoalService
         return goalDao.selectAllGoalsForUser(user);
     }
 
-    public Optional<Goal> findGoalById(Long id)
+    public Optional<Goal> findGoalById(long id)
     {
         return goalDao.findGoalById(id);
     }
@@ -54,7 +54,7 @@ public class GoalService
         return goalDao.updateGoal(goal);
     }
 
-    public void deleteGoalById(Long id)
+    public void deleteGoalById(long id)
     {
         goalDao.deleteGoalById(id);
     }
@@ -64,7 +64,7 @@ public class GoalService
         goalDao.deleteGoal(goal);
     }
 
-    public Long getTotalGoalsCountForUser(User user)
+    public long getTotalGoalsCountForUser(User user)
     {
         return goalDao.getTotalGoalsCountForUser(user);
     }

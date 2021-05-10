@@ -16,7 +16,7 @@ public interface GoalServiceInterface
 
     public List<Goal> getAllGoalsForUser(User user);
 
-    public Optional<Goal> findGoalById(Long id);
+    public Optional<Goal> findGoalById(long id);
 
     public Optional<Goal> findGoalByUuid(UUID uuid);
 
@@ -24,9 +24,9 @@ public interface GoalServiceInterface
 
     public boolean updateGoal(Goal goal);
 
-    public void deleteGoalById(Long id);
+    public void deleteGoalById(long id);
 
     public void deleteGoal(Goal goal);
 
-    public Long getTotalGoalsCountForUser(User user);
+    public long getTotalGoalsCountForUser(User user);
 }

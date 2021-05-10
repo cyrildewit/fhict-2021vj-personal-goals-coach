@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 public class User {
-    private Long id;
+    private long id;
     private UUID uuid;
 
     @NotBlank
@@ -53,7 +53,7 @@ public class User {
         this.password = password;
     }
 
-    public User(Long id, UUID uuid, String firstName, String lasttName, String phoneNumber, String email, LocalDateTime emailVerifiedAt, String password, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public User(long id, UUID uuid, String firstName, String lasttName, String phoneNumber, String email, LocalDateTime emailVerifiedAt, String password, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.uuid = uuid;
         this.firstName = firstName;
@@ -66,11 +66,11 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

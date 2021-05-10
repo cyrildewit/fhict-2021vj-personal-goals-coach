@@ -74,7 +74,7 @@ public class SqlGoalDao implements GoalDao {
         return goals;
     }
 
-    public Optional<Goal> findGoalById(Long id) {
+    public Optional<Goal> findGoalById(long id) {
         Optional<Goal> goal = Optional.empty();
 
         try (Connection connection = mariaDBDriver.getConnection();
@@ -142,7 +142,7 @@ public class SqlGoalDao implements GoalDao {
         return rowUpdated;
     }
 
-    public void deleteGoalById(Long id) {
+    public void deleteGoalById(long id) {
         try (Connection connection = mariaDBDriver.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_GOAL_BY_ID);) {
             preparedStatement.setLong(1, id);
@@ -158,7 +158,7 @@ public class SqlGoalDao implements GoalDao {
         deleteGoalById(goal.getId());
     }
 
-    public Long getTotalGoalsCountForUser(User user) {
+    public long getTotalGoalsCountForUser(User user) {
         long goalsCount = 0;
 
         try (Connection connection = mariaDBDriver.getConnection();
@@ -197,14 +197,14 @@ public class SqlGoalDao implements GoalDao {
     }
 
     private Goal mapResultSetToGoal(ResultSet result) throws SQLException {
-        Long id = result.getLong("id");
+        long id = result.getLong("id");
         String uuidString = result.getString("uuid");
         UUID uuid = UUID.fromString(uuidString);
         String title = result.getString("title");
         String description = result.getString("description");
         String deadlineString = result.getString("deadline");
         LocalDateTime deadline = LocalDateTime.parse(deadlineString, dateTimeFormatters.getMariaDbDateTimeFormatter());
-        Long userId = result.getLong("user_id");
+        long userId = result.getLong("user_id");
 
         return new Goal(id, uuid, title, description, deadline, userId);
     }
