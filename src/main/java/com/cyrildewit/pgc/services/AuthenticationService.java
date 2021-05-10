@@ -26,7 +26,6 @@ public class AuthenticationService {
     }
 
     public void fetchFakeUser() {
-
         Optional<User> optionalUser = userService.findUserById(1L);
         optionalUser.orElseThrow(() -> new UserNotFoundException());
         currentUser = optionalUser.get();
@@ -57,6 +56,8 @@ public class AuthenticationService {
 
     public User getCurrentUser()
     {
+        fetchFakeUser();
+
         if (currentUser == null) {
             throw new NotAuthenticatedException();
         }
