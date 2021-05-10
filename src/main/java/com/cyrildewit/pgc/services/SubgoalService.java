@@ -80,7 +80,7 @@ public class SubgoalService
 
     public void updateSubgoal(Subgoal subgoal)
     {
-        subgoalDao.insertSubgoal(subgoal);
+        subgoalDao.updateSubgoal(subgoal);
     }
 
     public void deleteSubgoalById(long id)
