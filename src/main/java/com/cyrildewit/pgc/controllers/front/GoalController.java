@@ -65,8 +65,10 @@ public class GoalController {
             return "front/goals/create";
         }
 
+        long currentUserId = authenticationService.getCurrentUser().getId();
+
         goal.setUuid(UUID.randomUUID());
-        goal.setUserId(authenticationService.getCurrentUser().getId());
+        goal.setUserId(currentUserId);
         goalService.addGoal(goal);
 
         return "redirect:goals/" + goal.getUuid().toString();
