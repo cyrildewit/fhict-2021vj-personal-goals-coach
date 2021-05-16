@@ -36,9 +36,7 @@ import com.cyrildewit.pgc.validation.form.UpdateGoalFormRequest;
 @Controller
 @RequestMapping("/goals")
 public class GoalController {
-    @Autowired
     private DateTimeFormatters dateTimeFormatters;
-
     private final GoalService goalService;
     private final SubgoalService subgoalService;
     private final AuthenticationService authenticationService;
@@ -47,11 +45,13 @@ public class GoalController {
     public GoalController(
             GoalService goalService,
             SubgoalService subgoalService,
-            AuthenticationService authenticationService
+            AuthenticationService authenticationService,
+            DateTimeFormatters dateTimeFormatters
     ) {
         this.goalService = goalService;
         this.subgoalService = subgoalService;
         this.authenticationService = authenticationService;
+        this.dateTimeFormatters = dateTimeFormatters;
     }
 
     @GetMapping("")
