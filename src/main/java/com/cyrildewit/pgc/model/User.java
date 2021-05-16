@@ -2,6 +2,8 @@ package com.cyrildewit.pgc.model;
 
 import java.util.UUID;
 import java.time.LocalDateTime;
+import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 public class User {
     private long id;
@@ -80,6 +82,12 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getFullName() {
+        return Stream.of(firstName, lastName)
+                .filter(x -> x != null && !x.isEmpty())
+                .collect(Collectors.joining(" "));
     }
 
     public String getPhoneNumber() {
