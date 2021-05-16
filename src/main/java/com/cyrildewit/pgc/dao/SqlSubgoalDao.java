@@ -29,11 +29,14 @@ import com.cyrildewit.pgc.datasource.MariaDBDriver;
 
 @Component
 public class SqlSubgoalDao implements SubgoalDao {
-    @Autowired
     private DateTimeFormatters dateTimeFormatters;
 
-    @Autowired
     private MariaDBDriver mariaDBDriver;
+
+    public SqlSubgoalDao(DateTimeFormatters dateTimeFormatters, MariaDBDriver mariaDBDriver) {
+        this.dateTimeFormatters = dateTimeFormatters;
+        this.mariaDBDriver = mariaDBDriver;
+    }
 
     private static final String SELECT_ALL_SUBGOALS = "SELECT * FROM subgoals";
     private static final String SELECT_ALL_SUBGOALS_FOR_GOAL = "SELECT * FROM subgoals WHERE goal_id = ?;";

@@ -26,11 +26,14 @@ import com.cyrildewit.pgc.datasource.MariaDBDriver;
 
 @Component
 public class SqlUserDao implements UserDao {
-    @Autowired
     private DateTimeFormatters dateTimeFormatters;
 
-    @Autowired
     private MariaDBDriver mariaDBDriver;
+
+    public SqlUserDao(DateTimeFormatters dateTimeFormatters, MariaDBDriver mariaDBDriver) {
+        this.dateTimeFormatters = dateTimeFormatters;
+        this.mariaDBDriver = mariaDBDriver;
+    }
 
     private static final String SELECT_ALL_USERS = "SELECT * FROM users";
 //    private static final String SELECT_ALL_USERS_WHERE_ROLE = "SELECT * from users WHERE user_id = ?;";

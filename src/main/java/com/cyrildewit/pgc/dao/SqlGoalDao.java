@@ -27,11 +27,14 @@ import com.cyrildewit.pgc.datasource.MariaDBDriver;
 
 @Component
 public class SqlGoalDao implements GoalDao {
-    @Autowired
     private DateTimeFormatters dateTimeFormatters;
 
-    @Autowired
     private MariaDBDriver mariaDBDriver;
+
+    public SqlGoalDao(DateTimeFormatters dateTimeFormatters, MariaDBDriver mariaDBDriver) {
+        this.dateTimeFormatters = dateTimeFormatters;
+        this.mariaDBDriver = mariaDBDriver;
+    }
 
     private static final String SELECT_ALL_GOALS = "SELECT * FROM goals";
     private static final String SELECT_ALL_GOALS_FOR_USER = "SELECT * from goals WHERE user_id = ?;";
