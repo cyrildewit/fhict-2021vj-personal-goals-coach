@@ -282,4 +282,22 @@ class SqlGoalDaoTest {
 
         assertEquals(0, goalsCount);
     }
+
+    @Test
+    void getTotalGoalsCountForUser() {
+        try (Connection connection = mariaDBDriver.getConnection();
+             Statement stmt = connection.createStatement();) {
+            stmt.execute("TRUNCATE TABLE goals;");
+            stmt.execute("INSERT INTO goals (uuid, title, description, deadline, user_id, created_at, updated_at) VALUES ('16bc6513-18df-4530-ab20-cb5e76412544', 'Test Goal', 'Goal description 1', '2021-05-10 20:15:25', 1, '2021-05-10 20:15:25', '2021-05-10 20:15:25');");
+            stmt.execute("INSERT INTO goals (uuid, title, description, deadline, user_id, created_at, updated_at) VALUES ('c38aeed1-9077-4194-9d6c-fe0fc3f12345', 'Test Goal', 'Goal description 2', '2021-05-10 20:15:25', 1, '2021-05-10 20:15:25', '2021-05-10 20:15:25');");
+            stmt.execute("INSERT INTO goals (uuid, title, description, deadline, user_id, created_at, updated_at) VALUES ('c38aeed1-9077-4194-9d6c-fe0fc3f12345', 'Test Goal', 'Goal description 3', '2021-05-10 20:15:25', 2, '2021-05-10 20:15:25', '2021-05-10 20:15:25');");
+        } catch (SQLException e) {
+            mariaDBDriver.printSQLException(e);
+        }
+
+        User user = new User();
+        user.setId(1L);
+
+        assertEquals(2, goalDao.getTotalGoalsCountForUser(user));
+    }
 }
