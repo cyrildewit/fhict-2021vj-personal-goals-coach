@@ -24,6 +24,7 @@
 
                             <ul class="dropdown-menu" aria-labelledby="goalSettingsDropdownMenuButton">
                                 <li><a class="dropdown-item" th:href="@{/goals/{goalUuid}/edit(goalUuid=${goal.getUuid().toString()})}">Edit Goal</a></li>
+                                <li><a class="dropdown-item" th:href="@{/goals/{goalUuid}/suggestive-actions(goalUuid=${goal.getUuid().toString()})}">Suggestive Actions (<th:block th:text="${suggestiveActionsCountFormatted}"></th:block>)</a></li>
                                 <li><a class="dropdown-item" href="#">Coaching Style</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteGoalModal">Delete Goal</a></li>

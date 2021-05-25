@@ -29,6 +29,8 @@ import com.cyrildewit.pgc.model.User;
 import com.cyrildewit.pgc.services.GoalService;
 import com.cyrildewit.pgc.services.SubgoalService;
 import com.cyrildewit.pgc.services.AuthenticationService;
+import com.cyrildewit.pgc.services.SuggestiveActionService;
+import com.cyrildewit.pgc.process.SuggestiveActionAnalyzerProcess;
 import com.cyrildewit.pgc.exceptions.GoalNotFoundException;
 import com.cyrildewit.pgc.validation.form.CreateGoalFormRequest;
 import com.cyrildewit.pgc.validation.form.UpdateGoalFormRequest;
@@ -40,17 +42,20 @@ public class GoalController {
     private final GoalService goalService;
     private final SubgoalService subgoalService;
     private final AuthenticationService authenticationService;
+    private final SuggestiveActionService suggestiveActionService;
 
     @Autowired
     public GoalController(
             GoalService goalService,
             SubgoalService subgoalService,
             AuthenticationService authenticationService,
+            SuggestiveActionService suggestiveActionService,
             DateTimeFormatters dateTimeFormatters
     ) {
         this.goalService = goalService;
         this.subgoalService = subgoalService;
         this.authenticationService = authenticationService;
+        this.suggestiveActionService = suggestiveActionService;
         this.dateTimeFormatters = dateTimeFormatters;
     }
 
@@ -104,6 +109,7 @@ public class GoalController {
 
         model.addAttribute("subgoalsCountFormatted", subgoalService.getTotalFirstLevelSubgoalsCountForGoal(goal));
         model.addAttribute("goalDeadlineFormatted", goal.getDeadline().format(dateTimeFormatters.getDayMonthYearFormatter()));
+        model.addAttribute("suggestiveActionsCountFormatted", suggestiveActionService.getTotalSuggestiveActionsCountForGoal(goal));
 
         return "front/goals/show";
     }
@@ -166,6 +172,16 @@ public class GoalController {
     public String test() {
         System.out.println("UUID: " + UUID.randomUUID());
         return "redirect:/goals";
+
+    }
+
+    @GetMapping("/test2")
+    public void test2() {
+        SuggestiveActionAnalyzerProcess process = new SuggestiveActionAnalyzerProcess(authenticationService.getCurrentUser(), goalService, subgoalService, suggestiveActionService);
+        process.execute();
+//
+//        System.out.println("UUID: " + UUID.randomUUID());
+//        return "redirect:/goals";
 
     }
 }

@@ -22,6 +22,8 @@ public interface GoalDao
 
     public void insertGoal(Goal goal);
 
+//    public void insertGoals(List<Goal> goal);
+
     public boolean updateGoal(Goal goal);
 
     public void deleteGoalById(long id);
