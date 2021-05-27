@@ -32,8 +32,8 @@ import com.cyrildewit.pgc.services.AuthenticationService;
 import com.cyrildewit.pgc.services.SuggestiveActionService;
 import com.cyrildewit.pgc.process.SuggestiveActionAnalyzerProcess;
 import com.cyrildewit.pgc.exceptions.GoalNotFoundException;
-import com.cyrildewit.pgc.validation.form.CreateGoalFormRequest;
-import com.cyrildewit.pgc.validation.form.UpdateGoalFormRequest;
+import com.cyrildewit.pgc.validation.form.goal.CreateGoalFormRequest;
+import com.cyrildewit.pgc.validation.form.goal.UpdateGoalFormRequest;
 
 @Controller
 @RequestMapping("/goals")

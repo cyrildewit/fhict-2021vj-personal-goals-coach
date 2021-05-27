@@ -32,7 +32,7 @@ import com.cyrildewit.pgc.services.SubgoalService;
 import com.cyrildewit.pgc.exceptions.GoalNotFoundException;
 import com.cyrildewit.pgc.exceptions.SubgoalNotFoundException;
 import com.cyrildewit.pgc.enums.SubgoalParentType;
-import com.cyrildewit.pgc.validation.form.CreateSubgoalFormRequest;
+import com.cyrildewit.pgc.validation.form.subgoal.CreateSubgoalFormRequest;
 
 @RequestMapping("/goals")
 @Controller

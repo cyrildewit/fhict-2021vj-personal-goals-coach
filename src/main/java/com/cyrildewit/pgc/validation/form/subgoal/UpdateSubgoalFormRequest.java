@@ -1,4 +1,4 @@
-package com.cyrildewit.pgc.validation.form;
+package com.cyrildewit.pgc.validation.form.subgoal;
 
 import java.time.LocalDateTime;
 
@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-public class CreateGoalFormRequest {
+public class UpdateSubgoalFormRequest {
     @NotBlank
     private String title;
 
@@ -18,7 +18,7 @@ public class CreateGoalFormRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime deadline;
 
-    public CreateGoalFormRequest(String title, String description, LocalDateTime deadline) {
+    public UpdateSubgoalFormRequest(String title, String description, LocalDateTime deadline) {
         this.title = title;
         this.description = description;
         this.deadline = deadline;

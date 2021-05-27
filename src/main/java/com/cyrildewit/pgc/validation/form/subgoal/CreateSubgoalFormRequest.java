@@ -1,4 +1,4 @@
-package com.cyrildewit.pgc.validation.form;
+package com.cyrildewit.pgc.validation.form.subgoal;
 
 import java.time.LocalDateTime;
 
