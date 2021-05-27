@@ -95,7 +95,7 @@ public class SubgoalService
 
     public boolean determineIfSubgoalBelongsToGoal(Subgoal subgoal, Goal goal)
     {
-        return true;
+        return subgoal.getGoalId() == goal.getId();
     }
 
     /**
