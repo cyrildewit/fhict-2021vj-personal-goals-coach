@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.cyrildewit.pgc.model.Goal;
 import com.cyrildewit.pgc.model.User;
 
-public interface GoalServiceInterface
-{
+public interface GoalServiceInterface {
     public List<Goal> getAllGoals();
 
     public List<Goal> getAllGoalsForUser(User user);
@@ -31,4 +30,6 @@ public interface GoalServiceInterface
     public void deleteGoal(Goal goal);
 
     public long getTotalGoalsCountForUser(User user);
+
+    public Optional<Goal> getGoalWithMostRecentActivity();
 }

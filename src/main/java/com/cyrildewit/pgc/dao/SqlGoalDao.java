@@ -206,6 +206,22 @@ public class SqlGoalDao implements GoalDao {
         return goalsCount;
     }
 
+    public Optional<Goal> getGoalWithMostRecentActivity() {
+        Optional<Goal> goal = Optional.empty();
+
+//        try (Connection connection = mariaDBDriver.getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_GOAL_BY_ID);) {
+//            preparedStatement.setLong(1, id);
+//            ResultSet result = preparedStatement.executeQuery();
+//
+//            goal = resolveFirstGoalFromResultSet(result);
+//        } catch (SQLException e) {
+//            mariaDBDriver.printSQLException(e);
+//        }
+
+        return goal;
+    }
+
     private Optional<Goal> resolveFirstGoalFromResultSet(ResultSet result) throws SQLException {
         Optional<Goal> goal = Optional.empty();
 

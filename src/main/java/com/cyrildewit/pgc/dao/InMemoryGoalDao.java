@@ -100,4 +100,8 @@ public class InMemoryGoalDao implements GoalDao {
     {
         return goals.stream().count();
     }
+
+    public Optional<Goal> getGoalWithMostRecentActivity() {
+        return goals.get(0);
+    }
 }

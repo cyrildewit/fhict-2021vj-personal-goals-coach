@@ -33,4 +33,6 @@ public interface GoalDao
     public void deleteGoal(Goal goal);
 
     public long getTotalGoalsCountForUser(User user);
+
+    public Optional<Goal> getGoalWithMostRecentActivity();
 }

@@ -14,33 +14,27 @@ import com.cyrildewit.pgc.dao.GoalDao;
 import com.cyrildewit.pgc.dao.SqlGoalDao;
 
 @Service
-public class GoalService
-{
+public class GoalService {
     private final GoalDao goalDao;
 
     @Autowired
-    public GoalService(SqlGoalDao goalDao)
-    {
+    public GoalService(SqlGoalDao goalDao) {
         this.goalDao = goalDao;
     }
 
-    public List<Goal> getAllGoals()
-    {
+    public List<Goal> getAllGoals() {
         return goalDao.selectAllGoals();
     }
 
-    public List<Goal> getAllGoalsForUser(User user)
-    {
+    public List<Goal> getAllGoalsForUser(User user) {
         return goalDao.selectAllGoalsForUser(user);
     }
 
-    public Optional<Goal> findGoalById(long id)
-    {
+    public Optional<Goal> findGoalById(long id) {
         return goalDao.findGoalById(id);
     }
 
-    public Optional<Goal> findGoalByUuid(UUID uuid)
-    {
+    public Optional<Goal> findGoalByUuid(UUID uuid) {
         return goalDao.findGoalByUuid(uuid);
     }
 
@@ -52,23 +46,23 @@ public class GoalService
         goalDao.insertGoal(goal);
     }
 
-    public boolean updateGoal(Goal goal)
-    {
+    public boolean updateGoal(Goal goal) {
         return goalDao.updateGoal(goal);
     }
 
-    public void deleteGoalById(long id)
-    {
+    public void deleteGoalById(long id) {
         goalDao.deleteGoalById(id);
     }
 
-    public void deleteGoal(Goal goal)
-    {
+    public void deleteGoal(Goal goal) {
         goalDao.deleteGoal(goal);
     }
 
-    public long getTotalGoalsCountForUser(User user)
-    {
+    public long getTotalGoalsCountForUser(User user) {
         return goalDao.getTotalGoalsCountForUser(user);
+    }
+
+    public Optional<Goal> getGoalWithMostRecentActivity() {
+        return goalDao.getGoalWithMostRecentActivity();
     }
 }
