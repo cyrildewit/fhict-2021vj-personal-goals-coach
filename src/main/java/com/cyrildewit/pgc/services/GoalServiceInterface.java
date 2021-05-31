@@ -20,6 +20,8 @@ public interface GoalServiceInterface
 
     public Optional<Goal> findGoalByUuid(UUID uuid);
 
+    public Optional<Goal> findGoalByIds(List<Long> ids);
+
     public void addGoal(Goal goal);
 
     public boolean updateGoal(Goal goal);

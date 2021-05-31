@@ -1,13 +1,14 @@
 package com.cyrildewit.pgc.dao;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Objects;
-import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -107,6 +108,29 @@ public class SqlGoalDao implements GoalDao {
         }
 
         return goal;
+    }
+
+    public List<Goal> findGoalByIds(List<Long> ids) {
+        String SELECT_GOAL_BY_IDS = "SELECT * FROM goals WHERE id IN (";
+
+        SELECT_GOAL_BY_IDS += ids.toString();
+
+        SELECT_GOAL_BY_IDS += ");";
+
+        System.out.println("SQLLL::::: " + SELECT_GOAL_BY_IDS);
+
+        List<Goal> goals = new ArrayList<Goal>();
+
+        try (Connection connection = mariaDBDriver.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_GOAL_BY_IDS);) {
+            ResultSet result = preparedStatement.executeQuery();
+
+            goals = resolveGoalsFromResultSet(result);
+        } catch (SQLException e) {
+            mariaDBDriver.printSQLException(e);
+        }
+
+        return goals;
     }
 
     public void insertGoal(Goal goal) {

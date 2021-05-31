@@ -29,18 +29,32 @@
 
         <div th:if="${suggestiveActions.empty}">
             <h3>There are no suggestive actions found.</h3>
-<!--            <a href="/goals/create" class="btn btn-sm btn-primary">Start with creating one!</a>-->
         </div>
 
         <div class="row">
             <div class="col-md-6" th:each="suggestiveAction, suggestiveActionsStat: ${suggestiveActions}">
-                <!--                ${goalsStat.count}-->
                 <div class="card mb-4">
                     <div class="card-body">
-                        <h5 class="card-title" th:text="${suggestiveAction.getId().toString()}"></h5>
+                        <th:block th:switch="${suggestiveAction.getType()}">
+                            <th:block th:case="${T(com.cyrildewit.pgc.enums.SuggestiveActionType).DELETE_GOAL}">
+                                <h5 class="card-title">d</h5>
+                                <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+                            </th:block>
+
+                            <th:block th:case="${T(com.cyrildewit.pgc.enums.SuggestiveActionType).CREATE_SUBGOAL}">
+                                <h6 class="card-subtitle mb-2 text-muted">Create a subgoal for "<th:block th:text="${goals.get(0).getTitle()}"></th:block>" to divide the goal into smaller steps.</h6>
+                                <a th:href="@{'/goals/' + ${goal.uuid.toString()}}/subgoals/create" class="btn btn-sm btn-primary">Create</a>
+                            </th:block>
+                        </th:block>
+
+                        <h5 class="card-title" th:text="${suggestiveAction.getType().toString()}"></h5>
+
+
+
                         <!--                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>-->
 <!--                        <p class="card-text" th:text="${subgoal.getDescription()}"></p>-->
                     </div>
+
 <!--                    <div class="card-body">-->
 <!--                        <a th:href="@{'/goals/' + ${goal.uuid.toString()} + '/subgoals/' + ${subgoal.uuid.toString()}}" class="btn btn-sm btn-primary ">View Subgoal-->
 <!--                            Overview</a>-->

@@ -62,6 +62,11 @@ public class InMemoryGoalDao implements GoalDao {
                 .findAny();
     }
 
+    public List<Goal> findGoalByIds(List<Long> ids) {
+
+        return goals;
+    }
+
     public void insertGoal(Goal goal) {
         goals.add(goal);
     }

@@ -26,6 +26,7 @@ import com.cyrildewit.pgc.util.DateTimeFormatters;
 import com.cyrildewit.pgc.model.Goal;
 import com.cyrildewit.pgc.model.Subgoal;
 import com.cyrildewit.pgc.model.User;
+import com.cyrildewit.pgc.model.SuggestiveAction;
 import com.cyrildewit.pgc.services.GoalService;
 import com.cyrildewit.pgc.services.SubgoalService;
 import com.cyrildewit.pgc.services.AuthenticationService;
@@ -68,8 +69,17 @@ public class GoalSuggestiveActionController {
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(uuid));
         Goal goal = optionalGoal.get();
 
+        List<SuggestiveAction> suggestiveActions = suggestiveActionService.getAllSuggestiveActionsForGoal(goal);
+        List<Long> goalIds = suggestiveActions
+                    .stream()
+                    .map(suggestiveAction -> new Long(suggestiveAction.getGoalId()))
+                    .collect(Collectors.toList());
+
+        List<Goal> goals = goalService.findGoalByIds(goalIds);
+
         model.addAttribute("goal", goal);
-        model.addAttribute("suggestiveActions", suggestiveActionService.getAllSuggestiveActionsForGoal(goal));
+        model.addAttribute("goals", goals);
+        model.addAttribute("suggestiveActions", suggestiveActions);
         model.addAttribute("suggestiveActionsCountFormatted", suggestiveActionService.getTotalSuggestiveActionsCountForGoal(goal));
 
 

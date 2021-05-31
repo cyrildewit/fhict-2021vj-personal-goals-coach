@@ -44,8 +44,11 @@ public class GoalService
         return goalDao.findGoalByUuid(uuid);
     }
 
-    public void addGoal(Goal goal)
-    {
+    public List<Goal> findGoalByIds(List<Long> ids) {
+        return goalDao.findGoalByIds(ids);
+    }
+
+    public void addGoal(Goal goal) {
         goalDao.insertGoal(goal);
     }
 
