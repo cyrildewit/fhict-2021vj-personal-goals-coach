@@ -1,4 +1,4 @@
-package com.cyrildewit.pgc.model;
+package com.cyrildewit.pgc.dao;
 
 import java.util.List;
 
