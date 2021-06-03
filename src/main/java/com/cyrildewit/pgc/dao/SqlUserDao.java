@@ -118,8 +118,8 @@ public class SqlUserDao implements UserDao {
             preparedStatement.setString(4, user.getEmail());
             preparedStatement.setString(5, user.getEmailVerifiedAt().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
             preparedStatement.setString(6, user.getPassword());
-            preparedStatement.setString(6, user.getCreatedAt().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
-            preparedStatement.setString(6, user.getUpdatedAt().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+            preparedStatement.setString(6, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+            preparedStatement.setString(6, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
 
             preparedStatement.executeUpdate();
 
