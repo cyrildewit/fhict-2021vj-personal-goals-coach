@@ -101,7 +101,22 @@ public class InMemoryGoalDao implements GoalDao {
         return goals.stream().count();
     }
 
-    public Optional<Goal> getGoalWithMostRecentActivity() {
-        return goals.get(0);
+    public Optional<Goal> getGoalWithMostRecentActivity(LocalDateTime start) {
+        return Optional.empty();
+    }
+
+    public Optional<Goal> getGoalWithMostRecentActivity(LocalDateTime start, LocalDateTime end) {
+        Optional<Goal> goal = Optional.empty();
+        return goal;
+    }
+
+    public Optional<Goal> getGoalWithMostRecentFrequentActivityForUser(User user, int days, LocalDateTime start) {
+        Optional<Goal> goal = Optional.empty();
+        return goal;
+    }
+
+    public Optional<Goal> getGoalWithMostRecentFrequentActivityForUser(User user, int days, LocalDateTime start, LocalDateTime end) {
+        Optional<Goal> goal = Optional.empty();
+        return goal;
     }
 }

@@ -23,8 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cyrildewit.pgc.model.Goal;
 import com.cyrildewit.pgc.model.User;
+import com.cyrildewit.pgc.model.Activity;
 import com.cyrildewit.pgc.util.DateTimeFormatters;
 import com.cyrildewit.pgc.datasource.MariaDBDriver;
+import com.cyrildewit.pgc.dao.ActivityDao;
 
 @Component
 public class SqlGoalDao implements GoalDao {
@@ -32,9 +34,12 @@ public class SqlGoalDao implements GoalDao {
 
     private MariaDBDriver mariaDBDriver;
 
-    public SqlGoalDao(DateTimeFormatters dateTimeFormatters, MariaDBDriver mariaDBDriver) {
+    private ActivityDao activityDao;
+
+    public SqlGoalDao(DateTimeFormatters dateTimeFormatters, MariaDBDriver mariaDBDriver, ActivityDao activityDao) {
         this.dateTimeFormatters = dateTimeFormatters;
         this.mariaDBDriver = mariaDBDriver;
+        this.activityDao = activityDao;
     }
 
     private static final String SELECT_ALL_GOALS = "SELECT * FROM goals";
@@ -206,19 +211,8 @@ public class SqlGoalDao implements GoalDao {
         return goalsCount;
     }
 
-    public Optional<Goal> getGoalWithMostRecentActivity() {
+    public Optional<Goal> getGoalWithMostRecentActivity(LocalDateTime start, LocalDateTime end) {
         Optional<Goal> goal = Optional.empty();
-
-//        try (Connection connection = mariaDBDriver.getConnection();
-//             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_GOAL_BY_ID);) {
-//            preparedStatement.setLong(1, id);
-//            ResultSet result = preparedStatement.executeQuery();
-//
-//            goal = resolveFirstGoalFromResultSet(result);
-//        } catch (SQLException e) {
-//            mariaDBDriver.printSQLException(e);
-//        }
-
         return goal;
     }
 

@@ -10,16 +10,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cyrildewit.pgc.model.Goal;
 import com.cyrildewit.pgc.model.User;
+import com.cyrildewit.pgc.model.Activity;
 import com.cyrildewit.pgc.dao.GoalDao;
 import com.cyrildewit.pgc.dao.SqlGoalDao;
+import com.cyrildewit.pgc.dao.ActivityDao;
+import com.cyrildewit.pgc.dao.SqlActivityDao;
 
 @Service
 public class GoalService {
     private final GoalDao goalDao;
+    private final ActivityDao activityDao;
 
     @Autowired
-    public GoalService(SqlGoalDao goalDao) {
+    public GoalService(SqlGoalDao goalDao, SqlActivityDao activityDao) {
         this.goalDao = goalDao;
+        this.activityDao = activityDao;
     }
 
     public List<Goal> getAllGoals() {
@@ -62,7 +67,52 @@ public class GoalService {
         return goalDao.getTotalGoalsCountForUser(user);
     }
 
-    public Optional<Goal> getGoalWithMostRecentActivity() {
-        return goalDao.getGoalWithMostRecentActivity();
+    public Optional<Goal> getGoalWithMostRecentActivity(LocalDateTime start) {
+        return getGoalWithMostRecentActivity(start, LocalDateTime.now());
+    }
+
+    public Optional<Goal> getGoalWithMostRecentActivity(LocalDateTime start, LocalDateTime end) {
+        return goalDao.getGoalWithMostRecentActivity(start, end);
+    }
+
+    public Optional<Goal> getGoalWithMostRecentFrequentActivityForUser(User user, int days, LocalDateTime start) {
+        return getGoalWithMostRecentFrequentActivityForUser(user, days, start, LocalDateTime.now());
+    }
+
+    public Optional<Goal> getGoalWithMostRecentFrequentActivityForUser(User user, int days, LocalDateTime start, LocalDateTime end) {
+
+        Goal goalWithMostRecentFrequentActivity = null;
+        long highestFrequency = 0;
+
+        List<Goal> goals = goalDao.selectAllGoalsForUser(user);
+
+        for (Goal goal : goals){
+            List<Activity> activities = activityDao.selectActvityWithinPeriodForSubjectAndCauser(goal, user, start, end);
+            long currentFrequency = activities.stream().count() / days;
+
+            System.out.println("goal fr: " + currentFrequency);
+            System.out.println("user : " + user.getId() + "  goal " + goal.getId());
+
+            if (currentFrequency > highestFrequency) {
+                goalWithMostRecentFrequentActivity = goal;
+                highestFrequency = currentFrequency;
+            }
+        }
+
+        return Optional.ofNullable(goalWithMostRecentFrequentActivity);
+    }
+
+    public boolean determineIfGoalHastMostRecentFrequentActivityForUser(User user, Goal goal, int days, LocalDateTime start) {
+        return determineIfGoalHastMostRecentFrequentActivityForUser(user, goal, days, start, LocalDateTime.now());
+    }
+
+    public boolean determineIfGoalHastMostRecentFrequentActivityForUser(User user, Goal goal, int days, LocalDateTime start, LocalDateTime end) {
+        Optional<Goal> optionalGoalWithMostRecentFrequentActivity = getGoalWithMostRecentFrequentActivityForUser(user, days, start, end);
+
+        if (optionalGoalWithMostRecentFrequentActivity.isEmpty()) {
+            return false;
+        }
+
+        return optionalGoalWithMostRecentFrequentActivity.get().getId() == goal.getId();
     }
 }

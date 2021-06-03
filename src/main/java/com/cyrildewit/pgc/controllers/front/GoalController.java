@@ -26,10 +26,12 @@ import com.cyrildewit.pgc.util.DateTimeFormatters;
 import com.cyrildewit.pgc.model.Goal;
 import com.cyrildewit.pgc.model.Subgoal;
 import com.cyrildewit.pgc.model.User;
+import com.cyrildewit.pgc.model.Activity;
 import com.cyrildewit.pgc.services.GoalService;
 import com.cyrildewit.pgc.services.SubgoalService;
 import com.cyrildewit.pgc.services.AuthenticationService;
 import com.cyrildewit.pgc.services.SuggestiveActionService;
+import com.cyrildewit.pgc.services.ActivityService;
 import com.cyrildewit.pgc.process.SuggestiveActionAnalyzerProcess;
 import com.cyrildewit.pgc.exceptions.GoalNotFoundException;
 import com.cyrildewit.pgc.validation.form.goal.CreateGoalFormRequest;
@@ -43,6 +45,7 @@ public class GoalController {
     private final SubgoalService subgoalService;
     private final AuthenticationService authenticationService;
     private final SuggestiveActionService suggestiveActionService;
+    private final ActivityService activityService;
 
     @Autowired
     public GoalController(
@@ -50,12 +53,14 @@ public class GoalController {
             SubgoalService subgoalService,
             AuthenticationService authenticationService,
             SuggestiveActionService suggestiveActionService,
+            ActivityService activityService,
             DateTimeFormatters dateTimeFormatters
     ) {
         this.goalService = goalService;
         this.subgoalService = subgoalService;
         this.authenticationService = authenticationService;
         this.suggestiveActionService = suggestiveActionService;
+        this.activityService = activityService;
         this.dateTimeFormatters = dateTimeFormatters;
     }
 
@@ -79,10 +84,12 @@ public class GoalController {
             return "redirect:/goals/create";
         }
 
-        long currentUserId = authenticationService.getCurrentUser().getId();
+        User currentUser = authenticationService.getCurrentUser();
 
-        Goal goal = new Goal(UUID.randomUUID(), goalForm.getTitle(), goalForm.getDescription(), goalForm.getDeadline(), currentUserId);
+        Goal goal = new Goal(UUID.randomUUID(), goalForm.getTitle(), goalForm.getDescription(), goalForm.getDeadline(), currentUser.getId());
         goalService.addGoal(goal);
+
+        activityService.addActivity(new Activity(UUID.randomUUID(), "", "Created goal '" + goalService.findGoalByUuid(goal.getUuid()).get().getTitle() + "'", goal, currentUser));
 
         return "redirect:/goals/" + goal.getUuid().toString();
     }
@@ -154,6 +161,10 @@ public class GoalController {
 
         goalService.updateGoal(goal);
 
+        User currentUser = authenticationService.getCurrentUser();
+
+        activityService.addActivity(new Activity(UUID.randomUUID(), "", "Updated goal '" + goal.getTitle() + "'", goal, currentUser));
+
         return "redirect:/goals/" + goal.getUuid().toString();
     }
 
@@ -164,6 +175,10 @@ public class GoalController {
         Goal goal = optionalGoal.get();
 
         goalService.deleteGoal(goal);
+
+        User currentUser = authenticationService.getCurrentUser();
+
+        activityService.addActivity(new Activity(UUID.randomUUID(), "", "Deleted goal '" + goal.getTitle() + "'", goal, currentUser));
 
         return "redirect:/goals";
     }
@@ -177,7 +192,14 @@ public class GoalController {
 
     @GetMapping("/test2")
     public void test2() {
-        SuggestiveActionAnalyzerProcess process = new SuggestiveActionAnalyzerProcess(authenticationService.getCurrentUser(), goalService, subgoalService, suggestiveActionService);
+        SuggestiveActionAnalyzerProcess process = new SuggestiveActionAnalyzerProcess(
+                authenticationService.getCurrentUser(),
+                LocalDateTime.now().minusMonths(3),
+                3,
+                goalService,
+                subgoalService,
+                suggestiveActionService
+        );
         process.execute();
 //
 //        System.out.println("UUID: " + UUID.randomUUID());

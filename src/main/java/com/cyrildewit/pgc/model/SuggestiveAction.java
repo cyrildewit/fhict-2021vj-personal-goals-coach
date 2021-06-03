@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.cyrildewit.pgc.enums.SuggestiveActionType;
 
-public class SuggestiveAction {
+public class SuggestiveAction extends Model {
     private long id;
 
     private UUID uuid;

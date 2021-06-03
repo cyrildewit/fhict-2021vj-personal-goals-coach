@@ -26,20 +26,31 @@ public class SuggestiveActionAnalyzerProcess implements ProcessInterface {
     private SuggestiveActionService suggestiveActionService;
 
     private User user;
+    private LocalDateTime activityStartDateTime;
+    private int activityFrequencyPeriod;
 
     private List<SuggestiveAction> suggestiveActions = new ArrayList<SuggestiveAction>();
 
+    private Optional<Goal> goalWithMostRecentFrequentActivity;
+
     @Autowired
-    public SuggestiveActionAnalyzerProcess(User user, GoalService goalService, SubgoalService subgoalService, SuggestiveActionService suggestiveActionService) {
+    public SuggestiveActionAnalyzerProcess(User user, LocalDateTime activityStartDateTime, int activityFrequencyPeriod, GoalService goalService, SubgoalService subgoalService, SuggestiveActionService suggestiveActionService) {
         this.user = user;
+        this.activityStartDateTime = activityStartDateTime;
+        this.activityFrequencyPeriod = activityFrequencyPeriod;
         this.goalService = goalService;
         this.subgoalService = subgoalService;
         this.suggestiveActionService = suggestiveActionService;
     }
 
     public void execute() {
+        prefetchData();
         analayzeData();
         storeSuggestiveActions();
+    }
+
+    private void prefetchData() {
+        goalWithMostRecentFrequentActivity = goalService.getGoalWithMostRecentFrequentActivityForUser(user, activityFrequencyPeriod, activityStartDateTime);
     }
 
     private void analayzeData() {
@@ -60,7 +71,7 @@ public class SuggestiveActionAnalyzerProcess implements ProcessInterface {
     private void storeSuggestiveActions() {
         suggestiveActions.stream()
                 .forEach(suggestiveAction -> {
-                    System.out.println("Suggestive action bestaat: "  + suggestiveActionService.suggestiveActionExists(suggestiveAction));
+//                    System.out.println("Suggestive action bestaat: "  + suggestiveActionService.suggestiveActionExists(suggestiveAction));
                     if (suggestiveActionService.suggestiveActionExists(suggestiveAction)) {
                         return;
                     }
@@ -84,6 +95,14 @@ public class SuggestiveActionAnalyzerProcess implements ProcessInterface {
             addSuggestiveAction(new SuggestiveAction(UUID.randomUUID(), SuggestiveActionType.DELETE_GOAL, user.getId(), goal.getId(), 0));
         } else if (lastGoalActivityDateTime.isBefore(LocalDateTime.now().minusWeeks(2))) {
             addSuggestiveAction(new SuggestiveAction(UUID.randomUUID(), SuggestiveActionType.CREATE_SUBGOAL, user.getId(), goal.getId(), 0));
+        }
+
+//        System.out.println(goalWithMostRecentFrequentActivity.isPresent() ? "goalWithMostRecentFrequentActivity is present" : "goalWithMostRecentFrequentActivity is niet presetn");
+
+        if (goalWithMostRecentFrequentActivity.isPresent() && goalWithMostRecentFrequentActivity.get().getId() == goal.getId()) {
+//            System.out.println("Goal has most recent activity: " + goal.getTitle());
+
+            addSuggestiveAction(new SuggestiveAction(UUID.randomUUID(), SuggestiveActionType.PIN_GOAL, user.getId(), goal.getId(), 0));
         }
     }
 

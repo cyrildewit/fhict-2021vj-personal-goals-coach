@@ -3,6 +3,7 @@ package com.cyrildewit.pgc.dao;
 import java.util.UUID;
 import java.util.Optional;
 import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -34,5 +35,5 @@ public interface GoalDao
 
     public long getTotalGoalsCountForUser(User user);
 
-    public Optional<Goal> getGoalWithMostRecentActivity();
+    public Optional<Goal> getGoalWithMostRecentActivity(LocalDateTime start, LocalDateTime end);
 }
