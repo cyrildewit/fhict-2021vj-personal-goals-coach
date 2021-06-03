@@ -5,7 +5,9 @@ import java.time.LocalDateTime;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
-public class User {
+import com.cyrildewit.pgc.model.Model;
+
+public class User extends Model {
     private long id;
 
     private UUID uuid;

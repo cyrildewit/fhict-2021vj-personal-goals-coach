@@ -3,7 +3,9 @@ package com.cyrildewit.pgc.model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public class Subgoal {
+import com.cyrildewit.pgc.model.Model;
+
+public class Subgoal extends Model {
     private long id;
 
     private UUID uuid;
