@@ -24,9 +24,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.cyrildewit.pgc.model.Goal;
 import com.cyrildewit.pgc.model.User;
 import com.cyrildewit.pgc.model.Activity;
+import com.cyrildewit.pgc.model.CoachingStylePreference;
 import com.cyrildewit.pgc.util.DateTimeFormatters;
 import com.cyrildewit.pgc.datasource.MariaDBDriver;
 import com.cyrildewit.pgc.dao.ActivityDao;
+import com.cyrildewit.pgc.dao.CoachingStylePreferenceDao;
 
 @Component
 public class SqlGoalDao implements GoalDao {
@@ -36,10 +38,13 @@ public class SqlGoalDao implements GoalDao {
 
     private ActivityDao activityDao;
 
-    public SqlGoalDao(DateTimeFormatters dateTimeFormatters, MariaDBDriver mariaDBDriver, ActivityDao activityDao) {
+    private CoachingStylePreferenceDao coachingStylePreferenceDao;
+
+    public SqlGoalDao(DateTimeFormatters dateTimeFormatters, MariaDBDriver mariaDBDriver, ActivityDao activityDao, CoachingStylePreferenceDao coachingStylePreferenceDao) {
         this.dateTimeFormatters = dateTimeFormatters;
         this.mariaDBDriver = mariaDBDriver;
         this.activityDao = activityDao;
+        this.coachingStylePreferenceDao = coachingStylePreferenceDao;
     }
 
     private static final String SELECT_ALL_GOALS = "SELECT * FROM goals";
@@ -63,7 +68,7 @@ public class SqlGoalDao implements GoalDao {
             mariaDBDriver.printSQLException(e);
         }
 
-        return goals;
+        return loadRelationshipseForGoals(goals);
     }
 
     public List<Goal> selectAllGoalsForUser(User user) {
@@ -80,7 +85,7 @@ public class SqlGoalDao implements GoalDao {
             mariaDBDriver.printSQLException(e);
         }
 
-        return goals;
+        return loadRelationshipseForGoals(goals);
     }
 
     public Optional<Goal> findGoalById(long id) {
@@ -94,6 +99,10 @@ public class SqlGoalDao implements GoalDao {
             goal = resolveFirstGoalFromResultSet(result);
         } catch (SQLException e) {
             mariaDBDriver.printSQLException(e);
+        }
+
+        if (goal.isPresent()) {
+            return Optional.of(loadRelationshipseForGoal(goal.get()));
         }
 
         return goal;
@@ -110,6 +119,10 @@ public class SqlGoalDao implements GoalDao {
             goal = resolveFirstGoalFromResultSet(result);
         } catch (SQLException e) {
             mariaDBDriver.printSQLException(e);
+        }
+
+        if (goal.isPresent()) {
+            return Optional.of(loadRelationshipseForGoal(goal.get()));
         }
 
         return goal;
@@ -135,7 +148,7 @@ public class SqlGoalDao implements GoalDao {
             mariaDBDriver.printSQLException(e);
         }
 
-        return goals;
+        return loadRelationshipseForGoals(goals);
     }
 
     public void insertGoal(Goal goal) {
@@ -251,5 +264,31 @@ public class SqlGoalDao implements GoalDao {
         LocalDateTime updatedAt = LocalDateTime.parse(updatedAtString, dateTimeFormatters.getMariaDbDateTimeFormatter());
 
         return new Goal(id, uuid, title, description, deadline, userId, createdAt, updatedAt);
+    }
+
+    private List<Goal> loadRelationshipseForGoals(List<Goal> goals) {
+        List<Goal> changedGoals = new ArrayList<Goal>();
+
+        for (Goal goal : goals) {
+            changedGoals.add(loadRelationshipseForGoal(goal));
+        }
+
+        return changedGoals;
+    }
+
+    private Goal loadRelationshipseForGoal(Goal goal) {
+        Optional<CoachingStylePreference> coachingStylePreferenceOptional = coachingStylePreferenceDao.findCoachingSytlePreferenceByGoal(goal);
+
+        if (coachingStylePreferenceOptional.isPresent()) {
+            goal.setCoachingStylePreference(coachingStylePreferenceOptional.get());
+        }
+
+        Optional<Activity> latestActivityOptional = activityDao.selectLatestActivityForSubject(goal);
+
+        if (latestActivityOptional.isPresent()) {
+            goal.setLatestActivity(latestActivityOptional.get());
+        }
+
+        return goal;
     }
 }

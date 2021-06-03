@@ -10,6 +10,8 @@ public interface SuggestiveActionServiceInterface
 {
     public void addSuggestiveAction(SuggestiveAction suggestiveAction);
 
+    public void addUniqueSuggestiveAction(SuggestiveAction suggestiveAction);
+
     public boolean suggestiveActionExists(SuggestiveAction suggestiveAction);
 
     public int getTotalSuggestiveActionsCountForUser(User user);

@@ -28,6 +28,11 @@ public class ActivityService implements ActivityServiceInterface {
         activityDao.insertActivity(activity);
     }
 
+    public Optional<Activity> selectLatestActivityForSubject(Model subject)
+    {
+        return activityDao.selectLatestActivityForSubject(subject);
+    }
+
     public List<Activity> getAllActvityForSubject(Model subject)
     {
         return activityDao.selectAllActvityForSubject(subject);

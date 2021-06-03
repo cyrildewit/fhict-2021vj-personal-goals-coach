@@ -128,4 +128,14 @@ public class Subgoal extends Model {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+//    private void analyzeSubgoal(Subgoal subgoal) {
+//        LocalDateTime lastSubgoalActivityDateTime = LocalDateTime.now().minusMonths(4);
+//
+//        if (lastSubgoalActivityDateTime.isBefore(LocalDateTime.now().minusMonths(3))) {
+//            addSuggestiveAction(new SuggestiveAction(UUID.randomUUID(), SuggestiveActionType.DELETE_SUBGOAL, user.getId(), subgoal.getGoalId(), subgoal.getId()));
+//        } else if (lastSubgoalActivityDateTime.isBefore(LocalDateTime.now().minusWeeks(2))) {
+//            addSuggestiveAction(new SuggestiveAction(UUID.randomUUID(), SuggestiveActionType.CREATE_SUBGOAL_FOR_SUBGOAL, user.getId(), subgoal.getGoalId(), subgoal.getId()));
+//        }
+//    }
 }

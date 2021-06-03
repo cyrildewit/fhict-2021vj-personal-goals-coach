@@ -40,6 +40,7 @@ public class SqlActivityDao implements ActivityDao {
 
     private static final String SELECT_ALL_ACTIVITY_FOR_SUBJECT = "SELECT * from activities WHERE subject_id = ? AND subject_type = ?;";
     private static final String SELECT_ALL_ACTIVITY_WITHIN_PERIOD_FOR_SUBJECT = "SELECT * from activities WHERE subject_id = ? AND subject_type = ? AND subject_id = ? AND subject_type = ? AND created_at > ? AND created_at < ?;";
+    private static final String SELECT_LATEST_ACTIVITY_FOR_USER = "SELECT * FROM activities WHERE subject_id = ? AND subject_type = ? ORDER BY created_at DESC LIMIT 1;";
     private static final String INSERT_ACTIVITY = "INSERT INTO activities (uuid, log_name, description, subject_id, subject_type, causer_id, causer_type, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
     public List<Activity> selectAllActvityForSubject(Model subject) {
@@ -84,6 +85,24 @@ public class SqlActivityDao implements ActivityDao {
         System.out.println("Activites" + activites.stream().count());
 
         return activites;
+    }
+
+    public Optional<Activity>  selectLatestActivityForSubject(Model subject) {
+        Optional<Activity> activity = Optional.empty();
+
+        try (Connection connection = mariaDBDriver.getConnection();
+
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_LATEST_ACTIVITY_FOR_USER);) {
+            preparedStatement.setLong(1, subject.getId());
+            preparedStatement.setString(2, subject.getMorphClass());
+            ResultSet result = preparedStatement.executeQuery();
+
+            activity = resolveFirstActivityFromResultSet(result);
+        } catch (SQLException e) {
+            mariaDBDriver.printSQLException(e);
+        }
+
+        return activity;
     }
 
     public void insertActivity(Activity activity) {

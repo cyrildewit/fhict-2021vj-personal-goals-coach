@@ -27,12 +27,12 @@ import com.cyrildewit.pgc.model.Goal;
 import com.cyrildewit.pgc.model.Subgoal;
 import com.cyrildewit.pgc.model.User;
 import com.cyrildewit.pgc.model.Activity;
+import com.cyrildewit.pgc.model.SuggestiveAction;
 import com.cyrildewit.pgc.services.GoalService;
 import com.cyrildewit.pgc.services.SubgoalService;
 import com.cyrildewit.pgc.services.AuthenticationService;
 import com.cyrildewit.pgc.services.SuggestiveActionService;
 import com.cyrildewit.pgc.services.ActivityService;
-import com.cyrildewit.pgc.process.SuggestiveActionAnalyzerProcess;
 import com.cyrildewit.pgc.exceptions.GoalNotFoundException;
 import com.cyrildewit.pgc.validation.form.goal.CreateGoalFormRequest;
 import com.cyrildewit.pgc.validation.form.goal.UpdateGoalFormRequest;
@@ -190,20 +190,20 @@ public class GoalController {
 
     }
 
-    @GetMapping("/test2")
-    public void test2() {
-        SuggestiveActionAnalyzerProcess process = new SuggestiveActionAnalyzerProcess(
-                authenticationService.getCurrentUser(),
-                LocalDateTime.now().minusMonths(3),
-                3,
-                goalService,
-                subgoalService,
-                suggestiveActionService
-        );
-        process.execute();
-//
-//        System.out.println("UUID: " + UUID.randomUUID());
-//        return "redirect:/goals";
+    @GetMapping("/analyze-suggestive-actions")
+    public String analyzeSuggestiveActions() {
+        User user = authenticationService.getCurrentUser();
+        user.setGoals(goalService.getAllGoalsForUser(user));
+        List<List> suggestiveActionsAggregation = new ArrayList<List>();
 
+        for (Goal goal : user.getGoals()) {
+            for (SuggestiveAction suggestiveAction : goal.analyzeSuggestiveActions()) {
+                suggestiveActionService.addUniqueSuggestiveAction(suggestiveAction);
+            }
+        }
+
+        // Redirect with success message
+
+        return "redirect:/goals";
     }
 }

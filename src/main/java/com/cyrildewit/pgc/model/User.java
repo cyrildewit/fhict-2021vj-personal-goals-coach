@@ -1,10 +1,15 @@
 package com.cyrildewit.pgc.model;
 
 import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.cyrildewit.pgc.services.GoalService;
 import com.cyrildewit.pgc.model.Model;
 
 public class User extends Model {
@@ -28,8 +33,12 @@ public class User extends Model {
 
     private LocalDateTime updatedAt;
 
-    public User() {
-    }
+    private List<Goal> goals = new ArrayList<Goal>();
+
+    @Autowired
+    private GoalService goalService;
+
+    public User() {}
 
     public User(UUID uuid, String firstName, String lastName, String phoneNumber, String email, LocalDateTime emailVerifiedAt, String password) {
         this.uuid = uuid;
@@ -138,5 +147,13 @@ public class User extends Model {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<Goal> getGoals() {
+        return goals;
+    }
+
+    public void setGoals(List<Goal> goals) {
+        this.goals = goals;
     }
 }

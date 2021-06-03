@@ -93,6 +93,31 @@ class SqlActivityDaoTest {
     }
 
     @Test
+    void selectLatestActivityForSubject() {
+        try (Connection connection = mariaDBDriver.getConnection();
+             Statement stmt = connection.createStatement();) {
+
+            stmt.execute("TRUNCATE TABLE activities;");
+            stmt.execute("INSERT INTO activities (uuid, log_name, description, subject_id, subject_type, causer_id, causer_type, created_at, updated_at) VALUES ('"+ UUID.randomUUID()+"', '', 'description', 1, 'Goal', 1, 'User', '2021-01-10 20:15:25', '2021-05-10 20:15:25');");
+            stmt.execute("INSERT INTO activities (uuid, log_name, description, subject_id, subject_type, causer_id, causer_type, created_at, updated_at) VALUES ('"+ UUID.randomUUID()+"', '', 'description of latest activity', 1, 'Goal', 1, 'User', '2021-02-10 20:15:25', '2021-05-10 20:15:25');");
+            stmt.execute("INSERT INTO activities (uuid, log_name, description, subject_id, subject_type, causer_id, causer_type, created_at, updated_at) VALUES ('"+ UUID.randomUUID()+"', '', 'description', 2, 'Goal', 1, 'User', '2021-03-10 20:15:25', '2021-05-10 20:15:25');");
+            stmt.execute("INSERT INTO activities (uuid, log_name, description, subject_id, subject_type, causer_id, causer_type, created_at, updated_at) VALUES ('"+ UUID.randomUUID()+"', '', 'description', 2, 'Goal', 1, 'User', '2021-04-10 20:15:25', '2021-05-10 20:15:25');");
+            stmt.execute("INSERT INTO activities (uuid, log_name, description, subject_id, subject_type, causer_id, causer_type, created_at, updated_at) VALUES ('"+ UUID.randomUUID()+"', '', 'description', 2, 'Goal', 2, 'User', '2021-05-10 20:15:25', '2021-05-10 20:15:25');");
+
+        } catch (SQLException e) {
+            mariaDBDriver.printSQLException(e);
+        }
+
+        Goal goal = new Goal();
+        goal.setId(1L);
+
+        Optional<Activity> optionalActivity = activityDao.selectLatestActivityForSubject(goal);
+        assertFalse(optionalActivity.isEmpty());
+
+        assertEquals("description of latest activity", optionalActivity.get().getDescription());
+    }
+
+    @Test
     void insertActivity() {
         Activity activity = new Activity(UUID.randomUUID(), "", "The most important description.", 1, "Goal", 1, "User");
         activityDao.insertActivity(activity);

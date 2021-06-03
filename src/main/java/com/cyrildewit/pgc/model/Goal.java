@@ -2,6 +2,19 @@ package com.cyrildewit.pgc.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.Optional;
+import java.util.List;
+import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.cyrildewit.pgc.model.Activity;
+import com.cyrildewit.pgc.model.CoachingStylePreference;
+import com.cyrildewit.pgc.dao.SqlGoalDao;
+import com.cyrildewit.pgc.services.ActivityService;
+import com.cyrildewit.pgc.services.SuggestiveActionService;
+import com.cyrildewit.pgc.services.CoachingStylePreferenceService;
+import com.cyrildewit.pgc.enums.SuggestiveActionType;
 
 public class Goal extends Model {
     private long id;
@@ -16,9 +29,23 @@ public class Goal extends Model {
 
     private long userId;
 
+    private Optional<User> user ;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private long coachingStylePreferenceId;
+
+    private CoachingStylePreference coachingStylePreference;
+
+    private Activity latestActivity;
+
+    @Autowired
+    SuggestiveActionService suggestiveActionService;
+
+    @Autowired
+    CoachingStylePreferenceService coachingStylePreferenceService;
 
     public Goal() {}
 
@@ -28,6 +55,7 @@ public class Goal extends Model {
         this.description = description;
         this.deadline = deadline;
         this.userId = userId;
+        this.user = Optional.empty();
     }
 
     public Goal(long id, UUID uuid, String title, String description, LocalDateTime deadline, long userId, LocalDateTime createdAt, LocalDateTime updatedAt) {
@@ -105,29 +133,63 @@ public class Goal extends Model {
         this.updatedAt = updatedAt;
     }
 
-//    public function latestActivity()
-//    {
-//        return
-//    }
+    public Optional<User> getUser() {
+        return user;
+    }
 
-//    public function analyseSuggestiveActions()
-//    {
-//
-//    }
+    public void setUser(Optional<User> user) {
+        this.user = user;
+    }
 
-//    private void analyzeGoal(Goal goal) {
-//        LocalDateTime lastGoalActivityDateTime = LocalDateTime.now().minusWeeks(3);
-//
-//        if (lastGoalActivityDateTime.isBefore(LocalDateTime.now().minusMonths(3))) {
-//            addSuggestiveAction(new SuggestiveAction(UUID.randomUUID(), SuggestiveActionType.DELETE_GOAL, user.getId(), goal.getId(), 0));
-//        } else if (lastGoalActivityDateTime.isBefore(LocalDateTime.now().minusWeeks(2))) {
-//            addSuggestiveAction(new SuggestiveAction(UUID.randomUUID(), SuggestiveActionType.CREATE_SUBGOAL, user.getId(), goal.getId(), 0));
+    public Optional<CoachingStylePreference> getCoachingStylePreference() {
+        return Optional.ofNullable(coachingStylePreference);
+    }
+
+    public void setCoachingStylePreference(CoachingStylePreference coachingStylePreference) {
+        this.coachingStylePreference = coachingStylePreference;
+    }
+
+    public Optional<Activity> getLatestActivity()
+    {
+        return Optional.ofNullable(latestActivity);
+    }
+
+    public void setLatestActivity(Activity latestActivity) {
+        this.latestActivity = latestActivity;
+    }
+
+    public List<SuggestiveAction> analyzeSuggestiveActions() {
+        List<SuggestiveAction> suggestiveActions = new ArrayList<SuggestiveAction>();
+
+        if (getUserId() == 0 || getCoachingStylePreference().isEmpty()) {
+            return suggestiveActions;
+        }
+
+        CoachingStylePreference coachingStylePreference = getCoachingStylePreference().get();
+        Optional<Activity> optionalLastGoalActivity = getLatestActivity();
+
+        if (optionalLastGoalActivity.isEmpty()) {
+            System.out.println("not last activity");
+        }
+
+        if (optionalLastGoalActivity.isPresent()) {
+            LocalDateTime lastGoalActivityDateTime = optionalLastGoalActivity.get().getCreatedAt();
+
+            if (lastGoalActivityDateTime.isBefore(coachingStylePreference.getSuggestDeleteGoalBeforePeriodDatetime())) {
+                System.out.println("SuggestiveActionType.DELETE_GOAL");
+                suggestiveActions.add(new SuggestiveAction(UUID.randomUUID(), SuggestiveActionType.DELETE_GOAL, getUserId(), getId(), 0));
+            } else if (lastGoalActivityDateTime.isBefore(LocalDateTime.now().minusWeeks(2))) {
+                System.out.println("SuggestiveActionType.CREATE_SUBGOAL");
+                suggestiveActions.add(new SuggestiveAction(UUID.randomUUID(), SuggestiveActionType.CREATE_SUBGOAL, getUserId(), getId(), 0));
+            }
+        }
+
+//        if (goalWithMostRecentFrequentActivity.isPresent() && goalWithMostRecentFrequentActivity.get().getId() == goal.getId()) {
+//            addSuggestiveAction(new SuggestiveAction(UUID.randomUUID(), SuggestiveActionType.PIN_GOAL, user.getId(), goal.getId(), 0));
 //        }
-//
-//        boolean goalHasMostRecentActivity = goalService.goalHasMostRecentActivity(goal);
-//
-//        if (goalHasMostRecentActivity) {
-//            System.out.println("Goal has most recent activity");
-//        }
-//    }
+
+        // analyze subgoals
+
+        return suggestiveActions;
+    }
 }

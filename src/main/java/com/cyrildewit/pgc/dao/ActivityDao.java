@@ -19,5 +19,7 @@ public interface ActivityDao
 
     public List<Activity> selectActvityWithinPeriodForSubjectAndCauser(Model subject, Model causer, LocalDateTime start, LocalDateTime end);
 
+    public Optional<Activity> selectLatestActivityForSubject(Model subject);
+
     public void insertActivity(Activity activity);
 }

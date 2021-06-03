@@ -31,6 +31,15 @@ public class SuggestiveActionService implements SuggestiveActionServiceInterface
         suggestiveActionDao.insertSuggestiveAction(suggestiveAction);
     }
 
+    public void addUniqueSuggestiveAction(SuggestiveAction suggestiveAction)
+    {
+        if (suggestiveActionExists(suggestiveAction)) {
+            return;
+        }
+
+        addSuggestiveAction(suggestiveAction);
+    }
+
     public boolean suggestiveActionExists(SuggestiveAction suggestiveAction) {
         return suggestiveActionDao.suggestiveActionExists(suggestiveAction);
     }
