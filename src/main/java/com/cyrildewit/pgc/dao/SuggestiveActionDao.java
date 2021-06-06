@@ -13,27 +13,11 @@ import com.cyrildewit.pgc.model.SuggestiveAction;
 
 public interface SuggestiveActionDao
 {
-//    public List<Goal> selectAllGoals();
-//
     public List<SuggestiveAction> selectAllSuggestiveActionsForGoal(Goal goal);
-
-//    public Optional<Goal> findGoalById(long id);
-//
-//    public Optional<Goal> findGoalByUuid(UUID uuid);
 
     public void insertSuggestiveAction(SuggestiveAction suggestiveAction);
 
     public boolean suggestiveActionExists(SuggestiveAction suggestiveAction);
-
-//    public void insertGoals(List<Goal> goal);
-
-//    public boolean updateGoal(Goal goal);
-//
-//    public void deleteGoalById(long id);
-//
-//    public void deleteGoal(Goal goal);
-//
-//    public long getTotalGoalsCountForUser(User user);
 
     public int getTotalSuggestiveActionsCountForUser(User user);
 
