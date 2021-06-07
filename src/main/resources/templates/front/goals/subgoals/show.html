@@ -13,11 +13,11 @@
                 <div class="col-md-8">
                     <h2 class="h5">
                         <th:block th:switch="${subgoalParentType}">
-                            <th:block th:case="${T(com.cyrildewit.pgc.enums.SubgoalParentType).GOAL}">
+                            <th:block th:case="${T(com.cyrildewit.pgc.application.enums.SubgoalParentType).GOAL}">
                                 <a th:href="@{'/goals/' + ${goal.uuid.toString()}}" th:text="${goal.getTitle()}"></a>
                             </th:block>
 
-                            <th:block th:case="${T(com.cyrildewit.pgc.enums.SubgoalParentType).SUBGOAL}">
+                            <th:block th:case="${T(com.cyrildewit.pgc.application.enums.SubgoalParentType).SUBGOAL}">
                                 <a th:href="@{~/goals/{goalUuid}/subgoals/{parentSubgoalUuid}(goalUuid=${goal.getUuid().toString()}, parentSubgoalUuid=${parentSubgoal.getUuid().toString()})}"><span th:text="${parentSubgoal.getTitle()}"></span></a>
                             </th:block>
                         </th:block>

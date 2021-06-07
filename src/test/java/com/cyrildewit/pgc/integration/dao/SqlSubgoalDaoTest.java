@@ -1,4 +1,4 @@
-package com.cyrildewit.pgc.dao;
+package com.cyrildewit.pgc.application.dao;
 
 import java.util.List;
 
@@ -20,13 +20,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.cyrildewit.pgc.logic.model.User;
-import com.cyrildewit.pgc.logic.model.Subgoal;
-import com.cyrildewit.pgc.logic.model.Goal;
-import com.cyrildewit.pgc.dao.SubgoalDao;
-import com.cyrildewit.pgc.dao.SqlSubgoalDao;
-import com.cyrildewit.pgc.datasource.MariaDBDriver;
-import com.cyrildewit.pgc.util.DateTimeFormatters;
+import com.cyrildewit.pgc.domain.user.model.User;
+import com.cyrildewit.pgc.domain.goal.model.Subgoal;
+import com.cyrildewit.pgc.domain.goal.model.Goal;
+import com.cyrildewit.pgc.application.dao.SubgoalDao;
+import com.cyrildewit.pgc.application.dao.SqlSubgoalDao;
+import com.cyrildewit.pgc.application.datasource.MariaDBDriver;
+import com.cyrildewit.pgc.support.util.DateTimeFormatters;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest

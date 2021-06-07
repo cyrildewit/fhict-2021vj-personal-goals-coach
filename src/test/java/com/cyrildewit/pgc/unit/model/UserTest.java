@@ -1,10 +1,10 @@
-package com.cyrildewit.pgc.logic.model;
+package com.cyrildewit.pgc.domain.model;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.cyrildewit.pgc.logic.model.User;
+import com.cyrildewit.pgc.domain.user.model.User;
 
 class UserTest {
     @Test
