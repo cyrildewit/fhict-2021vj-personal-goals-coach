@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.cyrildewit.pgc.model.Goal;
-import com.cyrildewit.pgc.model.User;
+import com.cyrildewit.pgc.logic.model.Goal;
+import com.cyrildewit.pgc.logic.model.User;
 
 public interface GoalServiceInterface {
     public List<Goal> getAllGoals();

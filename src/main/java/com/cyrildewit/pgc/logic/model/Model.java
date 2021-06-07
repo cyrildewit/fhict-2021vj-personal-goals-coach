@@ -1,4 +1,4 @@
-package com.cyrildewit.pgc.model;
+package com.cyrildewit.pgc.logic.model;
 
 public abstract class Model {
     public abstract long getId();

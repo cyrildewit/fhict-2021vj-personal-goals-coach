@@ -1,4 +1,4 @@
-package com.cyrildewit.pgc.model;
+package com.cyrildewit.pgc.logic.model;
 
 import java.util.UUID;
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cyrildewit.pgc.services.GoalService;
-import com.cyrildewit.pgc.model.Model;
+import com.cyrildewit.pgc.logic.model.Model;
 
 public class User extends Model {
     private long id;

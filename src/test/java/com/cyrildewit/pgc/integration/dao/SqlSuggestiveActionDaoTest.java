@@ -1,4 +1,4 @@
-package com.cyrildewit.pgc.model;
+package com.cyrildewit.pgc.logic.model;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.cyrildewit.pgc.model.User;
+import com.cyrildewit.pgc.logic.model.User;
 import com.cyrildewit.pgc.dao.GoalDao;
 import com.cyrildewit.pgc.dao.SqlSuggestiveActionDao;
 import com.cyrildewit.pgc.datasource.MariaDBDriver;

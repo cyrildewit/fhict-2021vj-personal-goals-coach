@@ -20,7 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.cyrildewit.pgc.model.User;
+import com.cyrildewit.pgc.logic.model.User;
 import com.cyrildewit.pgc.dao.GoalDao;
 import com.cyrildewit.pgc.services.AuthenticationService;
 import com.cyrildewit.pgc.datasource.MariaDBDriver;

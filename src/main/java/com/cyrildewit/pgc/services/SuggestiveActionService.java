@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.cyrildewit.pgc.model.SuggestiveAction;
-import com.cyrildewit.pgc.model.User;
-import com.cyrildewit.pgc.model.Goal;
+import com.cyrildewit.pgc.logic.model.SuggestiveAction;
+import com.cyrildewit.pgc.logic.model.User;
+import com.cyrildewit.pgc.logic.model.Goal;
 import com.cyrildewit.pgc.dao.SuggestiveActionDao;
 import com.cyrildewit.pgc.dao.SqlSuggestiveActionDao;
 import com.cyrildewit.pgc.services.SuggestiveActionServiceInterface;

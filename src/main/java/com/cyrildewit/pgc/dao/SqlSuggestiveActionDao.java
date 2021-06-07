@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.cyrildewit.pgc.model.Goal;
-import com.cyrildewit.pgc.model.User;
-import com.cyrildewit.pgc.model.SuggestiveAction;
+import com.cyrildewit.pgc.logic.model.Goal;
+import com.cyrildewit.pgc.logic.model.User;
+import com.cyrildewit.pgc.logic.model.SuggestiveAction;
 import com.cyrildewit.pgc.util.DateTimeFormatters;
 import com.cyrildewit.pgc.datasource.MariaDBDriver;
 import com.cyrildewit.pgc.enums.SuggestiveActionType;

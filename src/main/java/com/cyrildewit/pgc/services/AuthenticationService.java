@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.cyrildewit.pgc.model.User;
+import com.cyrildewit.pgc.logic.model.User;
 import com.cyrildewit.pgc.services.UserService;
 import com.cyrildewit.pgc.exceptions.UserNotFoundException;
 import com.cyrildewit.pgc.exceptions.NotAuthenticatedException;

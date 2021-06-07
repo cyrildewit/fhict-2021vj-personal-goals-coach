@@ -25,8 +25,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.cyrildewit.pgc.util.DateTimeFormatters;
-import com.cyrildewit.pgc.model.Goal;
-import com.cyrildewit.pgc.model.Subgoal;
+import com.cyrildewit.pgc.logic.model.Goal;
+import com.cyrildewit.pgc.logic.model.Subgoal;
 import com.cyrildewit.pgc.services.GoalService;
 import com.cyrildewit.pgc.services.SubgoalService;
 import com.cyrildewit.pgc.exceptions.GoalNotFoundException;

@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import com.cyrildewit.pgc.model.Goal;
-import com.cyrildewit.pgc.model.User;
-import com.cyrildewit.pgc.model.Activity;
-import com.cyrildewit.pgc.model.CoachingStylePreference;
+import com.cyrildewit.pgc.logic.model.Goal;
+import com.cyrildewit.pgc.logic.model.User;
+import com.cyrildewit.pgc.logic.model.Activity;
+import com.cyrildewit.pgc.logic.model.CoachingStylePreference;
 
 public interface CoachingStylePreferenceDao
 {

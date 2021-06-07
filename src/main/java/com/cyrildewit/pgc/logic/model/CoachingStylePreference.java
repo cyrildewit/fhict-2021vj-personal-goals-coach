@@ -1,4 +1,4 @@
-package com.cyrildewit.pgc.model;
+package com.cyrildewit.pgc.logic.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.cyrildewit.pgc.model.Activity;
+import com.cyrildewit.pgc.logic.model.Activity;
 import com.cyrildewit.pgc.dao.SqlGoalDao;
 import com.cyrildewit.pgc.services.ActivityService;
 import com.cyrildewit.pgc.services.SuggestiveActionService;

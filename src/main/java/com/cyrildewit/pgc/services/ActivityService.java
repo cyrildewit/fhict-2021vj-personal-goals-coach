@@ -8,9 +8,9 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.cyrildewit.pgc.model.Goal;
-import com.cyrildewit.pgc.model.Activity;
-import com.cyrildewit.pgc.model.Model;
+import com.cyrildewit.pgc.logic.model.Goal;
+import com.cyrildewit.pgc.logic.model.Activity;
+import com.cyrildewit.pgc.logic.model.Model;
 import com.cyrildewit.pgc.dao.ActivityDao;
 import com.cyrildewit.pgc.dao.SqlActivityDao;
 

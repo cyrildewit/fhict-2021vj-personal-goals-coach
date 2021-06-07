@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.cyrildewit.pgc.model.Goal;
-import com.cyrildewit.pgc.model.User;
-import com.cyrildewit.pgc.model.Activity;
-import com.cyrildewit.pgc.model.CoachingStylePreference;
+import com.cyrildewit.pgc.logic.model.Goal;
+import com.cyrildewit.pgc.logic.model.User;
+import com.cyrildewit.pgc.logic.model.Activity;
+import com.cyrildewit.pgc.logic.model.CoachingStylePreference;
 import com.cyrildewit.pgc.util.DateTimeFormatters;
 import com.cyrildewit.pgc.datasource.MariaDBDriver;
 import com.cyrildewit.pgc.dao.ActivityDao;

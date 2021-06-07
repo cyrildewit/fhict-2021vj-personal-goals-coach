@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.validation.BindingResult;
 
 import com.cyrildewit.pgc.util.DateTimeFormatters;
-import com.cyrildewit.pgc.model.Goal;
-import com.cyrildewit.pgc.model.Subgoal;
-import com.cyrildewit.pgc.model.User;
+import com.cyrildewit.pgc.logic.model.Goal;
+import com.cyrildewit.pgc.logic.model.Subgoal;
+import com.cyrildewit.pgc.logic.model.User;
 import com.cyrildewit.pgc.services.GoalService;
 import com.cyrildewit.pgc.services.SubgoalService;
 import com.cyrildewit.pgc.services.AuthenticationService;

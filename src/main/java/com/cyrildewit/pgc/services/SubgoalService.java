@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.cyrildewit.pgc.model.Goal;
-import com.cyrildewit.pgc.model.Subgoal;
+import com.cyrildewit.pgc.logic.model.Goal;
+import com.cyrildewit.pgc.logic.model.Subgoal;
 import com.cyrildewit.pgc.dao.SubgoalDao;
 import com.cyrildewit.pgc.dao.SqlSubgoalDao;
 
