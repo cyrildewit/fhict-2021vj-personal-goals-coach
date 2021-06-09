@@ -15,9 +15,12 @@ import com.cyrildewit.pgc.domain.suggestive_action.enums.SuggestiveActionType;
 
 import com.cyrildewit.pgc.application.dao.GoalDao;
 import com.cyrildewit.pgc.application.dao.SqlGoalDao;
+import com.cyrildewit.pgc.application.dao.CoachingStylePreferenceDao;
+import com.cyrildewit.pgc.application.dao.SqlCoachingStylePreferenceDao;
 import com.cyrildewit.pgc.application.services.ActivityService;
 import com.cyrildewit.pgc.application.services.SuggestiveActionService;
 import com.cyrildewit.pgc.application.factories.GoalDaoFactory;
+import com.cyrildewit.pgc.application.factories.CoachingStylePreferenceDaoFactory;
 
 public class Goal extends Model {
     private long id;
@@ -45,6 +48,7 @@ public class Goal extends Model {
     private Activity latestActivity;
 
     private GoalDao goalDao;
+    private CoachingStylePreferenceDao coachingStylePreferenceDao;
 
     public Goal() {}
 
@@ -141,6 +145,14 @@ public class Goal extends Model {
     }
 
     public Optional<CoachingStylePreference> getCoachingStylePreference() {
+        if (coachingStylePreference == null) {
+            Optional<CoachingStylePreference> fetchedCoachingStylePreference = getCoachingStylePreferenceDao().findCoachingSytlePreferenceByGoal(this);
+
+            if (fetchedCoachingStylePreference.isPresent()) {
+                coachingStylePreference = fetchedCoachingStylePreference.get();
+            }
+        }
+
         return Optional.ofNullable(coachingStylePreference);
     }
 
@@ -199,5 +211,13 @@ public class Goal extends Model {
         }
 
         return goalDao;
+    }
+
+    private CoachingStylePreferenceDao getCoachingStylePreferenceDao() {
+        if (coachingStylePreferenceDao == null) {
+            coachingStylePreferenceDao = CoachingStylePreferenceDaoFactory.getSqlCoachingStylePreferenceDaoFactory();
+        }
+
+        return coachingStylePreferenceDao;
     }
 }
