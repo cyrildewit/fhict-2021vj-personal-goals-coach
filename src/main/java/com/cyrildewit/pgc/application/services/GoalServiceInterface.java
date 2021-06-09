@@ -20,7 +20,7 @@ public interface GoalServiceInterface {
 
     public Optional<Goal> findGoalByUuid(UUID uuid);
 
-    public Optional<Goal> findGoalByIds(List<Long> ids);
+    public List<Goal> findGoalByIds(List<Long> ids);
 
     public void addGoal(Goal goal);
 
@@ -42,5 +42,5 @@ public interface GoalServiceInterface {
 
     public boolean determineIfGoalHastMostRecentFrequentActivityForUser(User user, Goal goal, int days, LocalDateTime start);
 
-    public boolean determineIfGoalHastMostRecentFrequentActivity(Goal goal, int days, LocalDateTime start, LocalDateTime end);
+    public boolean determineIfGoalHastMostRecentFrequentActivityForUser(User user, Goal goal, int days, LocalDateTime start, LocalDateTime end);
 }

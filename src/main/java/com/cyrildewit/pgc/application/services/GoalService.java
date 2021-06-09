@@ -17,7 +17,7 @@ import com.cyrildewit.pgc.application.dao.ActivityDao;
 import com.cyrildewit.pgc.application.dao.SqlActivityDao;
 
 @Service
-public class GoalService {
+public class GoalService implements GoalServiceInterface {
     private final GoalDao goalDao;
     private final ActivityDao activityDao;
 
