@@ -1,4 +1,4 @@
-package com.cyrildewit.pgc.feature.services;
+package com.cyrildewit.pgc.application.feature.services;
 
 import java.util.List;
 
