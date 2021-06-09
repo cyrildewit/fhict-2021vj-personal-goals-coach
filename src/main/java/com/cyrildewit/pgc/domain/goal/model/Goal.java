@@ -13,9 +13,11 @@ import com.cyrildewit.pgc.domain.goal.model.CoachingStylePreference;
 import com.cyrildewit.pgc.domain.suggestive_action.model.SuggestiveAction;
 import com.cyrildewit.pgc.domain.suggestive_action.enums.SuggestiveActionType;
 
+import com.cyrildewit.pgc.application.dao.GoalDao;
 import com.cyrildewit.pgc.application.dao.SqlGoalDao;
 import com.cyrildewit.pgc.application.services.ActivityService;
 import com.cyrildewit.pgc.application.services.SuggestiveActionService;
+import com.cyrildewit.pgc.application.factories.GoalDaoFactory;
 
 public class Goal extends Model {
     private long id;
@@ -186,11 +188,11 @@ public class Goal extends Model {
         return suggestiveActions;
     }
 
-//    getGoaldDo() {
-//        return goalDaoFacatory.getSqlDao();
-//    }
-//
-//    getSubgoalDo() {
-//        return goalDaoFacatory.getSqlDao();
-//    }
+    private GoalDao getGoalDao() {
+        if (goalDao == null) {
+            goalDao = GoalDaoFactory.getSqlGoalDao();
+        }
+
+        return goalDao;
+    }
 }
