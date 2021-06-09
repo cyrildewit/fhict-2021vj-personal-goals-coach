@@ -44,6 +44,8 @@ public class Goal extends Model {
 
     private Activity latestActivity;
 
+    private GoalDao goalDao;
+
     public Goal() {}
 
     public Goal(UUID uuid, String title, String description, LocalDateTime deadline, long userId) {
@@ -155,6 +157,15 @@ public class Goal extends Model {
         this.latestActivity = latestActivity;
     }
 
+    public boolean hasMostRecentFrequentActivity()
+    {
+        CoachingStylePreference coachingStylePreference = getCoachingStylePreference().get();
+
+        Optional<Goal> goalWithMostRecentFrequency = getGoalDao().getGoalWithMostRecentActivity(coachingStylePreference.gettSuggestPinGoalBasedOnActivityBeforePeriodDatetime(), LocalDateTime.now());
+
+        return goalWithMostRecentFrequency.isPresent() && goalWithMostRecentFrequency.get().getId() == getId();
+    }
+
     public List<SuggestiveAction> analyzeSuggestiveActions() {
         List<SuggestiveAction> suggestiveActions = new ArrayList<SuggestiveAction>();
 
@@ -169,21 +180,15 @@ public class Goal extends Model {
             LocalDateTime lastGoalActivityDateTime = optionalLastGoalActivity.get().getCreatedAt();
 
             if (lastGoalActivityDateTime.isBefore(coachingStylePreference.getSuggestDeleteGoalBeforePeriodDatetime())) {
-//                System.out.println("SuggestiveActionType.DELETE_GOAL");
                 suggestiveActions.add(new SuggestiveAction(UUID.randomUUID(), SuggestiveActionType.DELETE_GOAL, getUserId(), getId(), 0));
             } else if (lastGoalActivityDateTime.isBefore(LocalDateTime.now().minusWeeks(2))) {
-//                System.out.println("SuggestiveActionType.CREATE_SUBGOAL");
                 suggestiveActions.add(new SuggestiveAction(UUID.randomUUID(), SuggestiveActionType.CREATE_SUBGOAL, getUserId(), getId(), 0));
             }
         }
 
-//        if (goalWithMostRecentFrequentActivity.isPresent() && goalWithMostRecentFrequentActivity.get().getId() == goal.getId()) {
-//            suggestiveActions(new SuggestiveAction(UUID.randomUUID(), SuggestiveActionType.PIN_GOAL, user.getId(), goal.getId(), 0));
-//        }
-
-//        for (Subgoal subgoal : subgoals) {
-//            subgoal.analyzeSuggestiveActions();
-//        }
+        if (hasMostRecentFrequentActivity()) {
+            suggestiveActions.add(new SuggestiveAction(UUID.randomUUID(), SuggestiveActionType.PIN_GOAL, getUserId(), getId(), 0));
+        }
 
         return suggestiveActions;
     }
