@@ -83,12 +83,13 @@ public class SqlCoachingStylePreferenceDao implements CoachingStylePreferenceDao
         String uuidString = result.getString("uuid");
         UUID uuid = UUID.fromString(uuidString);
         long suggestDeleteGoalBeforePeriod = result.getLong("suggest_delete_goal_before_period");
+        long suggestPinGoalBasedOnActivityBeforePeriod = result.getLong("suggest_pin_goal_based_on_activity_before_period");
         long goalId = result.getLong("goal_id");
         String createdAtString = result.getString("created_at");
         LocalDateTime createdAt = LocalDateTime.parse(createdAtString, dateTimeFormatters.getMariaDbDateTimeFormatter());
         String updatedAtString = result.getString("updated_at");
         LocalDateTime updatedAt = LocalDateTime.parse(updatedAtString, dateTimeFormatters.getMariaDbDateTimeFormatter());
 
-        return new CoachingStylePreference(id, uuid, suggestDeleteGoalBeforePeriod, goalId, createdAt, updatedAt);
+        return new CoachingStylePreference(id, uuid, suggestDeleteGoalBeforePeriod, suggestPinGoalBasedOnActivityBeforePeriod, goalId, createdAt, updatedAt);
     }
 }
