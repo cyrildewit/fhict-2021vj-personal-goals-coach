@@ -1,4 +1,4 @@
-package com.cyrildewit.pgc.domain.model;
+package com.cyrildewit.pgc.domain.user.model;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
