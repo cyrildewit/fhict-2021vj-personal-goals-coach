@@ -41,6 +41,9 @@ import com.cyrildewit.pgc.application.validation.form.goal.UpdateGoalFormRequest
 
 import com.cyrildewit.pgc.application.view_model.front.goal.index.GoalIndexModelAndView;
 import com.cyrildewit.pgc.application.view_model.front.goal.index.GoalIndexDto;
+import com.cyrildewit.pgc.application.view_model.front.goal.index.GoalShowModelAndView;
+import com.cyrildewit.pgc.application.view_model.front.goal.index.GoalShowDto;
+import com.cyrildewit.pgc.application.view_model.front.goal.index.GoalShowSubgoalDto;
 
 @Controller
 @RequestMapping("/goals")
@@ -116,21 +119,26 @@ public class GoalController {
     }
 
     @GetMapping("/{uuid}")
-    public String show(@PathVariable("uuid") UUID uuid, Model model) {
+    public GoalShowModelAndView show(@PathVariable("uuid") UUID uuid, Model model) {
+        GoalShowModelAndView modelAndView = new GoalShowModelAndView();
+
         Optional<Goal> optionalGoal = goalService.findGoalByUuid(uuid);
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(uuid));
         Goal goal = optionalGoal.get();
 
-        model.addAttribute("goal", goal);
+        List<GoalShowSubgoalDto> subgoals = new ArrayList<GoalShowSubgoalDto>();
+        for (Subgoal subgoal : subgoalService.getAllFirstLevelSubgoals(goal)) {
+            subgoals.add(GoalShowSubgoalDto.fromSubgoalEntity(subgoal));
+        }
 
-        List<Subgoal> subgoals = subgoalService.getAllFirstLevelSubgoals(goal);
-        model.addAttribute("subgoals", subgoals);
+        GoalShowDto goalShowDto = GoalShowDto.fromGoalEntity(goal);
+        goalShowDto.setSubgoalsCountFormatted(Long.toString(subgoalService.getTotalFirstLevelSubgoalsCountForGoal(goal)));
+        goalShowDto.setSuggestiveActionsCountFormatted(Long.toString(suggestiveActionService.getTotalSuggestiveActionsCountForGoal(goal)));
 
-        model.addAttribute("subgoalsCountFormatted", subgoalService.getTotalFirstLevelSubgoalsCountForGoal(goal));
-        model.addAttribute("goalDeadlineFormatted", goal.getDeadline().format(dateTimeFormatters.getDayMonthYearFormatter()));
-        model.addAttribute("suggestiveActionsCountFormatted", suggestiveActionService.getTotalSuggestiveActionsCountForGoal(goal));
+        modelAndView.setGoal(goalShowDto);
+        modelAndView.setSubgoalsList(subgoals);
 
-        return "front/goals/show";
+        return modelAndView;
     }
 
     @GetMapping("/{uuid}/edit")

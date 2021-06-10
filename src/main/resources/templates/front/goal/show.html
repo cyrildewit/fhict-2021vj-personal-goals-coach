@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-md-8">
                     <h1 class="h2" th:text="${goal.getTitle()}"></h1>
-                    <p><span class="badge bg-primary" th:text="${goalDeadlineFormatted}"></span></p>
+                    <p><span class="badge bg-primary" th:text="${goal.getFormattedDeadline()}"></span></p>
                 </div>
 
                 <div class="col-md-4">
@@ -24,7 +24,7 @@
 
                             <ul class="dropdown-menu" aria-labelledby="goalSettingsDropdownMenuButton">
                                 <li><a class="dropdown-item" th:href="@{/goals/{goalUuid}/edit(goalUuid=${goal.getUuid().toString()})}">Edit Goal</a></li>
-                                <li><a class="dropdown-item" th:href="@{/goals/{goalUuid}/suggestive-actions(goalUuid=${goal.getUuid().toString()})}">Suggestive Actions (<th:block th:text="${suggestiveActionsCountFormatted}"></th:block>)</a></li>
+                                <li><a class="dropdown-item" th:href="@{/goals/{goalUuid}/suggestive-actions(goalUuid=${goal.getUuid().toString()})}">Suggestive Actions (<th:block th:text="${goal.getSuggestiveActionsCountFormatted()}"></th:block>)</a></li>
                                 <li><a class="dropdown-item" href="#">Coaching Style</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="#" data-bs-toggle="modal" data-bs-target="#deleteGoalModal">Delete Goal</a></li>
@@ -45,7 +45,7 @@
         <div class="mb-4">
             <div class="d-flex justify-content-between align-items-center">
                 <h2 class="h3">Subgoals <span class="badge rounded-pill bg-primary"
-                                              th:text="${subgoalsCountFormatted}"></span></h2>
+                                              th:text="${goal.getSubgoalsCountFormatted()}"></span></h2>
                 <a th:href="@{/goals/{goalUuid}/subgoals/create(goalUuid=${goal.getUuid().toString()})}"
                    class="btn btn-sm btn-primary">Create Subgoal</a>
             </div>
@@ -62,7 +62,6 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${subgoal.getTitle()}"></h5>
-                        <!--                    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>-->
                         <p class="card-text" th:text="${subgoal.getDescription()}"></p>
                     </div>
                     <div class="card-body">
