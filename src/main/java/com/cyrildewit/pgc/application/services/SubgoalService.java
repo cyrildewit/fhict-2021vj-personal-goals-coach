@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cyrildewit.pgc.domain.goal.model.Goal;
 import com.cyrildewit.pgc.domain.goal.model.Subgoal;
-import com.cyrildewit.pgc.application.dao.SubgoalDao;
-import com.cyrildewit.pgc.application.dao.SqlSubgoalDao;
+import com.cyrildewit.pgc.domain.goal.dao.SubgoalDao;
+import com.cyrildewit.pgc.domain.goal.dao.SqlSubgoalDao;
 
 @Service
 public class SubgoalService

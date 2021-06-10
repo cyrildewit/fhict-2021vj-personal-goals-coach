@@ -13,14 +13,14 @@ import com.cyrildewit.pgc.domain.goal.model.CoachingStylePreference;
 import com.cyrildewit.pgc.domain.suggestive_action.model.SuggestiveAction;
 import com.cyrildewit.pgc.domain.suggestive_action.enums.SuggestiveActionType;
 
-import com.cyrildewit.pgc.application.dao.GoalDao;
-import com.cyrildewit.pgc.application.dao.SqlGoalDao;
-import com.cyrildewit.pgc.application.dao.CoachingStylePreferenceDao;
-import com.cyrildewit.pgc.application.dao.SqlCoachingStylePreferenceDao;
+import com.cyrildewit.pgc.domain.goal.dao.GoalDao;
+import com.cyrildewit.pgc.domain.goal.dao.SqlGoalDao;
+import com.cyrildewit.pgc.domain.goal.dao.CoachingStylePreferenceDao;
+import com.cyrildewit.pgc.domain.goal.dao.SqlCoachingStylePreferenceDao;
 import com.cyrildewit.pgc.application.services.ActivityService;
+import com.cyrildewit.pgc.domain.goal.dao.factory.GoalDaoFactory;
+import com.cyrildewit.pgc.domain.goal.dao.factory.CoachingStylePreferenceDaoFactory;
 import com.cyrildewit.pgc.application.services.SuggestiveActionService;
-import com.cyrildewit.pgc.application.factories.GoalDaoFactory;
-import com.cyrildewit.pgc.application.factories.CoachingStylePreferenceDaoFactory;
 
 public class Goal extends Model {
     private long id;

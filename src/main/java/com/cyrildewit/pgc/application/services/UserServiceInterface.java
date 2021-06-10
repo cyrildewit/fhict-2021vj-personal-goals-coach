@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cyrildewit.pgc.domain.user.model.User;
-import com.cyrildewit.pgc.application.dao.UserDao;
+import com.cyrildewit.pgc.domain.user.dao.UserDao;
 
 public interface UserServiceInterface
 {

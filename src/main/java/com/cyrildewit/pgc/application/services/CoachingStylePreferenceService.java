@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.cyrildewit.pgc.domain.goal.model.Goal;
 import com.cyrildewit.pgc.domain.activity.model.Activity;
 import com.cyrildewit.pgc.domain.Model;
-import com.cyrildewit.pgc.application.dao.ActivityDao;
-import com.cyrildewit.pgc.application.dao.SqlActivityDao;
+import com.cyrildewit.pgc.domain.activity.dao.ActivityDao;
+import com.cyrildewit.pgc.domain.activity.dao.SqlActivityDao;
 
 @Service
 public class CoachingStylePreferenceService implements CoachingStylePreferenceServiceInterface {

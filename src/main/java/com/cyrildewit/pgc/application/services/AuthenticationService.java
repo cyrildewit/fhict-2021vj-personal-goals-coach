@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.cyrildewit.pgc.domain.user.model.User;
+
 import com.cyrildewit.pgc.application.services.UserService;
 import com.cyrildewit.pgc.application.exceptions.UserNotFoundException;
 import com.cyrildewit.pgc.application.exceptions.NotAuthenticatedException;

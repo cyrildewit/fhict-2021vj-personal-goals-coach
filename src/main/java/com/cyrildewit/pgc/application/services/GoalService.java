@@ -11,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.cyrildewit.pgc.domain.goal.model.Goal;
 import com.cyrildewit.pgc.domain.user.model.User;
 import com.cyrildewit.pgc.domain.activity.model.Activity;
-import com.cyrildewit.pgc.application.dao.GoalDao;
-import com.cyrildewit.pgc.application.dao.SqlGoalDao;
-import com.cyrildewit.pgc.application.dao.ActivityDao;
-import com.cyrildewit.pgc.application.dao.SqlActivityDao;
+import com.cyrildewit.pgc.domain.activity.dao.ActivityDao;
+import com.cyrildewit.pgc.domain.activity.dao.SqlActivityDao;
+import com.cyrildewit.pgc.domain.goal.dao.GoalDao;
+import com.cyrildewit.pgc.domain.goal.dao.SqlGoalDao;
 
 @Service
 public class GoalService implements GoalServiceInterface {

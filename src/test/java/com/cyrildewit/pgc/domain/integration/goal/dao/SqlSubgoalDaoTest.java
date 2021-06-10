@@ -1,0 +1,360 @@
+package com.cyrildewit.pgc.domain.goal.dao;
+
+import java.util.List;
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.UUID;
+import java.util.Optional;
+import java.time.LocalDateTime;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.cyrildewit.pgc.data.sql.MariaDBDataStore;
+
+import com.cyrildewit.pgc.domain.user.model.User;
+import com.cyrildewit.pgc.domain.goal.model.Subgoal;
+import com.cyrildewit.pgc.domain.goal.model.Goal;
+import com.cyrildewit.pgc.domain.goal.dao.SubgoalDao;
+import com.cyrildewit.pgc.domain.goal.dao.SqlSubgoalDao;
+import com.cyrildewit.pgc.support.util.DateTimeFormatters;
+
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
+class SqlSubgoalDaoTest {
+    private SqlSubgoalDao subgoalDao;
+    private MariaDBDataStore mariaDBDataStore;
+    private DateTimeFormatters dateTimeFormatters;
+
+    @Autowired
+    public SqlSubgoalDaoTest(SqlSubgoalDao subgoalDao, MariaDBDataStore mariaDBDataStore, DateTimeFormatters dateTimeFormatters) {
+        this.subgoalDao = subgoalDao;
+        this.mariaDBDataStore = mariaDBDataStore;
+        this.dateTimeFormatters = dateTimeFormatters;
+    }
+
+    @Test
+    void selectAllSubgoals() {
+        try (Connection connection = mariaDBDataStore.getConnection();
+             Statement stmt = connection.createStatement();) {
+
+            stmt.execute("TRUNCATE TABLE subgoals;");
+            stmt.execute("INSERT INTO subgoals (uuid, title, description, deadline, goal_id, created_at, updated_at) VALUES ('16bc6513-18df-4530-ab20-cb5e76412544', 'Test Goal 1', 'Goal description', '2021-05-10 20:15:25', 1, '2021-05-10 20:15:25', '2021-05-10 20:15:25');");
+            stmt.execute("INSERT INTO subgoals (uuid, title, description, deadline, goal_id, created_at, updated_at) VALUES ('c38aeed1-9077-4194-9d6c-fe0fc3f12345', 'Test Goal 2', 'Goal description', '2021-05-10 20:15:25', 1, '2021-05-10 20:15:25', '2021-05-10 20:15:25');");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        List<Subgoal> subgoals = subgoalDao.selectAllSubgoals();
+
+        assertEquals(2, subgoals.size());
+    }
+
+    @Test
+    void selectAllSubgoalsForGoal() {
+        // Database seeding
+        try (Connection connection = mariaDBDataStore.getConnection();
+             Statement stmt = connection.createStatement();) {
+
+            stmt.execute("TRUNCATE TABLE subgoals;");
+            stmt.execute("INSERT INTO subgoals (uuid, title, description, deadline, goal_id, created_at, updated_at) VALUES ('16bc6513-18df-4530-ab20-cb5e76412544', 'Test Goal', 'Goal description 1', '2021-05-10 20:15:25', 1, '2021-05-10 20:15:25', '2021-05-10 20:15:25');");
+            stmt.execute("INSERT INTO subgoals (uuid, title, description, deadline, goal_id, created_at, updated_at) VALUES ('c38aeed1-9077-4194-9d6c-fe0fc3f12345', 'Test Goal', 'Goal description 2', '2021-05-10 20:15:25', 1, '2021-05-10 20:15:25', '2021-05-10 20:15:25');");
+            stmt.execute("INSERT INTO subgoals (uuid, title, description, deadline, goal_id, created_at, updated_at) VALUES ('c38aeed1-9077-4194-9d6c-fe0fc3f12345', 'Test Goal', 'Goal description 3', '2021-05-10 20:15:25', 2, '2021-05-10 20:15:25', '2021-05-10 20:15:25');");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        Goal goal = new Goal();
+        goal.setId(1);
+
+        List<Subgoal> subgoals = subgoalDao.selectAllSubgoalsForGoal(goal);
+
+        assertEquals(2, subgoals.size());
+    }
+
+//    @Test
+//    void findGoalById() {
+//        UUID uuid = UUID.randomUUID();
+//        long expectedId = 0;
+//        final String SETUP_GOALS_TABLE_SQL = "INSERT INTO goals (uuid, title, description, deadline, user_id, created_at, updated_at) VALUES (?, 'Test Goal 1', 'Goal description', '2021-05-10 20:15:25', 1, '2021-05-10 20:15:25', '2021-05-10 20:15:25');";
+//
+//        try (Connection connection = mariaDBDataStore.getConnection();
+//             Statement stmt = connection.createStatement();
+//             PreparedStatement preparedStatement = connection.prepareStatement(SETUP_GOALS_TABLE_SQL);) {
+//            stmt.execute("TRUNCATE TABLE goals;");
+//
+//            preparedStatement.setString(1, uuid.toString());
+//            preparedStatement.executeUpdate();
+//
+//        } catch (SQLException e) {
+//            mariaDBDataStore.printSQLException(e);
+//        }
+//
+//        final String GET_GOAL_ID_SQL = "SELECT id FROM goals WHERE uuid = ?;";
+//
+//        try (Connection connection = mariaDBDataStore.getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(GET_GOAL_ID_SQL);) {
+//            preparedStatement.setString(1, uuid.toString());
+//            ResultSet result = preparedStatement.executeQuery();
+//
+//            while (result.next()) {
+//                expectedId = result.getLong("id");
+//            }
+//        } catch (SQLException e) {
+//            mariaDBDataStore.printSQLException(e);
+//        }
+//
+//        assertNotEquals(0, expectedId);
+//
+//        Optional<Goal> optionalGoal = subgoalDao.findGoalById(expectedId);
+//        assertFalse(optionalGoal.isEmpty());
+//
+//        assertEquals("Test Goal 1", optionalGoal.get().getTitle());
+//    }
+//
+//    @Test
+//    void findGoalByUuid() {
+//        UUID uuid = UUID.randomUUID();
+//        final String SETUP_GOALS_TABLE_SQL = "INSERT INTO goals (uuid, title, description, deadline, user_id, created_at, updated_at) VALUES (?, 'Test Goal 1', 'Goal description', '2021-05-10 20:15:25', 1, '2021-05-10 20:15:25', '2021-05-10 20:15:25');";
+//
+//        try (Connection connection = mariaDBDataStore.getConnection();
+//             Statement stmt = connection.createStatement();
+//             PreparedStatement preparedStatement = connection.prepareStatement(SETUP_GOALS_TABLE_SQL);) {
+//            stmt.execute("TRUNCATE TABLE goals;");
+//
+//            preparedStatement.setString(1, uuid.toString());
+//            preparedStatement.executeUpdate();
+//
+//        } catch (SQLException e) {
+//            mariaDBDataStore.printSQLException(e);
+//        }
+//
+//        Optional<Goal> optionalGoal = subgoalDao.findGoalByUuid(uuid);
+//        assertFalse(optionalGoal.isEmpty());
+//
+//        assertEquals("Test Goal 1", optionalGoal.get().getTitle());
+//    }
+//
+//    @Test
+//    void insertGoal() {
+//        Goal goal = new Goal(UUID.randomUUID(), "Goal Title 1", "Description here.", LocalDateTime.now(), 1L);
+//        subgoalDao.insertGoal(goal);
+//
+//        String databaseGoalTitle = "";
+//        try (Connection connection = mariaDBDataStore.getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement("SELECT title FROM goals WHERE uuid = ?");) {
+//            preparedStatement.setString(1, goal.getUuid().toString());
+//            ResultSet result = preparedStatement.executeQuery();
+//
+//            while (result.next()) {
+//                databaseGoalTitle = result.getString("title");
+//            }
+//        } catch (SQLException e) {
+//            mariaDBDataStore.printSQLException(e);
+//        }
+//
+//        assertEquals(goal.getTitle(), databaseGoalTitle);
+//    }
+//
+//    @Test
+//    void updateGoal() {
+//        Goal goal = new Goal(UUID.randomUUID(), "Goal Title 1", "Description here.", LocalDateTime.now(), 1L);
+//        String INSERT_GOAL_SQL = "INSERT INTO goals (uuid, title, description, deadline, user_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?);";
+//
+//        try (Connection connection = mariaDBDataStore.getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_GOAL_SQL);
+//             Statement stmt = connection.createStatement();) {
+//            stmt.execute("TRUNCATE TABLE goals;");
+//
+//            preparedStatement.setString(1, goal.getUuid().toString());
+//            preparedStatement.setString(2, goal.getTitle());
+//            preparedStatement.setString(3, goal.getDescription());
+//            preparedStatement.setString(4, goal.getDeadline().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+//            preparedStatement.setLong(5, goal.getUserId());
+//            preparedStatement.setString(6, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+//            preparedStatement.setString(7, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+//
+//            preparedStatement.executeUpdate();
+//        } catch (SQLException e) {
+//            mariaDBDataStore.printSQLException(e);
+//        }
+//
+//        final String GET_GOAL_ID_SQL = "SELECT id FROM goals WHERE uuid = ?;";
+//
+//        try (Connection connection = mariaDBDataStore.getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(GET_GOAL_ID_SQL);) {
+//            preparedStatement.setString(1, goal.getUuid().toString());
+//            ResultSet result = preparedStatement.executeQuery();
+//
+//            while (result.next()) {
+//                goal.setId(result.getLong("id"));
+//            }
+//        } catch (SQLException e) {
+//            mariaDBDataStore.printSQLException(e);
+//        }
+//
+//        goal.setTitle("New Updated Title");
+//
+//        boolean updated = subgoalDao.updateGoal(goal);
+//        assertTrue(updated);
+//
+//        String databaseGoalTitle = "";
+//        try (Connection connection = mariaDBDataStore.getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement("SELECT title FROM goals WHERE uuid = ?");) {
+//            preparedStatement.setString(1, goal.getUuid().toString());
+//            ResultSet result = preparedStatement.executeQuery();
+//
+//            while (result.next()) {
+//                databaseGoalTitle = result.getString("title");
+//            }
+//        } catch (SQLException e) {
+//            mariaDBDataStore.printSQLException(e);
+//        }
+//
+//        assertEquals(goal.getTitle(), databaseGoalTitle);
+//    }
+//
+//    @Test
+//    void deleteGoalById() {
+//        Goal goal = new Goal(UUID.randomUUID(), "Goal Title 1", "Description here.", LocalDateTime.now(), 1L);
+//        String INSERT_GOAL_SQL = "INSERT INTO goals (uuid, title, description, deadline, user_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?);";
+//
+//        try (Connection connection = mariaDBDataStore.getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_GOAL_SQL);
+//             Statement stmt = connection.createStatement();) {
+//            stmt.execute("TRUNCATE TABLE goals;");
+//
+//            preparedStatement.setString(1, goal.getUuid().toString());
+//            preparedStatement.setString(2, goal.getTitle());
+//            preparedStatement.setString(3, goal.getDescription());
+//            preparedStatement.setString(4, goal.getDeadline().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+//            preparedStatement.setLong(5, goal.getUserId());
+//            preparedStatement.setString(6, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+//            preparedStatement.setString(7, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+//
+//            preparedStatement.executeUpdate();
+//        } catch (SQLException e) {
+//            mariaDBDataStore.printSQLException(e);
+//        }
+//
+//        final String GET_GOAL_ID_SQL = "SELECT id FROM goals WHERE uuid = ?;";
+//
+//        try (Connection connection = mariaDBDataStore.getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(GET_GOAL_ID_SQL);) {
+//            preparedStatement.setString(1, goal.getUuid().toString());
+//            ResultSet result = preparedStatement.executeQuery();
+//
+//            while (result.next()) {
+//                goal.setId(result.getLong("id"));
+//            }
+//        } catch (SQLException e) {
+//            mariaDBDataStore.printSQLException(e);
+//        }
+//
+//        subgoalDao.deleteGoalById(goal.getId());
+//
+//        String GET_GOALS_COUNT = "SELECT count(*) AS goals_count FROM goals;";
+//        long goalsCount = -1;
+//
+//        try (Connection connection = mariaDBDataStore.getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(GET_GOALS_COUNT);) {
+//            ResultSet result = preparedStatement.executeQuery();
+//
+//            while (result.next()) {
+//                goalsCount = result.getLong("goals_count");
+//            }
+//        } catch (SQLException e) {
+//            mariaDBDataStore.printSQLException(e);
+//        }
+//
+//        assertEquals(0, goalsCount);
+//    }
+//
+//    @Test
+//    void deleteGoal() {
+//        Goal goal = new Goal(UUID.randomUUID(), "Goal Title 1", "Description here.", LocalDateTime.now(), 1L);
+//        String INSERT_GOAL_SQL = "INSERT INTO goals (uuid, title, description, deadline, user_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?);";
+//
+//        try (Connection connection = mariaDBDataStore.getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_GOAL_SQL);
+//             Statement stmt = connection.createStatement();) {
+//            stmt.execute("TRUNCATE TABLE goals;");
+//
+//            preparedStatement.setString(1, goal.getUuid().toString());
+//            preparedStatement.setString(2, goal.getTitle());
+//            preparedStatement.setString(3, goal.getDescription());
+//            preparedStatement.setString(4, goal.getDeadline().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+//            preparedStatement.setLong(5, goal.getUserId());
+//            preparedStatement.setString(6, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+//            preparedStatement.setString(7, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+//
+//            preparedStatement.executeUpdate();
+//        } catch (SQLException e) {
+//            mariaDBDataStore.printSQLException(e);
+//        }
+//
+//        final String GET_GOAL_ID_SQL = "SELECT id FROM goals WHERE uuid = ?;";
+//
+//        try (Connection connection = mariaDBDataStore.getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(GET_GOAL_ID_SQL);) {
+//            preparedStatement.setString(1, goal.getUuid().toString());
+//            ResultSet result = preparedStatement.executeQuery();
+//
+//            while (result.next()) {
+//                goal.setId(result.getLong("id"));
+//            }
+//        } catch (SQLException e) {
+//            mariaDBDataStore.printSQLException(e);
+//        }
+//
+//        subgoalDao.deleteGoal(goal);
+//
+//        String GET_GOALS_COUNT = "SELECT count(*) AS goals_count FROM goals;";
+//        long goalsCount = -1;
+//
+//        try (Connection connection = mariaDBDataStore.getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(GET_GOALS_COUNT);) {
+//            ResultSet result = preparedStatement.executeQuery();
+//
+//            while (result.next()) {
+//                goalsCount = result.getLong("goals_count");
+//            }
+//        } catch (SQLException e) {
+//            mariaDBDataStore.printSQLException(e);
+//        }
+//
+//        assertEquals(0, goalsCount);
+//    }
+//
+//    @Test
+//    void getTotalGoalsCountForUser() {
+//        try (Connection connection = mariaDBDataStore.getConnection();
+//             Statement stmt = connection.createStatement();) {
+//            stmt.execute("TRUNCATE TABLE goals;");
+//            stmt.execute("INSERT INTO goals (uuid, title, description, deadline, user_id, created_at, updated_at) VALUES ('16bc6513-18df-4530-ab20-cb5e76412544', 'Test Goal', 'Goal description 1', '2021-05-10 20:15:25', 1, '2021-05-10 20:15:25', '2021-05-10 20:15:25');");
+//            stmt.execute("INSERT INTO goals (uuid, title, description, deadline, user_id, created_at, updated_at) VALUES ('c38aeed1-9077-4194-9d6c-fe0fc3f12345', 'Test Goal', 'Goal description 2', '2021-05-10 20:15:25', 1, '2021-05-10 20:15:25', '2021-05-10 20:15:25');");
+//            stmt.execute("INSERT INTO goals (uuid, title, description, deadline, user_id, created_at, updated_at) VALUES ('c38aeed1-9077-4194-9d6c-fe0fc3f12345', 'Test Goal', 'Goal description 3', '2021-05-10 20:15:25', 2, '2021-05-10 20:15:25', '2021-05-10 20:15:25');");
+//        } catch (SQLException e) {
+//            mariaDBDataStore.printSQLException(e);
+//        }
+//
+//        User user = new User();
+//        user.setId(1L);
+//
+//        assertEquals(2, subgoalDao.getTotalGoalsCountForUser(user));
+//    }
+}

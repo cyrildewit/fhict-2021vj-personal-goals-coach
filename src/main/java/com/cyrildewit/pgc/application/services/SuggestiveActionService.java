@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.cyrildewit.pgc.domain.suggestive_action.model.SuggestiveAction;
 import com.cyrildewit.pgc.domain.user.model.User;
 import com.cyrildewit.pgc.domain.goal.model.Goal;
-import com.cyrildewit.pgc.application.dao.SuggestiveActionDao;
-import com.cyrildewit.pgc.application.dao.SqlSuggestiveActionDao;
+import com.cyrildewit.pgc.domain.suggestive_action.dao.SuggestiveActionDao;
+import com.cyrildewit.pgc.domain.suggestive_action.dao.SqlSuggestiveActionDao;
 import com.cyrildewit.pgc.application.services.SuggestiveActionServiceInterface;
 
 @Service
