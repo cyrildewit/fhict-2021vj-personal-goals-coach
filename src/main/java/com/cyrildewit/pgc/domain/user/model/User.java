@@ -7,9 +7,6 @@ import java.time.LocalDateTime;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.cyrildewit.pgc.application.services.GoalService;
 import com.cyrildewit.pgc.domain.Model;
 import com.cyrildewit.pgc.domain.goal.model.Goal;
 
@@ -35,9 +32,6 @@ public class User extends Model {
     private LocalDateTime updatedAt;
 
     private List<Goal> goals = new ArrayList<Goal>();
-
-    @Autowired
-    private GoalService goalService;
 
     public User() {}
 

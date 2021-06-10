@@ -4,15 +4,9 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.cyrildewit.pgc.domain.Model;
 import com.cyrildewit.pgc.domain.activity.model.Activity;
 import com.cyrildewit.pgc.domain.suggestive_action.enums.SuggestiveActionType;
-
-import com.cyrildewit.pgc.domain.goal.dao.SqlGoalDao;
-import com.cyrildewit.pgc.application.services.ActivityService;
-import com.cyrildewit.pgc.application.services.SuggestiveActionService;
 
 public class CoachingStylePreference extends Model {
     private final long defaultSuggestDeleteGoalBeforePeriod = 7257600L;
