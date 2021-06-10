@@ -56,7 +56,7 @@ public class SqlSubgoalDao extends BaseDao implements SubgoalDao {
     private static final String SELECT_COUNT_FIRST_LEVEL_SUBGOALS_FOR_GOAL = "SELECT count(*) AS count FROM subgoals WHERE goal_id = ? AND parent_subgoal_id IS NULL;";
     private static final String SELECT_COUNT_SUBGOALS_FOR_GOAL = "SELECT count(*) AS count FROM subgoals WHERE goal_id = ?;";
     private static final String SELECT_COUNT_SUBGOALS_FOR_SUBGOAL = "SELECT count(*) AS count FROM subgoals WHERE parent_subgoal_id = ?;";
-    private static final String SELECT_COUNT_FIRST_LEVEL_SUBGOALS_FOR_SUBGOAL = "SELECT count(*) AS count FROM subgoals WHERE parent_subgoal_id = ? AND parent_subgoal_id IS NUL;";
+    private static final String SELECT_COUNT_FIRST_LEVEL_SUBGOALS_FOR_SUBGOAL = "SELECT count(*) AS count FROM subgoals WHERE parent_subgoal_id = ?;";
     private static final String SELECT_SUBGOAL_BY_ID = "SELECT * FROM subgoals WHERE id = ?;";
     private static final String SELECT_SUBGOAL_BY_UUID = "SELECT * FROM subgoals WHERE uuid = ?;";
     private static final String UPDATE_SUBGOAL = "UPDATE subgoals SET title = ?, description = ?, deadline = ?, goal_id = ?, parent_subgoal_id = ?, updated_at = ? WHERE id = ?;";
@@ -226,6 +226,7 @@ public class SqlSubgoalDao extends BaseDao implements SubgoalDao {
     }
 
     public Integer determineSubgoalLevel(Subgoal subgoal) {
+        // TODO create the SQL query for this. This may needs to be solved using Java.
         return 3;
     }
 
