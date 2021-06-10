@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cyrildewit.pgc.domain.goal.model.Goal;
@@ -37,6 +38,9 @@ import com.cyrildewit.pgc.application.services.ActivityService;
 import com.cyrildewit.pgc.application.exceptions.GoalNotFoundException;
 import com.cyrildewit.pgc.application.validation.form.goal.CreateGoalFormRequest;
 import com.cyrildewit.pgc.application.validation.form.goal.UpdateGoalFormRequest;
+
+import com.cyrildewit.pgc.application.view_model.front.goal.index.GoalIndexModelAndView;
+import com.cyrildewit.pgc.application.view_model.front.goal.index.GoalIndexDto;
 
 @Controller
 @RequestMapping("/goals")
@@ -66,10 +70,17 @@ public class GoalController {
     }
 
     @GetMapping("")
-    public String index(Model model) {
-        model.addAttribute("goals", goalService.getAllGoalsForUser(authenticationService.getCurrentUser()));
+    public GoalIndexModelAndView index() {
+        GoalIndexModelAndView modelAndView = new GoalIndexModelAndView();
 
-        return "front/goals/index";
+        List<GoalIndexDto> goals = new ArrayList<GoalIndexDto>();
+        for (Goal goal : goalService.getAllGoalsForUser(authenticationService.getCurrentUser())) {
+            goals.add(GoalIndexDto.fromGoalEntity(goal));
+        }
+
+        modelAndView.setGoalsList(goals);
+
+        return modelAndView;
     }
 
     @PostMapping("")
