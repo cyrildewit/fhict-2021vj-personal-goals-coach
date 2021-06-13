@@ -1,4 +1,4 @@
-package com.cyrildewit.pgc.application.view_model.front.goal.index;
+package com.cyrildewit.pgc.application.view_model.front.goal.show;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

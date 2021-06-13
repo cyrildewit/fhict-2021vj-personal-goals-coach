@@ -39,13 +39,14 @@ import com.cyrildewit.pgc.application.services.SuggestiveActionService;
 import com.cyrildewit.pgc.application.services.ActivityService;
 import com.cyrildewit.pgc.application.exceptions.GoalNotFoundException;
 import com.cyrildewit.pgc.application.validation.form.goal.CreateGoalFormRequest;
-import com.cyrildewit.pgc.application.validation.form.goal.UpdateGoalFormRequest;
 
 import com.cyrildewit.pgc.application.view_model.front.goal.index.GoalIndexModelAndView;
 import com.cyrildewit.pgc.application.view_model.front.goal.index.GoalIndexDto;
-import com.cyrildewit.pgc.application.view_model.front.goal.index.GoalShowModelAndView;
-import com.cyrildewit.pgc.application.view_model.front.goal.index.GoalShowDto;
-import com.cyrildewit.pgc.application.view_model.front.goal.index.GoalShowSubgoalDto;
+import com.cyrildewit.pgc.application.view_model.front.goal.show.GoalShowModelAndView;
+import com.cyrildewit.pgc.application.view_model.front.goal.show.GoalShowDto;
+import com.cyrildewit.pgc.application.view_model.front.goal.show.GoalShowSubgoalDto;
+import com.cyrildewit.pgc.application.view_model.front.goal.edit.GoalEditModelAndView;
+import com.cyrildewit.pgc.application.view_model.front.goal.edit.GoalEditDto;
 
 @Controller
 @RequestMapping("/goals")
@@ -150,25 +151,27 @@ public class GoalController {
     }
 
     @GetMapping("/{uuid}/edit")
-    public String edit(
+    public GoalEditModelAndView edit(
             @PathVariable("uuid") UUID uuid,
             Model model
     ) {
+        GoalEditModelAndView modelAndView = new GoalEditModelAndView();
+
         Optional<Goal> optionalGoal = goalService.findGoalByUuid(uuid);
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(uuid));
         Goal goal = optionalGoal.get();
 
         if (!model.containsAttribute("goal")) {
-            model.addAttribute("goal", goal);
+            modelAndView.setGoal(GoalEditDto.fromGoalEntity(goal));
         }
 
-        return "front/goals/edit";
+        return modelAndView;
     }
 
     @PutMapping("/{uuid}/edit")
     public String update(
             @PathVariable("uuid") UUID uuid,
-            @ModelAttribute("goal") @Valid UpdateGoalFormRequest formGoal,
+            @ModelAttribute("goal") @Valid GoalEditDto formGoal,
             BindingResult result,
             RedirectAttributes redirectAttributes
     ) {

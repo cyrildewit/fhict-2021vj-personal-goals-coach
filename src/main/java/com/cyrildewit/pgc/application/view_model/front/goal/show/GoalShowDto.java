@@ -1,4 +1,4 @@
-package com.cyrildewit.pgc.application.view_model.front.goal.index;
+package com.cyrildewit.pgc.application.view_model.front.goal.show;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,6 +20,7 @@ public final class GoalShowDto {
         this.uuid = uuid;
         this.title = title;
         this.description = description;
+        this.formattedDeadline = formattedDeadline;
     }
 
     public GoalShowDto(long id, UUID uuid, String title, String description, String formattedDeadline, String subgoalsCountFormatted, String suggestiveActionsCountFormatted) {
