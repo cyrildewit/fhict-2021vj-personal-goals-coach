@@ -15,11 +15,11 @@ public interface UserServiceInterface
 {
     public List<User> getAllUsers();
 
-    public Optional<User> findUserById(long id);
+    public Optional<User> getUserById(long id);
 
-    public Optional<User> findUserByUuid(UUID uuid);
+    public Optional<User> getUserByUuid(UUID uuid);
 
-    public Optional<User> findUserByEmail(String email);
+    public Optional<User> getUserByEmail(String email);
 
     public void addUser(User user);
 
