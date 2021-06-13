@@ -75,7 +75,7 @@ public class CoachingStylePreference extends Model {
         this.suggestDeleteGoalBeforePeriod = suggestDeleteGoalBeforePeriod;
     }
 
-    public LocalDateTime gettSuggestPinGoalBasedOnActivityBeforePeriodDatetime() {
+    public LocalDateTime getSuggestPinGoalBasedOnActivityBeforePeriodDatetime() {
         return LocalDateTime.now().minusSeconds(suggestPinGoalBasedOnActivityBeforePeriod);
     }
 

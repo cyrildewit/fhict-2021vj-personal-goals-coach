@@ -106,6 +106,15 @@ public class SqlSuggestiveActionDao extends BaseDao implements SuggestiveActionD
         return exists;
     }
 
+    public void insertUniqueSuggestiveAction(SuggestiveAction suggestiveAction)
+    {
+        if (suggestiveActionExists(suggestiveAction)) {
+            return;
+        }
+
+        insertSuggestiveAction(suggestiveAction);
+    }
+
     public int getTotalSuggestiveActionsCountForUser(User user)
     {
         int suggestiveActionsCount = 0;

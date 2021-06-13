@@ -22,6 +22,6 @@ class CoachingStylePreferenceTest {
         CoachingStylePreference coachingStylePreference = new CoachingStylePreference();
         coachingStylePreference.setSuggestPinGoalBasedOnActivityStartDateTime(suggestPinGoalBeforePeriod);
 
-        assertTrue(coachingStylePreference.gettSuggestPinGoalBasedOnActivityBeforePeriodDatetime() instanceof LocalDateTime);
+        assertTrue(coachingStylePreference.getSuggestPinGoalBasedOnActivityBeforePeriodDatetime() instanceof LocalDateTime);
     }
 }

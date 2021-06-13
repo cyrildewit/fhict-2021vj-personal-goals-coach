@@ -11,6 +11,11 @@ public class GoalDaoFactory
 {
     public static GoalDao getSqlGoalDao()
     {
+//        var context = new AnnotationConfigApplicationContext();
+//        context.scan("com.cyrildewit");
+//        context.refresh();
+
+
         ApplicationContext context = new AnnotationConfigApplicationContext(SqlGoalDao.class);
 
         return context.getBean(SqlGoalDao.class);

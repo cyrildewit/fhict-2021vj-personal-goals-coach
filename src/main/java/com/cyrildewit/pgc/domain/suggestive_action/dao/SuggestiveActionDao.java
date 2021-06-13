@@ -19,6 +19,8 @@ public interface SuggestiveActionDao
 
     public boolean suggestiveActionExists(SuggestiveAction suggestiveAction);
 
+    public void insertUniqueSuggestiveAction(SuggestiveAction suggestiveAction);
+
     public int getTotalSuggestiveActionsCountForUser(User user);
 
     public int getTotalSuggestiveActionsCountForGoal(Goal goal);

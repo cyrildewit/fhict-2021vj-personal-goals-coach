@@ -140,12 +140,8 @@ public class SqlGoalDao extends BaseDao implements GoalDao {
 
     public List<Goal> findGoalByIds(List<Long> ids) {
         String SELECT_GOAL_BY_IDS = "SELECT * FROM goals WHERE id IN (";
-
         SELECT_GOAL_BY_IDS += ids.toString();
-
         SELECT_GOAL_BY_IDS += ");";
-
-        System.out.println("SQLLL::::: " + SELECT_GOAL_BY_IDS);
 
         List<Goal> goals = new ArrayList<Goal>();
 

@@ -25,9 +25,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.cyrildewit.pgc.domain.goal.model.Goal;
 import com.cyrildewit.pgc.domain.goal.model.Subgoal;
+import com.cyrildewit.pgc.domain.goal.dao.GoalDao;
 import com.cyrildewit.pgc.domain.user.model.User;
 import com.cyrildewit.pgc.domain.activity.model.Activity;
 import com.cyrildewit.pgc.domain.suggestive_action.model.SuggestiveAction;
+import com.cyrildewit.pgc.domain.suggestive_action.dao.SuggestiveActionDao;
 
 import com.cyrildewit.pgc.support.util.DateTimeFormatters;
 import com.cyrildewit.pgc.application.services.GoalService;
@@ -50,24 +52,30 @@ import com.cyrildewit.pgc.application.view_model.front.goal.index.GoalShowSubgoa
 public class GoalController {
     private DateTimeFormatters dateTimeFormatters;
     private final GoalService goalService;
+    private final GoalDao goalDao;
     private final SubgoalService subgoalService;
     private final AuthenticationService authenticationService;
     private final SuggestiveActionService suggestiveActionService;
+    private final SuggestiveActionDao suggestiveActionDao;
     private final ActivityService activityService;
 
     @Autowired
     public GoalController(
             GoalService goalService,
+            GoalDao goalDao,
             SubgoalService subgoalService,
             AuthenticationService authenticationService,
             SuggestiveActionService suggestiveActionService,
+            SuggestiveActionDao suggestiveActionDao,
             ActivityService activityService,
             DateTimeFormatters dateTimeFormatters
     ) {
         this.goalService = goalService;
         this.subgoalService = subgoalService;
+        this.goalDao = goalDao;
         this.authenticationService = authenticationService;
         this.suggestiveActionService = suggestiveActionService;
+        this.suggestiveActionDao = suggestiveActionDao;
         this.activityService = activityService;
         this.dateTimeFormatters = dateTimeFormatters;
     }
@@ -214,13 +222,9 @@ public class GoalController {
     public String analyzeSuggestiveActions() {
         User user = authenticationService.getCurrentUser();
         user.setGoals(goalService.getAllGoalsForUser(user));
-        List<List> suggestiveActionsAggregation = new ArrayList<List>();
-
-        for (Goal goal : user.getGoals()) {
-            for (SuggestiveAction suggestiveAction : goal.analyzeSuggestiveActions()) {
-                suggestiveActionService.addUniqueSuggestiveAction(suggestiveAction);
-            }
-        }
+        user.setGoalDao(goalDao);
+        user.setSuggestiveActionDao(suggestiveActionDao);
+        user.analyzeSuggestiveActions();
 
         // Redirect with success message
 
