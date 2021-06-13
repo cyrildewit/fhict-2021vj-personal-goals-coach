@@ -2,10 +2,9 @@ package com.cyrildewit.pgc.support.util;
 
 import java.time.format.DateTimeFormatter;
 
-import org.springframework.stereotype.Service;
-import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 public class DateTimeFormatters
 {
     public static final String mariaDbDateTimePattern = "yyyy-LL-dd HH:mm:ss.S";
