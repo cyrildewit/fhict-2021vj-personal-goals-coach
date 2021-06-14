@@ -61,7 +61,7 @@ public class SubgoalController {
             BindingResult result,
             RedirectAttributes redirectAttributes
     ) {
-        Optional<Goal> optionalGoal = goalService.findGoalByUuid(goalUuid);
+        Optional<Goal> optionalGoal = goalService.getGoalByUuid(goalUuid);
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(goalUuid));
         Goal goal = optionalGoal.get();
 
@@ -86,11 +86,11 @@ public class SubgoalController {
             BindingResult result,
             RedirectAttributes redirectAttributes
     ) {
-        Optional<Goal> optionalGoal = goalService.findGoalByUuid(goalUuid);
+        Optional<Goal> optionalGoal = goalService.getGoalByUuid(goalUuid);
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(goalUuid));
         Goal goal = optionalGoal.get();
 
-        Optional<Subgoal> optionalParentSubgoal = subgoalService.findSubgoalByUuid(parentSubgoalUuid);
+        Optional<Subgoal> optionalParentSubgoal = subgoalService.getSubgoalByUuid(parentSubgoalUuid);
         optionalParentSubgoal.orElseThrow(() -> new SubgoalNotFoundException(parentSubgoalUuid));
         Subgoal parentSubgoal = optionalParentSubgoal.get();
 
@@ -113,7 +113,7 @@ public class SubgoalController {
 
     @GetMapping("{goalUuid}/subgoals/create")
     public String create(@PathVariable("goalUuid") UUID goalUuid, Model model) {
-        Optional<Goal> optionalGoal = goalService.findGoalByUuid(goalUuid);
+        Optional<Goal> optionalGoal = goalService.getGoalByUuid(goalUuid);
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(goalUuid));
         Goal goal = optionalGoal.get();
 
@@ -127,11 +127,11 @@ public class SubgoalController {
 
     @GetMapping("{goalUuid}/subgoals/{parentSubgoalUuid}/subgoals/create")
     public String createChildSubgoal(@PathVariable("goalUuid") UUID goalUuid, @PathVariable("parentSubgoalUuid") UUID parentSubgoalUuid, Model model) {
-        Optional<Goal> optionalGoal = goalService.findGoalByUuid(goalUuid);
+        Optional<Goal> optionalGoal = goalService.getGoalByUuid(goalUuid);
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(goalUuid));
         Goal goal = optionalGoal.get();
 
-        Optional<Subgoal> optionalParentSubgoal = subgoalService.findSubgoalByUuid(parentSubgoalUuid);
+        Optional<Subgoal> optionalParentSubgoal = subgoalService.getSubgoalByUuid(parentSubgoalUuid);
         optionalParentSubgoal.orElseThrow(() -> new SubgoalNotFoundException(parentSubgoalUuid));
         Subgoal parentSubgoal = optionalParentSubgoal.get();
 
@@ -158,11 +158,11 @@ public class SubgoalController {
             @PathVariable("subgoalUuid") UUID subgoalUuid,
             Model model
     ) {
-        Optional<Goal> optionalGoal = goalService.findGoalByUuid(goalUuid);
+        Optional<Goal> optionalGoal = goalService.getGoalByUuid(goalUuid);
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(goalUuid));
         Goal goal = optionalGoal.get();
 
-        Optional<Subgoal> optionalSubgoal = subgoalService.findSubgoalByUuid(subgoalUuid);
+        Optional<Subgoal> optionalSubgoal = subgoalService.getSubgoalByUuid(subgoalUuid);
         optionalSubgoal.orElseThrow(() -> new SubgoalNotFoundException(subgoalUuid));
         Subgoal subgoal = optionalSubgoal.get();
 
@@ -175,7 +175,7 @@ public class SubgoalController {
         System.out.println("HIER:: " + subgoalParentType + " :::: " + subgoal.getParentSubgoalId());
 
         if (subgoalParentType == SubgoalParentType.SUBGOAL) {
-            Optional<Subgoal> optionalParentSubgoal = subgoalService.findSubgoalById(subgoal.getParentSubgoalId());
+            Optional<Subgoal> optionalParentSubgoal = subgoalService.getSubgoalById(subgoal.getParentSubgoalId());
             optionalParentSubgoal.orElseThrow(() -> new SubgoalNotFoundException(subgoal.getParentSubgoalId()));
             Subgoal parentSubgoal = optionalParentSubgoal.get();
 
@@ -200,11 +200,11 @@ public class SubgoalController {
             @PathVariable("subgoalUuid") UUID subgoalUuid,
             Model model
     ) {
-        Optional<Goal> optionalGoal = goalService.findGoalByUuid(goalUuid);
+        Optional<Goal> optionalGoal = goalService.getGoalByUuid(goalUuid);
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(goalUuid));
         Goal goal = optionalGoal.get();
 
-        Optional<Subgoal> optionalSubgoal = subgoalService.findSubgoalByUuid(subgoalUuid);
+        Optional<Subgoal> optionalSubgoal = subgoalService.getSubgoalByUuid(subgoalUuid);
         optionalSubgoal.orElseThrow(() -> new SubgoalNotFoundException(subgoalUuid));
         Subgoal subgoal = optionalSubgoal.get();
 
@@ -226,11 +226,11 @@ public class SubgoalController {
             BindingResult result,
             RedirectAttributes redirectAttributes
     ) {
-        Optional<Goal> optionalGoal = goalService.findGoalByUuid(goalUuid);
+        Optional<Goal> optionalGoal = goalService.getGoalByUuid(goalUuid);
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(goalUuid));
         Goal goal = optionalGoal.get();
 
-        Optional<Subgoal> optionalSubgoal = subgoalService.findSubgoalByUuid(subgoalUuid);
+        Optional<Subgoal> optionalSubgoal = subgoalService.getSubgoalByUuid(subgoalUuid);
         optionalSubgoal.orElseThrow(() -> new SubgoalNotFoundException(subgoalUuid));
         Subgoal subgoal = optionalSubgoal.get();
 
@@ -255,11 +255,11 @@ public class SubgoalController {
             @PathVariable("goalUuid") UUID goalUuid,
             @PathVariable("subgoalUuid") UUID subgoalUuid
     ) {
-        Optional<Goal> optionalGoal = goalService.findGoalByUuid(goalUuid);
+        Optional<Goal> optionalGoal = goalService.getGoalByUuid(goalUuid);
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(goalUuid));
         Goal goal = optionalGoal.get();
 
-        Optional<Subgoal> optionalSubgoal = subgoalService.findSubgoalByUuid(subgoalUuid);
+        Optional<Subgoal> optionalSubgoal = subgoalService.getSubgoalByUuid(subgoalUuid);
         optionalSubgoal.orElseThrow(() -> new SubgoalNotFoundException(subgoalUuid));
         Subgoal subgoal = optionalSubgoal.get();
 

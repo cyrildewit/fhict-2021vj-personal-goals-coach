@@ -12,9 +12,9 @@ import com.cyrildewit.pgc.domain.goal.model.Goal;
 
 public interface SubgoalServiceInterface
 {
-    public List<Goal> getAllSubgoals();
+    public List<Subgoal> getAllSubgoals();
 
-    public List<Goal> getAllGoalsForGoal(Goal goal);
+    public List<Subgoal> getAllSubgoalsForGoal(Goal goal);
 
     public List<Subgoal> getAllFirstLevelSubgoals(Goal goal);
 
@@ -28,15 +28,15 @@ public interface SubgoalServiceInterface
 
     public long getTotalFirstLevelSubgoalsCountForSubgoal(Subgoal subgoal);
 
-    public Optional<Goal> findGoalById(long id);
+    public Optional<Subgoal> getSubgoalById(long id);
 
-    public Optional<Goal> findGoalByUuid(UUID uuid);
+    public Optional<Subgoal> getSubgoalByUuid(UUID uuid);
 
-    public void addGoal(Subgoal subgoal);
+    public void addSubgoal(Subgoal subgoal);
 
-    public void updateGoal(Subgoal subgoal);
+    public void updateSubgoal(Subgoal subgoal);
 
-    public void deleteGoalById(long id);
+    public void deleteSubgoalById(long id);
 
     public void deleteSubgoal(Subgoal subgoal);
 
@@ -47,5 +47,5 @@ public interface SubgoalServiceInterface
      *
      * 0 is reserverd for goal.
      */
-    public Integer determineSubgoalLevel();
+    public Integer determineSubgoalLevel(Subgoal subgoal);
 }

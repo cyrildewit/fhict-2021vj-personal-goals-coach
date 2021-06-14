@@ -16,25 +16,5 @@ import com.cyrildewit.pgc.domain.activity.dao.SqlActivityDao;
 
 @Service
 public class CoachingStylePreferenceService implements CoachingStylePreferenceServiceInterface {
-//    private final CoacingStylePreferenceDao coacingStylePreferenceDao;
 //
-//    @Autowired
-//    public CoachingStylePreferenceService(SqlActivityDao activityDao) {
-//        this.activityDao = activityDao;
-//    }
-//
-//    public void addActivity(Activity activity)
-//    {
-//        activityDao.insertActivity(activity);
-//    }
-//
-//    public Optional<Activity> selectLatestActivityForSubject(Model subject)
-//    {
-//        return activityDao.selectLatestActivityForSubject(subject);
-//    }
-//
-//    public List<Activity> getAllActivityForSubject(Model subject)
-//    {
-//        return activityDao.selectAllActivityForSubject(subject);
-//    }
 }

@@ -16,11 +16,11 @@ public interface GoalServiceInterface {
 
     public List<Goal> getAllGoalsForUser(User user);
 
-    public Optional<Goal> findGoalById(long id);
+    public Optional<Goal> getGoalById(long id);
 
-    public Optional<Goal> findGoalByUuid(UUID uuid);
+    public Optional<Goal> getGoalByUuid(UUID uuid);
 
-    public List<Goal> findGoalByIds(List<Long> ids);
+    public List<Goal> getGoalsByIds(List<Long> ids);
 
     public void addGoal(Goal goal);
 

@@ -21,7 +21,7 @@ public interface GoalDao
 
     public Optional<Goal> findGoalByUuid(UUID uuid);
 
-    public List<Goal> findGoalByIds(List<Long> ids);
+    public List<Goal> findGoalsByIds(List<Long> ids);
 
     public void insertGoal(Goal goal);
 

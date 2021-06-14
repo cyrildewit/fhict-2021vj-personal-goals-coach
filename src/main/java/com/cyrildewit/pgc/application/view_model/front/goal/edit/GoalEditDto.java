@@ -32,8 +32,6 @@ public final class GoalEditDto {
     }
 
     public static GoalEditDto fromGoalEntity(Goal goal) {
-//        DateTimeFormatter inputLocalDateTimeFormat = DateTimeFormatter.ofPattern("yyy-MM-dd'T'HH:mm:ss");
-
         return new GoalEditDto(
                 goal.getUuid(),
                 goal.getTitle(),
@@ -65,14 +63,6 @@ public final class GoalEditDto {
     public void setDescription(String description) {
         this.description = description;
     }
-
-//    public String getDeadline() {
-//        return deadline;
-//    }
-//
-//    public void setDeadline(String deadline) {
-//        this.deadline = deadline;
-//    }
 
     public LocalDateTime getDeadline() {
         return deadline;

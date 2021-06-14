@@ -64,7 +64,7 @@ public class GoalSuggestiveActionController {
             @PathVariable("uuid") UUID uuid,
             Model model
     ) {
-        Optional<Goal> optionalGoal = goalService.findGoalByUuid(uuid);
+        Optional<Goal> optionalGoal = goalService.getGoalByUuid(uuid);
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(uuid));
         Goal goal = optionalGoal.get();
 
@@ -74,7 +74,7 @@ public class GoalSuggestiveActionController {
                     .map(suggestiveAction -> new Long(suggestiveAction.getGoalId()))
                     .collect(Collectors.toList());
 
-        List<Goal> goals = goalService.findGoalByIds(goalIds);
+        List<Goal> goals = goalService.getGoalsByIds(goalIds);
 
         model.addAttribute("goal", goal);
         model.addAttribute("goals", goals);

@@ -11,7 +11,7 @@ import com.cyrildewit.pgc.support.logging.LoggerInterface;
 public abstract class BaseDao {
     protected abstract LoggerInterface getLogger();
 
-    public void logSQLException(SQLException ex) {
+    protected void logSQLException(SQLException ex) {
         for (Throwable e : ex) {
             if (e instanceof SQLException) {
                 e.printStackTrace(System.err);

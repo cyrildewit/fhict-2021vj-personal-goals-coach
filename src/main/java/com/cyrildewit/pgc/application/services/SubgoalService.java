@@ -14,7 +14,7 @@ import com.cyrildewit.pgc.domain.goal.dao.SubgoalDao;
 import com.cyrildewit.pgc.domain.goal.dao.SqlSubgoalDao;
 
 @Service
-public class SubgoalService
+public class SubgoalService implements SubgoalServiceInterface
 {
     private final SubgoalDao subgoalDao;
 
@@ -63,12 +63,12 @@ public class SubgoalService
         return subgoalDao.countAllFistLevelSubgoalsForSubgoal(subgoal);
     }
 
-    public Optional<Subgoal> findSubgoalById(long id)
+    public Optional<Subgoal> getSubgoalById(long id)
     {
         return subgoalDao.findSubgoalById(id);
     }
 
-    public Optional<Subgoal> findSubgoalByUuid(UUID uuid)
+    public Optional<Subgoal> getSubgoalByUuid(UUID uuid)
     {
         return subgoalDao.findSubgoalByUuid(uuid);
     }

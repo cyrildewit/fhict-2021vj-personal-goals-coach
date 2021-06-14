@@ -113,7 +113,7 @@ public class GoalController {
         Goal goal = new Goal(UUID.randomUUID(), goalForm.getTitle(), goalForm.getDescription(), goalForm.getDeadline(), currentUser.getId());
         goalService.addGoal(goal);
 
-        activityService.addActivity(new Activity(UUID.randomUUID(), "", "Created goal '" + goalService.findGoalByUuid(goal.getUuid()).get().getTitle() + "'", goal, currentUser));
+        activityService.addActivity(new Activity(UUID.randomUUID(), "", "Created goal '" + goalService.getGoalByUuid(goal.getUuid()).get().getTitle() + "'", goal, currentUser));
 
         return "redirect:/goals/" + goal.getUuid().toString();
     }
@@ -131,7 +131,7 @@ public class GoalController {
     public GoalShowModelAndView show(@PathVariable("uuid") UUID uuid, Model model) {
         GoalShowModelAndView modelAndView = new GoalShowModelAndView();
 
-        Optional<Goal> optionalGoal = goalService.findGoalByUuid(uuid);
+        Optional<Goal> optionalGoal = goalService.getGoalByUuid(uuid);
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(uuid));
         Goal goal = optionalGoal.get();
 
@@ -157,7 +157,7 @@ public class GoalController {
     ) {
         GoalEditModelAndView modelAndView = new GoalEditModelAndView();
 
-        Optional<Goal> optionalGoal = goalService.findGoalByUuid(uuid);
+        Optional<Goal> optionalGoal = goalService.getGoalByUuid(uuid);
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(uuid));
         Goal goal = optionalGoal.get();
 
@@ -175,7 +175,7 @@ public class GoalController {
             BindingResult result,
             RedirectAttributes redirectAttributes
     ) {
-        Optional<Goal> optionalGoal = goalService.findGoalByUuid(uuid);
+        Optional<Goal> optionalGoal = goalService.getGoalByUuid(uuid);
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(uuid));
         Goal goal = optionalGoal.get();
 
@@ -201,7 +201,7 @@ public class GoalController {
 
     @DeleteMapping("/{uuid}")
     public String destroy(@PathVariable("uuid") UUID uuid, Model model) {
-        Optional<Goal> optionalGoal = goalService.findGoalByUuid(uuid);
+        Optional<Goal> optionalGoal = goalService.getGoalByUuid(uuid);
         optionalGoal.orElseThrow(() -> new GoalNotFoundException(uuid));
         Goal goal = optionalGoal.get();
 

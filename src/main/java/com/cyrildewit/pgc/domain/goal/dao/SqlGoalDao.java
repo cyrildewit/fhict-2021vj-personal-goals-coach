@@ -138,7 +138,7 @@ public class SqlGoalDao extends BaseDao implements GoalDao {
         return goal;
     }
 
-    public List<Goal> findGoalByIds(List<Long> ids) {
+    public List<Goal> findGoalsByIds(List<Long> ids) {
         String SELECT_GOAL_BY_IDS = "SELECT * FROM goals WHERE id IN (";
         SELECT_GOAL_BY_IDS += ids.toString();
         SELECT_GOAL_BY_IDS += ");";

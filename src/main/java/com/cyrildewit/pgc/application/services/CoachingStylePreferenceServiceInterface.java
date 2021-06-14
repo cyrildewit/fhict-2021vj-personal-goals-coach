@@ -11,9 +11,5 @@ import com.cyrildewit.pgc.domain.Model;
 
 public interface CoachingStylePreferenceServiceInterface
 {
-//    public void addActivity(Activity activity);
-//
-//    public List<Activity> getAllActivityForSubject(Model subject);
-//
-//    public Optional<Activity> selectLatestActivityForSubject(Model subject);
+    //
 }

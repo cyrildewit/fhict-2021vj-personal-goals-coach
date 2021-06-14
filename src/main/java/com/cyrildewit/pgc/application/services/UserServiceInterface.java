@@ -23,7 +23,7 @@ public interface UserServiceInterface
 
     public void addUser(User user);
 
-    public void updateUser(User user, String[] params);
+    public void updateUser(User user);
 
     public void deleteUserById(long id);
 

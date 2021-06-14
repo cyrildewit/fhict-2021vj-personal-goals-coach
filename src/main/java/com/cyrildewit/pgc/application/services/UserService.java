@@ -13,7 +13,7 @@ import com.cyrildewit.pgc.domain.user.dao.UserDao;
 import com.cyrildewit.pgc.domain.user.dao.SqlUserDao;
 
 @Service
-public class UserService
+public class UserService implements UserServiceInterface
 {
     private final UserDao userDao;
 
@@ -28,17 +28,17 @@ public class UserService
         return userDao.selectAllUsers();
     }
 
-    public Optional<User> findUserById(long id)
+    public Optional<User> getUserById(long id)
     {
         return userDao.findUserById(id);
     }
 
-    public Optional<User> findUserByUuid(UUID uuid)
+    public Optional<User> getUserByUuid(UUID uuid)
     {
         return userDao.findUserByUuid(uuid);
     }
 
-    public Optional<User> findUserByEmail(String email)
+    public Optional<User> getUserByEmail(String email)
     {
         return userDao.findUserByEmail(email);
     }

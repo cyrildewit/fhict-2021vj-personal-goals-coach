@@ -35,16 +35,16 @@ public class GoalService implements GoalServiceInterface {
         return goalDao.selectAllGoalsForUser(user);
     }
 
-    public Optional<Goal> findGoalById(long id) {
+    public Optional<Goal> getGoalById(long id) {
         return goalDao.findGoalById(id);
     }
 
-    public Optional<Goal> findGoalByUuid(UUID uuid) {
+    public Optional<Goal> getGoalByUuid(UUID uuid) {
         return goalDao.findGoalByUuid(uuid);
     }
 
-    public List<Goal> findGoalByIds(List<Long> ids) {
-        return goalDao.findGoalByIds(ids);
+    public List<Goal> getGoalsByIds(List<Long> ids) {
+        return goalDao.findGoalsByIds(ids);
     }
 
     public void addGoal(Goal goal) {

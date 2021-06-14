@@ -26,7 +26,7 @@ public class AuthenticationService implements AuthenticationServiceInterface {
     }
 
     public void fetchFakeUser() {
-        Optional<User> optionalUser = userService.findUserById(1L);
+        Optional<User> optionalUser = userService.getUserById(1L);
         optionalUser.orElseThrow(() -> new UserNotFoundException());
         currentUser = optionalUser.get();
     }
@@ -35,7 +35,7 @@ public class AuthenticationService implements AuthenticationServiceInterface {
      * Unfinished implementation and therefore obviously not secure.
      */
     public boolean attemptLogin(String email, String password) {
-        Optional<User> optionalUser = userService.findUserByEmail(email);
+        Optional<User> optionalUser = userService.getUserByEmail(email);
         if (!optionalUser.isPresent()) {
             return false;
         }
