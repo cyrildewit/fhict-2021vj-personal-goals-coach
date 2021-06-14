@@ -15,9 +15,9 @@ import com.cyrildewit.pgc.domain.user.model.User;
 import com.cyrildewit.pgc.domain.goal.model.CoachingStylePreference;
 import com.cyrildewit.pgc.domain.suggestive_action.model.SuggestiveAction;
 import com.cyrildewit.pgc.domain.suggestive_action.enums.SuggestiveActionType;
-
 import com.cyrildewit.pgc.domain.goal.dao.GoalDao;
 import com.cyrildewit.pgc.domain.goal.dao.SqlGoalDao;
+import com.cyrildewit.pgc.domain.goal.dao.SubgoalDao;
 import com.cyrildewit.pgc.domain.goal.dao.CoachingStylePreferenceDao;
 import com.cyrildewit.pgc.domain.goal.dao.SqlCoachingStylePreferenceDao;
 import com.cyrildewit.pgc.application.services.ActivityService;
@@ -25,6 +25,8 @@ import com.cyrildewit.pgc.domain.goal.dao.factory.GoalDaoFactory;
 import com.cyrildewit.pgc.domain.goal.dao.factory.CoachingStylePreferenceDaoFactory;
 import com.cyrildewit.pgc.domain.suggestive_action.dao.SuggestiveActionDao;
 import com.cyrildewit.pgc.domain.suggestive_action.dao.factory.SuggestiveActionDaoFactory;
+import com.cyrildewit.pgc.domain.activity.dao.ActivityDao;
+
 import com.cyrildewit.pgc.application.services.SuggestiveActionService;
 
 public class Goal extends Model {
@@ -55,8 +57,10 @@ public class Goal extends Model {
     private List<SuggestiveAction> suggestiveActions = new ArrayList<SuggestiveAction>();
 
     private GoalDao goalDao;
+    private SubgoalDao subgoalDao;
     private CoachingStylePreferenceDao coachingStylePreferenceDao;
     private SuggestiveActionDao suggestiveActionDao;
+    private ActivityDao activityDao;
 
     public Goal() {}
 
@@ -233,57 +237,16 @@ public class Goal extends Model {
                     )
             );
         }
+
+        for (Subgoal subgoal : subgoalDao.selectAllSubgoalsForGoal(this)) {
+            subgoal.setSuggestiveActionDao(suggestiveActionDao);
+            subgoal.setSubgoalDao(subgoalDao);
+            subgoal.setActivityDao(activityDao);
+            subgoal.setGoal(this);
+
+            subgoal.analyzeSuggestiveActions();
+        }
     }
-
-
-//    public void analyzeSuggestiveActions() {
-//        List<SuggestiveAction> suggestiveActions = new ArrayList<SuggestiveAction>();
-//
-//        if (getUserId() == 0 || getCoachingStylePreference().isEmpty()) {
-//            return;
-//        }
-//
-//        CoachingStylePreference coachingStylePreference = getCoachingStylePreference().get();
-//        Optional<Activity> optionalLastGoalActivity = getLatestActivity();
-//
-//        if (optionalLastGoalActivity.isPresent()) {
-//            LocalDateTime lastGoalActivityDateTime = optionalLastGoalActivity.get().getCreatedAt();
-//
-//            if (lastGoalActivityDateTime.isBefore(coachingStylePreference.getSuggestDeleteGoalBeforePeriodDatetime())) {
-//                addUniqueSuggestiveAction(
-//                        new SuggestiveAction(
-//                                UUID.randomUUID(),
-//                                SuggestiveActionType.DELETE_GOAL,
-//                                getUserId(),
-//                                getId(),
-//                                0
-//                        )
-//                );
-//            } else if (lastGoalActivityDateTime.isBefore(LocalDateTime.now().minusWeeks(2))) {
-//                addUniqueSuggestiveAction(
-//                        new SuggestiveAction(
-//                                UUID.randomUUID(),
-//                                SuggestiveActionType.CREATE_SUBGOAL,
-//                                getUserId(),
-//                                getId(),
-//                                0
-//                        )
-//                );
-//            }
-//        }
-//
-//        if (hasMostRecentFrequentActivity()) {
-//            addUniqueSuggestiveAction(
-//                    new SuggestiveAction(
-//                            UUID.randomUUID(),
-//                            SuggestiveActionType.PIN_GOAL,
-//                            getUserId(),
-//                            getId(),
-//                            0
-//                    )
-//            );
-//        }
-//    }
 
     private GoalDao getGoalDao() {
         if (goalDao == null) {
@@ -296,32 +259,6 @@ public class Goal extends Model {
     public void setGoalDao(GoalDao goalDao) {
         this.goalDao = goalDao;
     }
-
-//    public void addUniqueSuggestiveAction(SuggestiveAction suggestiveAction)
-//    {
-//        if (hasSuggestiveAction(suggestiveAction)) {
-//            return;
-//        }
-//
-//        addSuggestiveAction(suggestiveAction);
-//    }
-
-//    public void addSuggestiveAction(SuggestiveAction suggestiveAction){
-//        suggestiveActions.add(suggestiveAction);
-//    }
-
-//    public boolean hasSuggestiveAction(SuggestiveAction newSuggestiveAction){
-//        for (SuggestiveAction suggestiveAction : suggestiveActions) {
-//            if (newSuggestiveAction.getType() == suggestiveAction.getType() &&
-//                    newSuggestiveAction.getGoalId() == suggestiveAction.getGoalId() &&
-//                    newSuggestiveAction.getSubgoalId() == suggestiveAction.getSubgoalId() &&
-//                    newSuggestiveAction.getUserId() == suggestiveAction.getUserId()) {
-//                return true;
-//            }
-//        }
-//
-//        return false;
-//    }
 
     private CoachingStylePreferenceDao getCoachingStylePreferenceDao() {
         if (coachingStylePreferenceDao == null) {
@@ -341,5 +278,13 @@ public class Goal extends Model {
 
     public void setSuggestiveActionDao(SuggestiveActionDao suggestiveActionDao) {
         this.suggestiveActionDao = suggestiveActionDao;
+    }
+
+    public void setSubgoalDao(SubgoalDao subgoalDao) {
+        this.subgoalDao = subgoalDao;
+    }
+
+    public void setActivityDao(ActivityDao activityDao) {
+        this.activityDao = activityDao;
     }
 }

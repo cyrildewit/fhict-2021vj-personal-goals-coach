@@ -10,7 +10,9 @@ import java.util.stream.Collectors;
 import com.cyrildewit.pgc.domain.Model;
 import com.cyrildewit.pgc.domain.goal.model.Goal;
 import com.cyrildewit.pgc.domain.goal.dao.GoalDao;
+import com.cyrildewit.pgc.domain.goal.dao.SubgoalDao;
 import com.cyrildewit.pgc.domain.suggestive_action.dao.SuggestiveActionDao;
+import com.cyrildewit.pgc.domain.activity.dao.ActivityDao;
 
 public class User extends Model {
     private long id;
@@ -37,6 +39,8 @@ public class User extends Model {
 
     private GoalDao goalDao;
     private SuggestiveActionDao suggestiveActionDao;
+    private ActivityDao activityDao;
+    private SubgoalDao subgoalDao;
 
     public User() {}
 
@@ -161,7 +165,10 @@ public class User extends Model {
     {
         for (Goal goal : getGoals()) {
             goal.setGoalDao(goalDao);
+            goal.setSubgoalDao(subgoalDao);
             goal.setSuggestiveActionDao(suggestiveActionDao);
+            goal.setActivityDao(activityDao);
+
             goal.analyzeSuggestiveActions();
         }
     }
@@ -176,5 +183,13 @@ public class User extends Model {
 
     public void setSuggestiveActionDao(SuggestiveActionDao suggestiveActionDao) {
         this.suggestiveActionDao = suggestiveActionDao;
+    }
+
+    public void setActivityDao(ActivityDao activityDao) {
+        this.activityDao = activityDao;
+    }
+
+    public void setSubgoalDao(SubgoalDao subgoalDao) {
+        this.subgoalDao = subgoalDao;
     }
 }

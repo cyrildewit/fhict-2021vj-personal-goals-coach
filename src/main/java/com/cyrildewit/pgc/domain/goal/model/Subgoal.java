@@ -2,8 +2,15 @@ package com.cyrildewit.pgc.domain.goal.model;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.Optional;
 
 import com.cyrildewit.pgc.domain.Model;
+import com.cyrildewit.pgc.domain.suggestive_action.model.SuggestiveAction;
+import com.cyrildewit.pgc.domain.suggestive_action.dao.SuggestiveActionDao;
+import com.cyrildewit.pgc.domain.suggestive_action.enums.SuggestiveActionType;
+import com.cyrildewit.pgc.domain.goal.dao.SubgoalDao;
+import com.cyrildewit.pgc.domain.activity.model.Activity;
+import com.cyrildewit.pgc.domain.activity.dao.ActivityDao;
 
 public class Subgoal extends Model {
     private long id;
@@ -24,7 +31,13 @@ public class Subgoal extends Model {
 
     private LocalDateTime updatedAt;
 
-    public Subgoal() {}
+    private Optional<Goal> goal;
+    private SubgoalDao subgoalDao;
+    private SuggestiveActionDao suggestiveActionDao;
+    private ActivityDao activityDao;
+
+    public Subgoal() {
+    }
 
     public Subgoal(UUID uuid, String title, String description, LocalDateTime deadline, long goalId, long parentSubgoalId) {
         this.uuid = uuid;
@@ -103,13 +116,11 @@ public class Subgoal extends Model {
         this.parentSubgoalId = parentSubgoalId;
     }
 
-    public boolean hasGoal()
-    {
+    public boolean hasGoal() {
         return goalId > 0;
     }
 
-    public boolean hasParentSubgoal()
-    {
+    public boolean hasParentSubgoal() {
         return parentSubgoalId > 0;
     }
 
@@ -129,13 +140,60 @@ public class Subgoal extends Model {
         this.updatedAt = updatedAt;
     }
 
-//    private void analyzeSubgoal(Subgoal subgoal) {
-//        LocalDateTime lastSubgoalActivityDateTime = LocalDateTime.now().minusMonths(4);
-//
-//        if (lastSubgoalActivityDateTime.isBefore(LocalDateTime.now().minusMonths(3))) {
-//            addSuggestiveAction(new SuggestiveAction(UUID.randomUUID(), SuggestiveActionType.DELETE_SUBGOAL, user.getId(), subgoal.getGoalId(), subgoal.getId()));
-//        } else if (lastSubgoalActivityDateTime.isBefore(LocalDateTime.now().minusWeeks(2))) {
-//            addSuggestiveAction(new SuggestiveAction(UUID.randomUUID(), SuggestiveActionType.CREATE_SUBGOAL_FOR_SUBGOAL, user.getId(), subgoal.getGoalId(), subgoal.getId()));
+    public void analyzeSuggestiveActions() {
+        Optional<Activity> optionalLatestActivity = activityDao.selectLatestActivityForSubject(this);
+
+        if (goal.isEmpty() || optionalLatestActivity.isEmpty()) {
+            return;
+        }
+
+        Goal goalInstance = goal.get();
+        Optional<CoachingStylePreference> optinalCoachingStylePreference = goalInstance.getCoachingStylePreference();
+
+        if (optinalCoachingStylePreference.isEmpty()) {
+            return;
+        }
+        CoachingStylePreference coachingStylePreference = optinalCoachingStylePreference.get();
+
+        Activity latestActivity = optionalLatestActivity.get();
+
+        if (latestActivity.getCreatedAt().isBefore(coachingStylePreference.getSuggestDeleteSubgoalAfterLastActivityBeforePeriodDateTime())) {
+            suggestiveActionDao.insertUniqueSuggestiveAction(
+                    new SuggestiveAction(
+                            UUID.randomUUID(),
+                            SuggestiveActionType.DELETE_SUBGOAL,
+                            goalInstance.getUserId(),
+                            getGoalId(),
+                            getId()
+                    )
+            );
+        }
+//        else if (lastSubgoalActivityDateTime.isBefore(LocalDateTime.now().minusWeeks(2))) {
+//            suggestiveActionDao.insertUniqueSuggestiveAction(
+//                    new SuggestiveAction(
+//                            UUID.randomUUID(),
+//                            SuggestiveActionType.CREATE_SUBGOAL_FOR_SUBGOAL,
+//                            this.goal.get().getUserId(),
+//                            getGoalId(),
+//                            getId()
+//                    )
+//            );
 //        }
-//    }
+    }
+
+    public void setSuggestiveActionDao(SuggestiveActionDao suggestiveActionDao) {
+        this.suggestiveActionDao = suggestiveActionDao;
+    }
+
+    public void setSubgoalDao(SubgoalDao subgoalDao) {
+        this.subgoalDao = subgoalDao;
+    }
+
+    public void setGoal(Goal goal) {
+        this.goal = Optional.ofNullable(goal);
+    }
+
+    public void setActivityDao(ActivityDao activityDao) {
+        this.activityDao = activityDao;
+    }
 }

@@ -26,12 +26,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.cyrildewit.pgc.domain.goal.model.Goal;
 import com.cyrildewit.pgc.domain.goal.model.Subgoal;
 import com.cyrildewit.pgc.domain.goal.dao.GoalDao;
+import com.cyrildewit.pgc.domain.goal.dao.SubgoalDao;
 import com.cyrildewit.pgc.domain.user.model.User;
 import com.cyrildewit.pgc.domain.activity.model.Activity;
 import com.cyrildewit.pgc.domain.suggestive_action.model.SuggestiveAction;
 import com.cyrildewit.pgc.domain.suggestive_action.dao.SuggestiveActionDao;
+import com.cyrildewit.pgc.domain.activity.dao.ActivityDao;
 
 import com.cyrildewit.pgc.support.util.DateTimeFormatters;
+
 import com.cyrildewit.pgc.application.services.GoalService;
 import com.cyrildewit.pgc.application.services.SubgoalService;
 import com.cyrildewit.pgc.application.services.AuthenticationService;
@@ -39,7 +42,6 @@ import com.cyrildewit.pgc.application.services.SuggestiveActionService;
 import com.cyrildewit.pgc.application.services.ActivityService;
 import com.cyrildewit.pgc.application.exceptions.GoalNotFoundException;
 import com.cyrildewit.pgc.application.validation.form.goal.CreateGoalFormRequest;
-
 import com.cyrildewit.pgc.application.view_model.front.goal.index.GoalIndexModelAndView;
 import com.cyrildewit.pgc.application.view_model.front.goal.index.GoalIndexDto;
 import com.cyrildewit.pgc.application.view_model.front.goal.show.GoalShowModelAndView;
@@ -59,6 +61,8 @@ public class GoalController {
     private final SuggestiveActionService suggestiveActionService;
     private final SuggestiveActionDao suggestiveActionDao;
     private final ActivityService activityService;
+    private final ActivityDao activityDao;
+    private final SubgoalDao subgoalDao;
 
     @Autowired
     public GoalController(
@@ -69,15 +73,19 @@ public class GoalController {
             SuggestiveActionService suggestiveActionService,
             SuggestiveActionDao suggestiveActionDao,
             ActivityService activityService,
+            ActivityDao activityDao,
+            SubgoalDao subgoalDao,
             DateTimeFormatters dateTimeFormatters
     ) {
         this.goalService = goalService;
         this.subgoalService = subgoalService;
         this.goalDao = goalDao;
+        this.subgoalDao = subgoalDao;
         this.authenticationService = authenticationService;
         this.suggestiveActionService = suggestiveActionService;
         this.suggestiveActionDao = suggestiveActionDao;
         this.activityService = activityService;
+        this.activityDao = activityDao;
         this.dateTimeFormatters = dateTimeFormatters;
     }
 
@@ -227,6 +235,8 @@ public class GoalController {
         user.setGoals(goalService.getAllGoalsForUser(user));
         user.setGoalDao(goalDao);
         user.setSuggestiveActionDao(suggestiveActionDao);
+        user.setActivityDao(activityDao);
+        user.setSubgoalDao(subgoalDao);
         user.analyzeSuggestiveActions();
 
         // Redirect with success message
