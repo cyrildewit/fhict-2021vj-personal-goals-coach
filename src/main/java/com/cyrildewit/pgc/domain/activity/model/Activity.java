@@ -31,7 +31,15 @@ public class Activity extends Model {
 
     public Activity() {}
 
-    public Activity(UUID uuid, String logName, String description, long subjectId, String subjectType, long causerId, String causerType) {
+    public Activity(
+            UUID uuid,
+            String logName,
+            String description,
+            long subjectId,
+            String subjectType,
+            long causerId,
+            String causerType
+    ) {
         this.uuid = uuid;
         this.logName = logName;
         this.description = description;
@@ -39,7 +47,13 @@ public class Activity extends Model {
         this.subjectType = subjectType;
     }
 
-    public Activity(UUID uuid, String logName, String description, Model subject, Model causer) {
+    public Activity(
+            UUID uuid,
+            String logName,
+            String description,
+            Model subject,
+            Model causer
+    ) {
         this.uuid = uuid;
         this.logName = logName;
         this.description = description;
@@ -47,7 +61,18 @@ public class Activity extends Model {
         this.setCauser(causer);
     }
 
-    public Activity(long id, UUID uuid, String logName, String description, long subjectId, String subjectType, long causerId, String causerType, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Activity(
+            long id,
+            UUID uuid,
+            String logName,
+            String description,
+            long subjectId,
+            String subjectType,
+            long causerId,
+            String causerType,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
+    ) {
         this.id = id;
         this.uuid = uuid;
         this.logName = logName;
