@@ -23,4 +23,6 @@ public interface UserDao {
     public void deleteUserById(long id);
 
     public void deleteUser(User user);
+
+    public void truncate();
 }

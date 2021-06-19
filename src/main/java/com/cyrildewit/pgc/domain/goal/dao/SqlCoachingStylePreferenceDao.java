@@ -50,6 +50,8 @@ public class SqlCoachingStylePreferenceDao extends BaseDao implements CoachingSt
     }
 
     private static final String FIND_COACHING_STYLE_PREFERENCE_BY_GOAL = "SELECT * from coaching_style_preferences WHERE goal_id = ? LIMIT 1";
+    private static final String INSERT_COACHING_STYLE_PREFERENCE = "INSERT INTO coaching_style_preferences (uuid, suggest_delete_goal_before_period, suggest_pin_goal_based_on_activity_before_period, suggest_delete_subgoal_after_last_activity_before_period, suggest_create_subgoal_for_subgoal_activity_before_period, goal_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+    private static final String TRUNCATE_TABLE = "TRUNCATE coaching_style_preferences";
 
     public Optional<CoachingStylePreference> findCoachingSytlePreferenceByGoal(Goal goal) {
         Optional<CoachingStylePreference> coachingStylePreferenceOptional = Optional.empty();
@@ -68,6 +70,15 @@ public class SqlCoachingStylePreferenceDao extends BaseDao implements CoachingSt
         return coachingStylePreferenceOptional;
     }
 
+    public void truncate() {
+        try (Connection connection = sqlDataStore.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(TRUNCATE_TABLE);) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            logSQLException(e);
+        }
+    }
+
     private Optional<CoachingStylePreference> resolveFirstCoachingStylePreferenceFromResultSet(ResultSet result) throws SQLException {
         Optional<CoachingStylePreference> coachingStylePreferenceOptional = Optional.empty();
 
@@ -76,6 +87,29 @@ public class SqlCoachingStylePreferenceDao extends BaseDao implements CoachingSt
         }
 
         return coachingStylePreferenceOptional;
+    }
+
+    public void insertCoachingStylePreference(CoachingStylePreference coachingStylePreference) {
+        try (Connection connection = sqlDataStore.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_COACHING_STYLE_PREFERENCE);) {
+            preparedStatement.setString(1, coachingStylePreference.getUuid().toString());
+            preparedStatement.setLong(2, coachingStylePreference.getSuggestDeleteGoalBeforePeriod());
+            preparedStatement.setLong(3, coachingStylePreference.getSuggestPinGoalBasedOnActivityBeforePeriod());
+            preparedStatement.setLong(4, coachingStylePreference.getSuggestDeleteSubgoalAfterLastActivityBeforePeriod());
+            preparedStatement.setLong(5, coachingStylePreference.getSuggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod());
+            preparedStatement.setLong(6, coachingStylePreference.getGoalId());
+            preparedStatement.setString(7, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+            preparedStatement.setString(8, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            logSQLException(e);
+        }
+    }
+
+    public void insertGoal(Goal goal) {
+
     }
 
     private List<CoachingStylePreference> resolveCoachingStylePreferencesFromResultSet(ResultSet result) throws SQLException {
@@ -94,7 +128,8 @@ public class SqlCoachingStylePreferenceDao extends BaseDao implements CoachingSt
         UUID uuid = UUID.fromString(uuidString);
         long suggestDeleteGoalBeforePeriod = result.getLong("suggest_delete_goal_before_period");
         long suggestPinGoalBasedOnActivityBeforePeriod = result.getLong("suggest_pin_goal_based_on_activity_before_period");
-        long getSuggestDeleteSubgoalAfterLastActivityBeforePeriod = result.getLong("suggest_delete_subgoal_after_last_activity_before_period");
+        long suggestDeleteSubgoalAfterLastActivityBeforePeriod = result.getLong("suggest_delete_subgoal_after_last_activity_before_period");
+        long suggestCreateSubgoalAfterLastActivityBeforePeriod = result.getLong("suggest_create_subgoal_for_subgoal_activity_before_period");
         long goalId = result.getLong("goal_id");
         String createdAtString = result.getString("created_at");
         LocalDateTime createdAt = LocalDateTime.parse(createdAtString, dateTimeFormatters.getMariaDbDateTimeFormatter());
@@ -106,7 +141,8 @@ public class SqlCoachingStylePreferenceDao extends BaseDao implements CoachingSt
                 uuid,
                 suggestDeleteGoalBeforePeriod,
                 suggestPinGoalBasedOnActivityBeforePeriod,
-                getSuggestDeleteSubgoalAfterLastActivityBeforePeriod,
+                suggestDeleteSubgoalAfterLastActivityBeforePeriod,
+                suggestCreateSubgoalAfterLastActivityBeforePeriod,
                 goalId,
                 createdAt,
                 updatedAt

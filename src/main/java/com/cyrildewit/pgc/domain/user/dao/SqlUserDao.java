@@ -52,6 +52,7 @@ public class SqlUserDao extends BaseDao implements UserDao {
     private static final String UPDATE_USER = "UPDATE users SET first_name = ?, last_name = ?, phone_number = ?, email = ?, email_verified_at = ?, password = ?, updated_at = ? WHERE id = ?;";
     private static final String INSERT_USER = "INSERT INTO users (uuid, first_name, last_name, phone_number, email, email_verified_at, password, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String DELETE_USER_BY_ID = "DELETE FROM users WHERE id = ?;";
+    private static final String TRUNCATE_TABLE = "TRUNCATe users";
 
     public List<User> selectAllUsers() {
         List<User> users = new ArrayList<User>();
@@ -122,11 +123,12 @@ public class SqlUserDao extends BaseDao implements UserDao {
             preparedStatement.setString(1, user.getUuid().toString());
             preparedStatement.setString(2, user.getFirstName());
             preparedStatement.setString(3, user.getLastName());
-            preparedStatement.setString(4, user.getEmail());
-            preparedStatement.setString(5, user.getEmailVerifiedAt().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
-            preparedStatement.setString(6, user.getPassword());
-            preparedStatement.setString(6, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
-            preparedStatement.setString(6, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+            preparedStatement.setString(4, user.getPhoneNumber());
+            preparedStatement.setString(5, user.getEmail());
+            preparedStatement.setString(6, user.getEmailVerifiedAt().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+            preparedStatement.setString(7, user.getPassword());
+            preparedStatement.setString(8, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+            preparedStatement.setString(9, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
 
             preparedStatement.executeUpdate();
 
@@ -172,6 +174,15 @@ public class SqlUserDao extends BaseDao implements UserDao {
 
     public void deleteUser(User user) {
         deleteUserById(user.getId());
+    }
+
+    public void truncate() {
+        try (Connection connection = sqlDataStore.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(TRUNCATE_TABLE);) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            logSQLException(e);
+        }
     }
 
     private Optional<User> resolveFirstUserFromResultSet(ResultSet result) throws SQLException {

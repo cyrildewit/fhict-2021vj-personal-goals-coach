@@ -172,8 +172,6 @@ public class SubgoalController {
 
         SubgoalParentType subgoalParentType = subgoal.getParentSubgoalId() == 0 ? SubgoalParentType.GOAL : SubgoalParentType.SUBGOAL;
 
-        System.out.println("HIER:: " + subgoalParentType + " :::: " + subgoal.getParentSubgoalId());
-
         if (subgoalParentType == SubgoalParentType.SUBGOAL) {
             Optional<Subgoal> optionalParentSubgoal = subgoalService.getSubgoalById(subgoal.getParentSubgoalId());
             optionalParentSubgoal.orElseThrow(() -> new SubgoalNotFoundException(subgoal.getParentSubgoalId()));

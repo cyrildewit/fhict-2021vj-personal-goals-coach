@@ -16,4 +16,8 @@ import com.cyrildewit.pgc.domain.goal.model.CoachingStylePreference;
 public interface CoachingStylePreferenceDao
 {
     public Optional<CoachingStylePreference> findCoachingSytlePreferenceByGoal(Goal goal);
+
+    public void insertCoachingStylePreference(CoachingStylePreference coachingStylePreference);
+
+    public void truncate();
 }

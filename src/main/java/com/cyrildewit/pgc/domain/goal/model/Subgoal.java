@@ -3,11 +3,16 @@ package com.cyrildewit.pgc.domain.goal.model;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.Optional;
+import java.util.List;
+import java.util.ArrayList;
 
 import com.cyrildewit.pgc.domain.Model;
 import com.cyrildewit.pgc.domain.suggestive_action.model.SuggestiveAction;
 import com.cyrildewit.pgc.domain.suggestive_action.dao.SuggestiveActionDao;
 import com.cyrildewit.pgc.domain.suggestive_action.enums.SuggestiveActionType;
+import com.cyrildewit.pgc.domain.suggestive_action.analyzing.SuggestiveActionAnalyzer;
+import com.cyrildewit.pgc.domain.suggestive_action.analyzing.subgoal.DeleteSubgoalSuggestiveActionAnalyzer;
+import com.cyrildewit.pgc.domain.suggestive_action.analyzing.subgoal.CreateSubgoalForSubgoalSuggestiveActionAnalyzer;
 import com.cyrildewit.pgc.domain.goal.dao.SubgoalDao;
 import com.cyrildewit.pgc.domain.activity.model.Activity;
 import com.cyrildewit.pgc.domain.activity.dao.ActivityDao;
@@ -32,6 +37,9 @@ public class Subgoal extends Model {
     private LocalDateTime updatedAt;
 
     private Optional<Goal> goal;
+
+    private Optional<Activity> latestActivity = Optional.empty();
+
     private SubgoalDao subgoalDao;
     private SuggestiveActionDao suggestiveActionDao;
     private ActivityDao activityDao;
@@ -108,6 +116,10 @@ public class Subgoal extends Model {
         this.goalId = goalId;
     }
 
+    public Optional<Goal> getGoal() {
+        return goal;
+    }
+
     public long getParentSubgoalId() {
         return parentSubgoalId;
     }
@@ -140,46 +152,45 @@ public class Subgoal extends Model {
         this.updatedAt = updatedAt;
     }
 
-    public void analyzeSuggestiveActions() {
-        Optional<Activity> optionalLatestActivity = activityDao.selectLatestActivityForSubject(this);
-
-        if (goal.isEmpty() || optionalLatestActivity.isEmpty()) {
-            return;
+    public Optional<Activity> getLatestActivity() {
+        if (latestActivity.isEmpty()) {
+            this.latestActivity = activityDao.selectLatestActivityForSubject(this);
         }
 
-        Goal goalInstance = goal.get();
-        Optional<CoachingStylePreference> optinalCoachingStylePreference = goalInstance.getCoachingStylePreference();
-
-        if (optinalCoachingStylePreference.isEmpty()) {
-            return;
-        }
-        CoachingStylePreference coachingStylePreference = optinalCoachingStylePreference.get();
-
-        Activity latestActivity = optionalLatestActivity.get();
-
-        if (latestActivity.getCreatedAt().isBefore(coachingStylePreference.getSuggestDeleteSubgoalAfterLastActivityBeforePeriodDateTime())) {
-            suggestiveActionDao.insertUniqueSuggestiveAction(
-                    new SuggestiveAction(
-                            UUID.randomUUID(),
-                            SuggestiveActionType.DELETE_SUBGOAL,
-                            goalInstance.getUserId(),
-                            getGoalId(),
-                            getId()
-                    )
-            );
-        }
-//        else if (lastSubgoalActivityDateTime.isBefore(LocalDateTime.now().minusWeeks(2))) {
-//            suggestiveActionDao.insertUniqueSuggestiveAction(
-//                    new SuggestiveAction(
-//                            UUID.randomUUID(),
-//                            SuggestiveActionType.CREATE_SUBGOAL_FOR_SUBGOAL,
-//                            this.goal.get().getUserId(),
-//                            getGoalId(),
-//                            getId()
-//                    )
-//            );
-//        }
+        return latestActivity;
     }
+
+    public void setLatestActivity(Activity latestActivity) {
+        this.latestActivity = Optional.of(latestActivity);
+    }
+
+    public void analyzeSuggestiveActions() {
+        List<SuggestiveActionAnalyzer> suggestiveActionAnalyzers = new ArrayList<SuggestiveActionAnalyzer>();
+        suggestiveActionAnalyzers.add(new DeleteSubgoalSuggestiveActionAnalyzer(this));
+        suggestiveActionAnalyzers.add(new CreateSubgoalForSubgoalSuggestiveActionAnalyzer(this));
+
+        for (SuggestiveActionAnalyzer suggestiveActionAnalyzer : suggestiveActionAnalyzers) {
+            suggestiveActionAnalyzer.analyze().ifPresent(suggestiveAction -> suggestiveActionDao.insertUniqueSuggestiveAction(suggestiveAction));
+        }
+    }
+
+//    public void analyzeSuggestiveActions() {
+//        Optional<Activity> optionalLatestActivity = activityDao.selectLatestActivityForSubject(this);
+//
+//        if (goal.isEmpty() || optionalLatestActivity.isEmpty()) {
+//            return;
+//        }
+//
+//        Goal goalInstance = goal.get();
+//        Optional<CoachingStylePreference> optinalCoachingStylePreference = goalInstance.getCoachingStylePreference();
+//
+//        if (optinalCoachingStylePreference.isEmpty()) {
+//            return;
+//        }
+//        CoachingStylePreference coachingStylePreference = optinalCoachingStylePreference.get();
+//
+//        Activity latestActivity = optionalLatestActivity.get();
+//    }
 
     public void setSuggestiveActionDao(SuggestiveActionDao suggestiveActionDao) {
         this.suggestiveActionDao = suggestiveActionDao;

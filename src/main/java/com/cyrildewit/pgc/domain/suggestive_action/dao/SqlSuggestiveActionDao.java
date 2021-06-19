@@ -49,6 +49,7 @@ public class SqlSuggestiveActionDao extends BaseDao implements SuggestiveActionD
     private static final String SELECT_ALL_SUGGESTIVE_ACTIONS_FOR_GOAL = "SELECT * FROM suggestive_actions WHERE goal_id = ?;";
     private static final String SELECT_COUNT_SUGGESTIVE_ACTIONS_FOR_USER = "SELECT count(*) AS count FROM suggestive_actions WHERE user_id = ? AND deleted_at IS NULL;";
     private static final String SELECT_COUNT_SUGGESTIVE_ACTIONS_FOR_GOAL = "SELECT count(*) AS count FROM suggestive_actions WHERE goal_id = ? AND deleted_at IS NULL;";
+    private static final String TRUNCATE_TABLE = "TRUNCATE suggestive_actions";
 
     public List<SuggestiveAction> selectAllSuggestiveActionsForGoal(Goal goal) {
         List<SuggestiveAction> suggestiveActions = new ArrayList<SuggestiveAction>();
@@ -151,6 +152,15 @@ public class SqlSuggestiveActionDao extends BaseDao implements SuggestiveActionD
         }
 
         return suggestiveActionsCount;
+    }
+
+    public void truncate() {
+        try (Connection connection = sqlDataStore.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(TRUNCATE_TABLE);) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            logSQLException(e);
+        }
     }
 
     private Optional<SuggestiveAction> resolveFirstSuggestiveActionFromResultSet(ResultSet result) throws SQLException {

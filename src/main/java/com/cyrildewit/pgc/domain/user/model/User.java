@@ -11,6 +11,7 @@ import com.cyrildewit.pgc.domain.Model;
 import com.cyrildewit.pgc.domain.goal.model.Goal;
 import com.cyrildewit.pgc.domain.goal.dao.GoalDao;
 import com.cyrildewit.pgc.domain.goal.dao.SubgoalDao;
+import com.cyrildewit.pgc.domain.user.dao.UserDao;
 import com.cyrildewit.pgc.domain.suggestive_action.dao.SuggestiveActionDao;
 import com.cyrildewit.pgc.domain.activity.dao.ActivityDao;
 
@@ -41,6 +42,7 @@ public class User extends Model {
     private SuggestiveActionDao suggestiveActionDao;
     private ActivityDao activityDao;
     private SubgoalDao subgoalDao;
+    private UserDao userDao;
 
     public User() {}
 

@@ -24,4 +24,6 @@ public interface SuggestiveActionDao
     public int getTotalSuggestiveActionsCountForUser(User user);
 
     public int getTotalSuggestiveActionsCountForGoal(Goal goal);
+
+    public void truncate();
 }

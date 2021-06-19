@@ -1,4 +1,4 @@
-package com.cyrildewit.pgc.domain.model;
+package com.cyrildewit.pgc.domain.goal.dao;
 
 import java.util.List;
 
