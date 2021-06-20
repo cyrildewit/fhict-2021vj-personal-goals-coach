@@ -222,13 +222,6 @@ public class GoalController {
         return "redirect:/goals";
     }
 
-    @GetMapping("/test")
-    public String test() {
-        System.out.println("UUID: " + UUID.randomUUID());
-        return "redirect:/goals";
-
-    }
-
     @GetMapping("/analyze-suggestive-actions")
     public String analyzeSuggestiveActions() {
         User user = authenticationService.getCurrentUser();

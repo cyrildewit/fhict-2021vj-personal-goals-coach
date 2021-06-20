@@ -174,24 +174,6 @@ public class Subgoal extends Model {
         }
     }
 
-//    public void analyzeSuggestiveActions() {
-//        Optional<Activity> optionalLatestActivity = activityDao.selectLatestActivityForSubject(this);
-//
-//        if (goal.isEmpty() || optionalLatestActivity.isEmpty()) {
-//            return;
-//        }
-//
-//        Goal goalInstance = goal.get();
-//        Optional<CoachingStylePreference> optinalCoachingStylePreference = goalInstance.getCoachingStylePreference();
-//
-//        if (optinalCoachingStylePreference.isEmpty()) {
-//            return;
-//        }
-//        CoachingStylePreference coachingStylePreference = optinalCoachingStylePreference.get();
-//
-//        Activity latestActivity = optionalLatestActivity.get();
-//    }
-
     public void setSuggestiveActionDao(SuggestiveActionDao suggestiveActionDao) {
         this.suggestiveActionDao = suggestiveActionDao;
     }

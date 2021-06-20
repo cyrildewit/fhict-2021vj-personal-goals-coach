@@ -41,7 +41,8 @@ public class DeleteSubgoalSuggestiveActionAnalyzer implements SuggestiveActionAn
         CoachingStylePreference coachingStylePreference = goal.getCoachingStylePreference().get();
         LocalDateTime lastSubgoalActivityDateTime = lastSubgoalActivityOptional.get().getCreatedAt();
 
-        if (! lastSubgoalActivityDateTime.isBefore(coachingStylePreference.getSuggestDeleteSubgoalAfterLastActivityBeforePeriodDateTime())) {
+        if (!coachingStylePreference.isSuggestDeleteSubgoalEnabled() ||
+                !lastSubgoalActivityDateTime.isBefore(coachingStylePreference.getSuggestDeleteSubgoalAfterLastActivityBeforePeriodDateTime())) {
             return suggestiveAction;
         }
 
