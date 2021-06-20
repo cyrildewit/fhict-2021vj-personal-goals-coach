@@ -32,7 +32,9 @@ public class CreateSubgoalSuggestiveActionAnalyzer implements SuggestiveActionAn
         CoachingStylePreference coachingStylePreference = goal.getCoachingStylePreference().get();
         LocalDateTime lastGoalActivityDateTime = optionalLastGoalActivity.get().getCreatedAt();
 
-        if (! lastGoalActivityDateTime.isBefore(coachingStylePreference.getSuggestCreateSubgoalAfterLastActivityBeforePeriodDateTime())) {
+        if (!coachingStylePreference.isSuggestCreateSubgoalEnabled() ||
+                !lastGoalActivityDateTime.isBefore(coachingStylePreference.getSuggestCreateSubgoalAfterLastActivityBeforePeriodDateTime())
+        ) {
             return suggestiveAction;
         }
 

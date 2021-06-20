@@ -33,7 +33,8 @@ public class DeleteGoalSuggestiveActionAnalyzer implements SuggestiveActionAnaly
         CoachingStylePreference coachingStylePreference = goal.getCoachingStylePreference().get();
         LocalDateTime lastGoalActivityDateTime = optionalLastGoalActivity.get().getCreatedAt();
 
-        if (! lastGoalActivityDateTime.isBefore(coachingStylePreference.getSuggestDeleteGoalBeforePeriodDatetime())) {
+        if (!coachingStylePreference.isSuggestDeleteGoalEnabled() ||
+                !lastGoalActivityDateTime.isBefore(coachingStylePreference.getSuggestDeleteGoalBeforePeriodDatetime())) {
             return suggestiveAction;
         }
 

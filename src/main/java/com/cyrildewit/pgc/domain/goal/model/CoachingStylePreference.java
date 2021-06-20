@@ -19,15 +19,25 @@ public class CoachingStylePreference extends Model {
 
     private UUID uuid;
 
-    private long suggestDeleteGoalBeforePeriod = defaultSuggestDeleteGoalBeforePeriod;
+    private boolean isSuggestDeleteGoalEnabled;
 
-    private long suggestCreateSubgoalAfterLastActivityBeforePeriod = defaultSuggestCreateSubgoalAfterLastActivityBeforePeriod;
+    private long suggestDeleteGoalBeforePeriod;
 
-    private long suggestPinGoalBasedOnActivityBeforePeriod = defaultSuggestPinGoalBasedOnActivityBeforePeriod;
+    private boolean isSuggestCreateSubgoalEnabled;
 
-    private long suggestDeleteSubgoalAfterLastActivityBeforePeriod = defaultSuggestDeleteSubgoalAfterLastActivityBeforePeriod;
+    private long suggestCreateSubgoalAfterLastActivityBeforePeriod;
 
-    private long suggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod = defaultSuggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod;
+    private boolean isSuggestPinGoalEnabled;
+
+    private long suggestPinGoalBasedOnActivityBeforePeriod;
+
+    private boolean isSuggestDeleteSubgoalEnabled;
+
+    private long suggestDeleteSubgoalAfterLastActivityBeforePeriod;
+
+    private boolean isSuggestCreateSubgoalForSubgoalEnabled;
+
+    private long suggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod;
 
     private long goalId;
 
@@ -41,18 +51,28 @@ public class CoachingStylePreference extends Model {
 
     public CoachingStylePreference(
             UUID uuid,
+            boolean isSuggestDeleteGoalEnabled,
             long suggestDeleteGoalBeforePeriod,
+            boolean isSuggestPinGoalEnabled,
             long suggestPinGoalBasedOnActivityBeforePeriod,
+            boolean isSuggestDeleteSubgoalEnabled,
             long suggestDeleteSubgoalAfterLastActivityBeforePeriod,
+            boolean isSuggestCreateSubgoalEnabled,
             long suggestCreateSubgoalAfterLastActivityBeforePeriod,
+            boolean isSuggestCreateSubgoalForSubgoalEnabled,
             long suggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod,
             long goalId
     ) {
         this.uuid = uuid;
+        this.isSuggestDeleteGoalEnabled = isSuggestDeleteGoalEnabled;
         this.suggestDeleteGoalBeforePeriod = suggestDeleteGoalBeforePeriod;
+        this.isSuggestPinGoalEnabled = isSuggestPinGoalEnabled;
         this.suggestPinGoalBasedOnActivityBeforePeriod = suggestPinGoalBasedOnActivityBeforePeriod;
+        this.isSuggestDeleteSubgoalEnabled = isSuggestDeleteSubgoalEnabled;
         this.suggestDeleteSubgoalAfterLastActivityBeforePeriod = suggestDeleteSubgoalAfterLastActivityBeforePeriod;
+        this.isSuggestCreateSubgoalEnabled = isSuggestCreateSubgoalEnabled;
         this.suggestCreateSubgoalAfterLastActivityBeforePeriod = suggestCreateSubgoalAfterLastActivityBeforePeriod;
+        this.isSuggestCreateSubgoalForSubgoalEnabled = isSuggestCreateSubgoalForSubgoalEnabled;
         this.suggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod = suggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod;
         this.goalId = goalId;
     }
@@ -60,20 +80,31 @@ public class CoachingStylePreference extends Model {
     public CoachingStylePreference(
             long id,
             UUID uuid,
+            boolean isSuggestDeleteGoalEnabled,
             long suggestDeleteGoalBeforePeriod,
+            boolean isSuggestPinGoalEnabled,
             long suggestPinGoalBasedOnActivityBeforePeriod,
+            boolean isSuggestDeleteSubgoalEnabled,
             long suggestDeleteSubgoalAfterLastActivityBeforePeriod,
+            boolean isSuggestCreateSubgoalEnabled,
             long suggestCreateSubgoalAfterLastActivityBeforePeriod,
+            boolean isSuggestCreateSubgoalForSubgoalEnabled,
+            long suggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod,
             long goalId,
             LocalDateTime createdAt,
             LocalDateTime updatedAt
     ) {
         this.id = id;
         this.uuid = uuid;
+        this.isSuggestDeleteGoalEnabled = isSuggestDeleteGoalEnabled;
         this.suggestDeleteGoalBeforePeriod = suggestDeleteGoalBeforePeriod;
+        this.isSuggestPinGoalEnabled = isSuggestPinGoalEnabled;
         this.suggestPinGoalBasedOnActivityBeforePeriod = suggestPinGoalBasedOnActivityBeforePeriod;
+        this.isSuggestDeleteSubgoalEnabled = isSuggestDeleteSubgoalEnabled;
         this.suggestDeleteSubgoalAfterLastActivityBeforePeriod = suggestDeleteSubgoalAfterLastActivityBeforePeriod;
         this.suggestCreateSubgoalAfterLastActivityBeforePeriod = suggestCreateSubgoalAfterLastActivityBeforePeriod;
+        this.isSuggestCreateSubgoalForSubgoalEnabled = isSuggestCreateSubgoalForSubgoalEnabled;
+        this.suggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod = suggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod;
         this.goalId = goalId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -95,6 +126,10 @@ public class CoachingStylePreference extends Model {
         this.uuid = uuid;
     }
 
+    public boolean isSuggestDeleteGoalEnabled() {
+        return isSuggestDeleteGoalEnabled;
+    }
+
     public LocalDateTime getSuggestDeleteGoalBeforePeriodDatetime() {
         return LocalDateTime.now().minusSeconds(getSuggestDeleteGoalBeforePeriod());
     }
@@ -105,6 +140,10 @@ public class CoachingStylePreference extends Model {
 
     public void setSuggestDeleteGoalBeforePeriod(long suggestDeleteGoalBeforePeriod) {
         this.suggestDeleteGoalBeforePeriod = suggestDeleteGoalBeforePeriod;
+    }
+
+    public boolean isSuggestCreateSubgoalEnabled() {
+        return isSuggestCreateSubgoalEnabled;
     }
 
     public LocalDateTime getSuggestCreateSubgoalAfterLastActivityBeforePeriodDateTime() {
@@ -119,6 +158,10 @@ public class CoachingStylePreference extends Model {
         this.suggestCreateSubgoalAfterLastActivityBeforePeriod = suggestCreateSubgoalAfterLastActivityBeforePeriod;
     }
 
+    public boolean isSuggestPinGoalEnabled() {
+        return isSuggestPinGoalEnabled;
+    }
+
     public LocalDateTime getSuggestPinGoalBasedOnActivityBeforePeriodDatetime() {
         return LocalDateTime.now().minusSeconds(suggestPinGoalBasedOnActivityBeforePeriod);
     }
@@ -131,6 +174,10 @@ public class CoachingStylePreference extends Model {
         this.suggestPinGoalBasedOnActivityBeforePeriod = suggestPinGoalBasedOnActivityBeforePeriod;
     }
 
+    public boolean isSuggestDeleteSubgoalEnabled() {
+        return isSuggestDeleteSubgoalEnabled;
+    }
+
     public LocalDateTime getSuggestDeleteSubgoalAfterLastActivityBeforePeriodDateTime() {
         return LocalDateTime.now().minusSeconds(suggestDeleteSubgoalAfterLastActivityBeforePeriod);
     }
@@ -141,6 +188,10 @@ public class CoachingStylePreference extends Model {
 
     public void setSuggestDeleteSubgoalAfterLastActivityBeforePeriod(long suggestDeleteSubgoalAfterLastActivityBeforePeriod) {
         this.suggestDeleteSubgoalAfterLastActivityBeforePeriod = suggestDeleteSubgoalAfterLastActivityBeforePeriod;
+    }
+
+    public boolean isSuggestCreateSubgoalForSubgoalEnabled() {
+        return isSuggestCreateSubgoalForSubgoalEnabled;
     }
 
     public LocalDateTime getSuggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriodDateTime() {

@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.cyrildewit.pgc.domain.goal.model.Goal;
+import com.cyrildewit.pgc.domain.goal.model.CoachingStylePreference;
 import com.cyrildewit.pgc.domain.suggestive_action.dao.SuggestiveActionDao;
 import com.cyrildewit.pgc.domain.suggestive_action.model.SuggestiveAction;
 import com.cyrildewit.pgc.domain.suggestive_action.enums.SuggestiveActionType;
@@ -19,7 +20,14 @@ public class PinGoalSuggestiveActionAnalyzer implements SuggestiveActionAnalyzer
     public Optional<SuggestiveAction> analyze() {
         Optional<SuggestiveAction> suggestiveAction = Optional.empty();
 
-        if (!goal.hasMostRecentFrequentActivity()) {
+        if (goal.getCoachingStylePreference().isEmpty()) {
+            return suggestiveAction;
+        }
+
+        CoachingStylePreference coachingStylePreference = goal.getCoachingStylePreference().get();
+
+        if (!coachingStylePreference.isSuggestPinGoalEnabled() ||
+                !goal.hasMostRecentFrequentActivity()) {
             return suggestiveAction;
         }
 

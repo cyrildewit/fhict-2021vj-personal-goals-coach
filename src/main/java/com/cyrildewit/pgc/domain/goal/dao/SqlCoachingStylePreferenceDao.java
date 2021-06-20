@@ -48,9 +48,8 @@ public class SqlCoachingStylePreferenceDao extends BaseDao implements CoachingSt
         this.sqlDataStore = mariaDBDataStore;
         this.logger = logger;
     }
-
     private static final String FIND_COACHING_STYLE_PREFERENCE_BY_GOAL = "SELECT * from coaching_style_preferences WHERE goal_id = ? LIMIT 1";
-    private static final String INSERT_COACHING_STYLE_PREFERENCE = "INSERT INTO coaching_style_preferences (uuid, suggest_delete_goal_before_period, suggest_pin_goal_based_on_activity_before_period, suggest_delete_subgoal_after_last_activity_before_period, suggest_create_subgoal_for_subgoal_activity_before_period, goal_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
+    private static final String INSERT_COACHING_STYLE_PREFERENCE = "INSERT INTO coaching_style_preferences (uuid, is_suggest_delete_goal_enabled, suggest_delete_goal_before_period, is_suggest_pin_goal_enabled, suggest_pin_goal_based_on_activity_before_period, is_suggest_delete_subgoal_enabled, suggest_delete_subgoal_after_last_activity_before_period, is_suggest_create_subgoal_for_subgoal_enabled, suggest_create_subgoal_for_subgoal_activity_before_period, goal_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String TRUNCATE_TABLE = "TRUNCATE coaching_style_preferences";
 
     public Optional<CoachingStylePreference> findCoachingSytlePreferenceByGoal(Goal goal) {
@@ -93,13 +92,17 @@ public class SqlCoachingStylePreferenceDao extends BaseDao implements CoachingSt
         try (Connection connection = sqlDataStore.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_COACHING_STYLE_PREFERENCE);) {
             preparedStatement.setString(1, coachingStylePreference.getUuid().toString());
-            preparedStatement.setLong(2, coachingStylePreference.getSuggestDeleteGoalBeforePeriod());
-            preparedStatement.setLong(3, coachingStylePreference.getSuggestPinGoalBasedOnActivityBeforePeriod());
-            preparedStatement.setLong(4, coachingStylePreference.getSuggestDeleteSubgoalAfterLastActivityBeforePeriod());
-            preparedStatement.setLong(5, coachingStylePreference.getSuggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod());
-            preparedStatement.setLong(6, coachingStylePreference.getGoalId());
-            preparedStatement.setString(7, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
-            preparedStatement.setString(8, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+            preparedStatement.setBoolean(2, coachingStylePreference.isSuggestDeleteGoalEnabled());
+            preparedStatement.setLong(3, coachingStylePreference.getSuggestDeleteGoalBeforePeriod());
+            preparedStatement.setBoolean(4, coachingStylePreference.isSuggestPinGoalEnabled());
+            preparedStatement.setLong(5, coachingStylePreference.getSuggestPinGoalBasedOnActivityBeforePeriod());
+            preparedStatement.setBoolean(6, coachingStylePreference.isSuggestDeleteSubgoalEnabled());
+            preparedStatement.setLong(7, coachingStylePreference.getSuggestDeleteSubgoalAfterLastActivityBeforePeriod());
+            preparedStatement.setBoolean(8, coachingStylePreference.isSuggestCreateSubgoalForSubgoalEnabled());
+            preparedStatement.setLong(9, coachingStylePreference.getSuggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod());
+            preparedStatement.setLong(10, coachingStylePreference.getGoalId());
+            preparedStatement.setString(11, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+            preparedStatement.setString(12, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
 
             preparedStatement.executeUpdate();
 
@@ -123,29 +126,22 @@ public class SqlCoachingStylePreferenceDao extends BaseDao implements CoachingSt
     }
 
     private CoachingStylePreference mapResultSetToCoachingStylePreference(ResultSet result) throws SQLException {
-        long id = result.getLong("id");
-        String uuidString = result.getString("uuid");
-        UUID uuid = UUID.fromString(uuidString);
-        long suggestDeleteGoalBeforePeriod = result.getLong("suggest_delete_goal_before_period");
-        long suggestPinGoalBasedOnActivityBeforePeriod = result.getLong("suggest_pin_goal_based_on_activity_before_period");
-        long suggestDeleteSubgoalAfterLastActivityBeforePeriod = result.getLong("suggest_delete_subgoal_after_last_activity_before_period");
-        long suggestCreateSubgoalAfterLastActivityBeforePeriod = result.getLong("suggest_create_subgoal_for_subgoal_activity_before_period");
-        long goalId = result.getLong("goal_id");
-        String createdAtString = result.getString("created_at");
-        LocalDateTime createdAt = LocalDateTime.parse(createdAtString, dateTimeFormatters.getMariaDbDateTimeFormatter());
-        String updatedAtString = result.getString("updated_at");
-        LocalDateTime updatedAt = LocalDateTime.parse(updatedAtString, dateTimeFormatters.getMariaDbDateTimeFormatter());
-
         return new CoachingStylePreference(
-                id,
-                uuid,
-                suggestDeleteGoalBeforePeriod,
-                suggestPinGoalBasedOnActivityBeforePeriod,
-                suggestDeleteSubgoalAfterLastActivityBeforePeriod,
-                suggestCreateSubgoalAfterLastActivityBeforePeriod,
-                goalId,
-                createdAt,
-                updatedAt
+                result.getLong("id"),
+                UUID.fromString(result.getString("uuid")),
+                result.getBoolean("is_suggest_delete_goal_enabled"),
+                result.getLong("suggest_delete_goal_before_period"),
+                result.getBoolean("is_suggest_pin_goal_enabled"),
+                result.getLong("suggest_pin_goal_based_on_activity_before_period"),
+                result.getBoolean("is_suggest_delete_subgoal_enabled"),
+                result.getLong("suggest_delete_subgoal_after_last_activity_before_period"),
+                result.getBoolean("is_suggest_create_subgoal_enabled"),
+                result.getLong("suggest_create_subgoal_after_last_activity_before_period"),
+                result.getBoolean("is_suggest_create_subgoal_for_subgoal_enabled"),
+                result.getLong("suggest_create_subgoal_for_subgoal_activity_before_period"),
+                result.getLong("goal_id"),
+                LocalDateTime.parse(result.getString("created_at"), dateTimeFormatters.getMariaDbDateTimeFormatter()),
+                LocalDateTime.parse(result.getString("updated_at"), dateTimeFormatters.getMariaDbDateTimeFormatter())
         );
     }
 

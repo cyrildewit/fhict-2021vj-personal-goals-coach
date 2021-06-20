@@ -108,11 +108,16 @@ class DeelteGoalSuggestiveActionAnalyzerTest {
 
         CoachingStylePreference coachingStylePreference = new CoachingStylePreference(
                 UUID.randomUUID(),
+                true,
                 20 * 7 * 24 * 60 * 60 * 60, // 20 weeks
-                -1, // unrelevant
-                -1, // unrelevant
-                -1, // unrelevant
-                -1, // unrelevant
+                false,
+                -1, 
+                false,
+                -1, 
+                false,
+                -1, 
+                false,
+                -1, 
                 goal.getId()
         );
 
@@ -188,11 +193,16 @@ class DeelteGoalSuggestiveActionAnalyzerTest {
 
         CoachingStylePreference coachingStylePreference = new CoachingStylePreference(
                 UUID.randomUUID(),
+                true,
                 20 * 7 * 24 * 60 * 60 * 60, // 20 weeks
-                -1, // unrelevant
-                -1, // unrelevant
-                -1, // unrelevant
-                -1, // unrelevant
+                false,
+                -1, 
+                false,
+                -1, 
+                false,
+                -1, 
+                false,
+                -1, 
                 goal.getId()
         );
 
@@ -212,6 +222,87 @@ class DeelteGoalSuggestiveActionAnalyzerTest {
         activityDao.insertActivity(activity);
         activity = activityDao.findActivityByUuid(activity.getUuid()).get();
         activity.setCreatedAt(LocalDateTime.now().minusSeconds(5 * 7 * 24 * 60 * 60 * 60));  // 21 weeks ago
+        activityDao.updateActivity(activity);
+
+        goal.setCoachingStylePreference(coachingStylePreference);
+        goal.setLatestActivity(activity);
+
+        Optional<SuggestiveAction> suggestiveActionOptional = (new DeleteGoalSuggestiveActionAnalyzer(goal)).analyze();
+
+        assertTrue(suggestiveActionOptional.isEmpty());
+    }
+
+    @Test
+    void itDoesNotSuggestAGoalWithLatestActivityOlderThanConfiguredInCoachingStyleWhenDisabled() {
+        // Data clean up
+        userDao.truncate();
+        goalDao.truncate();
+        activityDao.truncate();
+        coachingStylePreferenceDao.truncate();
+        suggestiveActionDao.truncate();
+
+        // Data setup
+        User user = new User(
+                UUID.randomUUID(),
+                "John",
+                "Doe",
+                "062993939",
+                "john@example.com",
+                LocalDateTime.now(),
+                "password"
+        );
+
+        // Save user in datastore
+        userDao.insertUser(user);
+
+        // Refetch user, so it has all the data
+        user = userDao.findUserByUuid(user.getUuid()).get();
+
+        Goal goal = new Goal(
+                UUID.randomUUID(),
+                "Test Goal",
+                "Description",
+                LocalDateTime.now(),
+                user.getId()
+        );
+
+        // Save goal in datastore
+        goalDao.insertGoal(goal);
+
+        // Refetch goal, so it has all the data
+        goal = goalDao.findGoalByUuid(goal.getUuid()).get();
+
+        CoachingStylePreference coachingStylePreference = new CoachingStylePreference(
+                UUID.randomUUID(),
+                false, // important factor
+                20 * 7 * 24 * 60 * 60 * 60, // 20 weeks
+                false,
+                -1, 
+                false,
+                -1, 
+                false,
+                -1, 
+                false,
+                -1, 
+                goal.getId()
+        );
+
+        // Save coaching style preference in data store
+        coachingStylePreferenceDao.insertCoachingStylePreference(coachingStylePreference);
+
+        // Add activity for goal that's before the specified period
+        Activity activity = new Activity(
+                UUID.randomUUID(),
+                "",
+                "Activity description",
+                goal,
+                user
+        );
+
+        // Save activity in datastore
+        activityDao.insertActivity(activity);
+        activity = activityDao.findActivityByUuid(activity.getUuid()).get();
+        activity.setCreatedAt(LocalDateTime.now().minusSeconds(21 * 7 * 24 * 60 * 60 * 60));  // 21 weeks ago
         activityDao.updateActivity(activity);
 
         goal.setCoachingStylePreference(coachingStylePreference);
