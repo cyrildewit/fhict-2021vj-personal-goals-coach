@@ -232,11 +232,14 @@ public class GoalController {
     @GetMapping("/analyze-suggestive-actions")
     public String analyzeSuggestiveActions() {
         User user = authenticationService.getCurrentUser();
+
+        // TODO clean this ugly way of dependency injection :-P
         user.setGoals(goalService.getAllGoalsForUser(user));
         user.setGoalDao(goalDao);
         user.setSuggestiveActionDao(suggestiveActionDao);
         user.setActivityDao(activityDao);
         user.setSubgoalDao(subgoalDao);
+
         user.analyzeSuggestiveActions();
 
         // Redirect with success message

@@ -21,10 +21,12 @@ import com.cyrildewit.pgc.domain.goal.dao.SubgoalDao;
 import com.cyrildewit.pgc.domain.goal.dao.CoachingStylePreferenceDao;
 import com.cyrildewit.pgc.domain.goal.dao.SqlCoachingStylePreferenceDao;
 import com.cyrildewit.pgc.application.services.ActivityService;
-import com.cyrildewit.pgc.domain.goal.dao.factory.GoalDaoFactory;
-import com.cyrildewit.pgc.domain.goal.dao.factory.CoachingStylePreferenceDaoFactory;
 import com.cyrildewit.pgc.domain.suggestive_action.dao.SuggestiveActionDao;
-import com.cyrildewit.pgc.domain.suggestive_action.dao.factory.SuggestiveActionDaoFactory;
+import com.cyrildewit.pgc.domain.suggestive_action.analyzing.SuggestiveActionAnalyzer;
+import com.cyrildewit.pgc.domain.suggestive_action.analyzing.goal.PinGoalSuggestiveActionAnalyzer;
+import com.cyrildewit.pgc.domain.suggestive_action.analyzing.goal.DeleteGoalSuggestiveActionAnalyzer;
+import com.cyrildewit.pgc.domain.suggestive_action.analyzing.goal.CreateSubgoalSuggestiveActionAnalyzer;
+import com.cyrildewit.pgc.domain.suggestive_action.analyzing.SuggestiveActionAnalyzer;
 import com.cyrildewit.pgc.domain.activity.dao.ActivityDao;
 
 import com.cyrildewit.pgc.application.services.SuggestiveActionService;
@@ -62,7 +64,8 @@ public class Goal extends Model {
     private SuggestiveActionDao suggestiveActionDao;
     private ActivityDao activityDao;
 
-    public Goal() {}
+    public Goal() {
+    }
 
     public Goal(UUID uuid, String title, String description, LocalDateTime deadline, long userId) {
         this.uuid = uuid;
@@ -172,8 +175,7 @@ public class Goal extends Model {
         this.coachingStylePreference = coachingStylePreference;
     }
 
-    public Optional<Activity> getLatestActivity()
-    {
+    public Optional<Activity> getLatestActivity() {
         return Optional.ofNullable(latestActivity);
     }
 
@@ -181,61 +183,26 @@ public class Goal extends Model {
         this.latestActivity = latestActivity;
     }
 
-    public boolean hasMostRecentFrequentActivity()
-    {
+    public boolean hasMostRecentFrequentActivity() {
         CoachingStylePreference coachingStylePreference = getCoachingStylePreference().get();
 
-        Optional<Goal> goalWithMostRecentFrequency = getGoalDao().getGoalWithMostRecentActivity(coachingStylePreference.getSuggestPinGoalBasedOnActivityBeforePeriodDatetime(), LocalDateTime.now());
+        Optional<Goal> goalWithMostRecentFrequency = getGoalDao().getGoalWithMostRecentActivityForUser(user.get(), coachingStylePreference.getSuggestPinGoalBasedOnActivityBeforePeriodDatetime(), LocalDateTime.now());
 
         return goalWithMostRecentFrequency.isPresent() && goalWithMostRecentFrequency.get().getId() == getId();
     }
 
+    // gesprek:
+    // - verbetepunten software
+    // - hoe verlietp het zemesters
+
     public void analyzeSuggestiveActions() {
-        List<SuggestiveAction> suggestiveActions = new ArrayList<SuggestiveAction>();
+        List<SuggestiveActionAnalyzer> suggestiveActionAnalyzers = new ArrayList<SuggestiveActionAnalyzer>();
+        suggestiveActionAnalyzers.add(new PinGoalSuggestiveActionAnalyzer(this));
+        suggestiveActionAnalyzers.add(new DeleteGoalSuggestiveActionAnalyzer(this));
+        suggestiveActionAnalyzers.add(new CreateSubgoalSuggestiveActionAnalyzer(this));
 
-        if (getUserId() == 0 || getCoachingStylePreference().isEmpty()) {
-            return;
-        }
-
-        CoachingStylePreference coachingStylePreference = getCoachingStylePreference().get();
-        Optional<Activity> optionalLastGoalActivity = getLatestActivity();
-
-        if (optionalLastGoalActivity.isPresent()) {
-            LocalDateTime lastGoalActivityDateTime = optionalLastGoalActivity.get().getCreatedAt();
-
-            if (lastGoalActivityDateTime.isBefore(coachingStylePreference.getSuggestDeleteGoalBeforePeriodDatetime())) {
-                suggestiveActionDao.insertUniqueSuggestiveAction(
-                        new SuggestiveAction(
-                                UUID.randomUUID(),
-                                SuggestiveActionType.DELETE_GOAL,
-                                getUserId(),
-                                getId(),
-                                0
-                        )
-                );
-            } else if (lastGoalActivityDateTime.isBefore(LocalDateTime.now().minusWeeks(2))) {
-                suggestiveActionDao.insertUniqueSuggestiveAction(
-                        new SuggestiveAction(
-                                UUID.randomUUID(),
-                                SuggestiveActionType.CREATE_SUBGOAL,
-                                getUserId(),
-                                getId(),
-                                0
-                        )
-                );
-            }
-        }
-
-        if (hasMostRecentFrequentActivity()) {
-            suggestiveActionDao.insertUniqueSuggestiveAction(
-                    new SuggestiveAction(
-                            UUID.randomUUID(),
-                            SuggestiveActionType.PIN_GOAL,
-                            getUserId(),
-                            getId(),
-                            0
-                    )
-            );
+        for (SuggestiveActionAnalyzer suggestiveActionAnalyzer : suggestiveActionAnalyzers) {
+            suggestiveActionAnalyzer.analyze().ifPresent(suggestiveAction -> suggestiveActionDao.insertUniqueSuggestiveAction(suggestiveAction));
         }
 
         for (Subgoal subgoal : subgoalDao.selectAllSubgoalsForGoal(this)) {
@@ -249,10 +216,6 @@ public class Goal extends Model {
     }
 
     private GoalDao getGoalDao() {
-        if (goalDao == null) {
-            goalDao = GoalDaoFactory.getSqlGoalDao();
-        }
-
         return goalDao;
     }
 
@@ -261,18 +224,10 @@ public class Goal extends Model {
     }
 
     private CoachingStylePreferenceDao getCoachingStylePreferenceDao() {
-        if (coachingStylePreferenceDao == null) {
-            coachingStylePreferenceDao = CoachingStylePreferenceDaoFactory.getSqlCoachingStylePreferenceDaoFactory();
-        }
-
         return coachingStylePreferenceDao;
     }
 
     private SuggestiveActionDao getSuggestiveActionDao() {
-//        if (suggestiveActionDao == null) {
-//            suggestiveActionDao = SuggestiveActionDaoFactory.getSqlSuggestiveActionDaoFactory();
-//        }
-
         return suggestiveActionDao;
     }
 

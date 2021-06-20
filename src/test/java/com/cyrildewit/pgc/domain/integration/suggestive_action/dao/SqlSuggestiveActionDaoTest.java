@@ -1,4 +1,4 @@
-package com.cyrildewit.pgc.domain.model;
+package com.cyrildewit.pgc.domain.suggestive_action.dao;
 
 import java.util.List;
 
@@ -26,6 +26,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.cyrildewit.pgc.domain.user.model.User;
+import com.cyrildewit.pgc.domain.user.dao.UserDao;
+import com.cyrildewit.pgc.domain.user.dao.SqlUserDao;
 import com.cyrildewit.pgc.domain.goal.model.Goal;
 import com.cyrildewit.pgc.domain.suggestive_action.model.SuggestiveAction;
 import com.cyrildewit.pgc.domain.suggestive_action.enums.SuggestiveActionType;
@@ -39,12 +41,19 @@ import com.cyrildewit.pgc.support.util.DateTimeFormatters;
 @SpringBootTest
 class SqlSuggestiveActionDaoTest {
     private SqlSuggestiveActionDao suggestiveActionDao;
+    private UserDao userDao;
     private MariaDBDataStore mariaDBDataStore;
     private DateTimeFormatters dateTimeFormatters;
 
     @Autowired
-    public SqlSuggestiveActionDaoTest(SqlSuggestiveActionDao suggestiveActionDao, MariaDBDataStore mariaDBDataStore, DateTimeFormatters dateTimeFormatters) {
+    public SqlSuggestiveActionDaoTest(
+            SqlSuggestiveActionDao suggestiveActionDao,
+            SqlUserDao userDao,
+            MariaDBDataStore mariaDBDataStore,
+            DateTimeFormatters dateTimeFormatters
+    ) {
         this.suggestiveActionDao = suggestiveActionDao;
+        this.userDao = userDao;
         this.mariaDBDataStore = mariaDBDataStore;
         this.dateTimeFormatters = dateTimeFormatters;
     }

@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import com.cyrildewit.pgc.domain.goal.model.Goal;
 import com.cyrildewit.pgc.domain.user.model.User;
 
-public interface GoalDao
-{
+public interface GoalDao {
     public List<Goal> selectAllGoals();
 
     public List<Goal> selectAllGoalsForUser(User user);
@@ -31,7 +30,11 @@ public interface GoalDao
 
     public void deleteGoal(Goal goal);
 
+    public void truncate();
+
     public long getTotalGoalsCountForUser(User user);
 
     public Optional<Goal> getGoalWithMostRecentActivity(LocalDateTime start, LocalDateTime end);
+
+    public Optional<Goal> getGoalWithMostRecentActivityForUser(User user, LocalDateTime start, LocalDateTime end);
 }

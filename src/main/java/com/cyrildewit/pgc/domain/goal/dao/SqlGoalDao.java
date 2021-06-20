@@ -27,6 +27,7 @@ import com.cyrildewit.pgc.data.sql.MariaDBDataStore;
 import com.cyrildewit.pgc.domain.BaseDao;
 import com.cyrildewit.pgc.domain.goal.model.Goal;
 import com.cyrildewit.pgc.domain.user.model.User;
+import com.cyrildewit.pgc.domain.user.dao.UserDao;
 import com.cyrildewit.pgc.domain.activity.model.Activity;
 import com.cyrildewit.pgc.domain.goal.model.CoachingStylePreference;
 import com.cyrildewit.pgc.domain.activity.dao.ActivityDao;
@@ -40,6 +41,7 @@ public class SqlGoalDao extends BaseDao implements GoalDao {
     private DateTimeFormatters dateTimeFormatters;
     private SqlDataStore sqlDataStore;
     private ActivityDao activityDao;
+    private UserDao userDao;
     private CoachingStylePreferenceDao coachingStylePreferenceDao;
     private LoggerInterface logger;
 
@@ -47,12 +49,14 @@ public class SqlGoalDao extends BaseDao implements GoalDao {
             DateTimeFormatters dateTimeFormatters,
             MariaDBDataStore mariaDBDataStore,
             ActivityDao activityDao,
+            UserDao userDao,
             CoachingStylePreferenceDao coachingStylePreferenceDao,
             LoggerInterface logger
     ) {
         this.dateTimeFormatters = dateTimeFormatters;
         this.sqlDataStore = mariaDBDataStore;
         this.activityDao = activityDao;
+        this.userDao = userDao;
         this.coachingStylePreferenceDao = coachingStylePreferenceDao;
         this.logger = logger;
     }
@@ -65,6 +69,7 @@ public class SqlGoalDao extends BaseDao implements GoalDao {
     private static final String INSERT_GOAL = "INSERT INTO goals (uuid, title, description, deadline, user_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?);";
     private static final String DELETE_GOAL_BY_ID = "DELETE FROM goals WHERE id = ?;";
     private static final String SELECT_COUNT_GOALS_FOR_USER = "SELECT count(*) AS count FROM goals WHERE user_id = ?;";
+    private static final String TRUNCATE_TABLE = "TRUNCATE goals";
 
     public List<Goal> selectAllGoals() {
         List<Goal> goals = new ArrayList<Goal>();
@@ -212,6 +217,15 @@ public class SqlGoalDao extends BaseDao implements GoalDao {
         deleteGoalById(goal.getId());
     }
 
+    public void truncate() {
+        try (Connection connection = sqlDataStore.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(TRUNCATE_TABLE);) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            logSQLException(e);
+        }
+    }
+
     public long getTotalGoalsCountForUser(User user) {
         long goalsCount = 0;
 
@@ -233,6 +247,24 @@ public class SqlGoalDao extends BaseDao implements GoalDao {
     public Optional<Goal> getGoalWithMostRecentActivity(LocalDateTime start, LocalDateTime end) {
         Optional<Goal> goal = Optional.empty();
         return goal;
+    }
+
+    public Optional<Goal> getGoalWithMostRecentActivityForUser(User user, LocalDateTime start, LocalDateTime end) {
+        List<Goal> goals = selectAllGoalsForUser(user);
+
+        long currentGoalWithMostRecentActiityCount = 0;
+        Optional<Goal> goalWithMostRecentActivity = Optional.empty();
+
+        for (Goal goal : goals) {
+            long activitiesCount = activityDao.getTotalActiviesCountForSubjectWithinPeriod(goal, start, end);
+
+            if (activitiesCount > currentGoalWithMostRecentActiityCount) {
+                currentGoalWithMostRecentActiityCount = activitiesCount;
+                goalWithMostRecentActivity = Optional.of(goal);
+            }
+        }
+
+        return goalWithMostRecentActivity;
     }
 
     private Optional<Goal> resolveFirstGoalFromResultSet(ResultSet result) throws SQLException {
@@ -294,6 +326,8 @@ public class SqlGoalDao extends BaseDao implements GoalDao {
         if (latestActivityOptional.isPresent()) {
             goal.setLatestActivity(latestActivityOptional.get());
         }
+
+        goal.setUser(userDao.findUserById(goal.getUserId()));
 
         return goal;
     }

@@ -112,7 +112,6 @@ class AuthenticationServiceTest {
 
             stmt.execute("TRUNCATE TABLE users;");
             stmt.execute("INSERT INTO users (uuid, first_name, last_name, phone_number, email, email_verified_at, password, created_at, updated_at) VALUES ('16bc6513-18df-4530-ab20-cb5e76412544', 'John', 'Doe', '0628838283', '" + testEmail + "', '2021-05-10 22:22:45', '" + testPassword + "', '2021-05-10 20:15:25', '2021-05-10 20:15:25');");
-            System.out.println("INSERT INTO users (uuid, first_name, last_name, phone_number, email, email_verified_at, password, created_at, updated_at) VALUES ('16bc6513-18df-4530-ab20-cb5e76412544', 'John', 'Doe', '0628838283', '" + testEmail + "', '2021-05-10 22:22:45', '" + testPassword + "', '2021-05-10 20:15:25', '2021-05-10 20:15:25');");
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -90,9 +90,6 @@ public class GoalService implements GoalServiceInterface {
             List<Activity> activities = activityDao.selectActivityWithinPeriodForSubjectAndCauser(goal, user, start, end);
             long currentFrequency = activities.stream().count() / days;
 
-            System.out.println("goal fr: " + currentFrequency);
-            System.out.println("user : " + user.getId() + "  goal " + goal.getId());
-
             if (currentFrequency > highestFrequency) {
                 goalWithMostRecentFrequentActivity = goal;
                 highestFrequency = currentFrequency;

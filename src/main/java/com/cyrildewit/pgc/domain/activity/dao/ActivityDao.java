@@ -13,13 +13,22 @@ import com.cyrildewit.pgc.domain.user.model.User;
 import com.cyrildewit.pgc.domain.activity.model.Activity;
 import com.cyrildewit.pgc.domain.Model;
 
-public interface ActivityDao
-{
+public interface ActivityDao {
     public List<Activity> selectAllActivityForSubject(Model subject);
 
     public List<Activity> selectActivityWithinPeriodForSubjectAndCauser(Model subject, Model causer, LocalDateTime start, LocalDateTime end);
 
     public Optional<Activity> selectLatestActivityForSubject(Model subject);
 
+    public Optional<Activity> findActivityByUuid(UUID uuid);
+
     public void insertActivity(Activity activity);
+
+    public boolean updateActivity(Activity activity);
+
+    public long getTotalActiviesCountForSubject(Model subject);
+
+    public long getTotalActiviesCountForSubjectWithinPeriod(Model subject, LocalDateTime start, LocalDateTime end);
+
+    public void truncate();
 }

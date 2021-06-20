@@ -62,6 +62,7 @@ public class SqlSubgoalDao extends BaseDao implements SubgoalDao {
     private static final String UPDATE_SUBGOAL = "UPDATE subgoals SET title = ?, description = ?, deadline = ?, goal_id = ?, parent_subgoal_id = ?, updated_at = ? WHERE id = ?;";
     private static final String INSERT_SUBGOAL = "INSERT INTO subgoals (uuid, title, description, deadline, goal_id, parent_subgoal_id, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String DELETE_SUBGOAL_BY_ID = "DELETE FROM subgoals WHERE id = ?;";
+    private static final String TRUNCATE_TABLE = "TRUNCATe subgoals";
 
     public List<Subgoal> selectAllSubgoals() {
         List<Subgoal> subgoals = new ArrayList<Subgoal>();
@@ -223,6 +224,15 @@ public class SqlSubgoalDao extends BaseDao implements SubgoalDao {
 
     public void deleteSubgoal(Subgoal subgoal) {
         deleteSubgoalById(subgoal.getId());
+    }
+
+    public void truncate() {
+        try (Connection connection = sqlDataStore.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(TRUNCATE_TABLE);) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            logSQLException(e);
+        }
     }
 
     public Integer determineSubgoalLevel(Subgoal subgoal) {

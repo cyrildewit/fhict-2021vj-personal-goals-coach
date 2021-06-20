@@ -10,8 +10,10 @@ import com.cyrildewit.pgc.domain.suggestive_action.enums.SuggestiveActionType;
 
 public class CoachingStylePreference extends Model {
     private final long defaultSuggestDeleteGoalBeforePeriod = 7257600L;
+    private final long defaultSuggestCreateSubgoalAfterLastActivityBeforePeriod = 7257600L;
     private final long defaultSuggestPinGoalBasedOnActivityBeforePeriod = 7257600L;
     private final long defaultSuggestDeleteSubgoalAfterLastActivityBeforePeriod = 7257600L;
+    private final long defaultSuggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod = 7257600L;
 
     private long id;
 
@@ -19,9 +21,13 @@ public class CoachingStylePreference extends Model {
 
     private long suggestDeleteGoalBeforePeriod = defaultSuggestDeleteGoalBeforePeriod;
 
+    private long suggestCreateSubgoalAfterLastActivityBeforePeriod = defaultSuggestCreateSubgoalAfterLastActivityBeforePeriod;
+
     private long suggestPinGoalBasedOnActivityBeforePeriod = defaultSuggestPinGoalBasedOnActivityBeforePeriod;
 
     private long suggestDeleteSubgoalAfterLastActivityBeforePeriod = defaultSuggestDeleteSubgoalAfterLastActivityBeforePeriod;
+
+    private long suggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod = defaultSuggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod;
 
     private long goalId;
 
@@ -33,20 +39,41 @@ public class CoachingStylePreference extends Model {
 
     public CoachingStylePreference() {}
 
-    public CoachingStylePreference(UUID uuid, long suggestDeleteGoalBeforePeriod, long suggestPinGoalBasedOnActivityBeforePeriod, long suggestDeleteSubgoalAfterLastActivityBeforePeriod, long goalId) {
+    public CoachingStylePreference(
+            UUID uuid,
+            long suggestDeleteGoalBeforePeriod,
+            long suggestPinGoalBasedOnActivityBeforePeriod,
+            long suggestDeleteSubgoalAfterLastActivityBeforePeriod,
+            long suggestCreateSubgoalAfterLastActivityBeforePeriod,
+            long suggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod,
+            long goalId
+    ) {
         this.uuid = uuid;
         this.suggestDeleteGoalBeforePeriod = suggestDeleteGoalBeforePeriod;
         this.suggestPinGoalBasedOnActivityBeforePeriod = suggestPinGoalBasedOnActivityBeforePeriod;
         this.suggestDeleteSubgoalAfterLastActivityBeforePeriod = suggestDeleteSubgoalAfterLastActivityBeforePeriod;
+        this.suggestCreateSubgoalAfterLastActivityBeforePeriod = suggestCreateSubgoalAfterLastActivityBeforePeriod;
+        this.suggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod = suggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod;
         this.goalId = goalId;
     }
 
-    public CoachingStylePreference(long id, UUID uuid, long suggestDeleteGoalBeforePeriod, long suggestPinGoalBasedOnActivityBeforePeriod, long suggestDeleteSubgoalAfterLastActivityBeforePeriod, long goalId, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public CoachingStylePreference(
+            long id,
+            UUID uuid,
+            long suggestDeleteGoalBeforePeriod,
+            long suggestPinGoalBasedOnActivityBeforePeriod,
+            long suggestDeleteSubgoalAfterLastActivityBeforePeriod,
+            long suggestCreateSubgoalAfterLastActivityBeforePeriod,
+            long goalId,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
+    ) {
         this.id = id;
         this.uuid = uuid;
         this.suggestDeleteGoalBeforePeriod = suggestDeleteGoalBeforePeriod;
         this.suggestPinGoalBasedOnActivityBeforePeriod = suggestPinGoalBasedOnActivityBeforePeriod;
         this.suggestDeleteSubgoalAfterLastActivityBeforePeriod = suggestDeleteSubgoalAfterLastActivityBeforePeriod;
+        this.suggestCreateSubgoalAfterLastActivityBeforePeriod = suggestCreateSubgoalAfterLastActivityBeforePeriod;
         this.goalId = goalId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -80,6 +107,18 @@ public class CoachingStylePreference extends Model {
         this.suggestDeleteGoalBeforePeriod = suggestDeleteGoalBeforePeriod;
     }
 
+    public LocalDateTime getSuggestCreateSubgoalAfterLastActivityBeforePeriodDateTime() {
+        return LocalDateTime.now().minusSeconds(getSuggestCreateSubgoalAfterLastActivityBeforePeriod());
+    }
+
+    public long getSuggestCreateSubgoalAfterLastActivityBeforePeriod() {
+        return suggestCreateSubgoalAfterLastActivityBeforePeriod;
+    }
+
+    public void setSuggestCreateSubgoalAfterLastActivityBeforePeriod(long suggestCreateSubgoalAfterLastActivityBeforePeriod) {
+        this.suggestCreateSubgoalAfterLastActivityBeforePeriod = suggestCreateSubgoalAfterLastActivityBeforePeriod;
+    }
+
     public LocalDateTime getSuggestPinGoalBasedOnActivityBeforePeriodDatetime() {
         return LocalDateTime.now().minusSeconds(suggestPinGoalBasedOnActivityBeforePeriod);
     }
@@ -102,6 +141,18 @@ public class CoachingStylePreference extends Model {
 
     public void setSuggestDeleteSubgoalAfterLastActivityBeforePeriod(long suggestDeleteSubgoalAfterLastActivityBeforePeriod) {
         this.suggestDeleteSubgoalAfterLastActivityBeforePeriod = suggestDeleteSubgoalAfterLastActivityBeforePeriod;
+    }
+
+    public LocalDateTime getSuggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriodDateTime() {
+        return LocalDateTime.now().minusSeconds(suggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod);
+    }
+
+    public long getSuggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod() {
+        return suggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod;
+    }
+
+    public void setSuggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod(long suggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod) {
+        this.suggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod = suggestCreateSubgoalForSubgoalAfterLastActivityBeforePeriod;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -127,5 +178,9 @@ public class CoachingStylePreference extends Model {
     public void setGoal(Goal goal) {
         this.goalId = goalId;
         this.goal = goal;
+    }
+
+    public long getGoalId() {
+        return goalId;
     }
 }

@@ -51,7 +51,12 @@ public class SqlActivityDao extends BaseDao implements ActivityDao {
     private static final String SELECT_ALL_ACTIVITY_FOR_SUBJECT = "SELECT * from activities WHERE subject_id = ? AND subject_type = ?;";
     private static final String SELECT_ALL_ACTIVITY_WITHIN_PERIOD_FOR_SUBJECT = "SELECT * from activities WHERE subject_id = ? AND subject_type = ? AND subject_id = ? AND subject_type = ? AND created_at > ? AND created_at < ?;";
     private static final String SELECT_LATEST_ACTIVITY_FOR_USER = "SELECT * FROM activities WHERE subject_id = ? AND subject_type = ? ORDER BY created_at DESC LIMIT 1;";
+    private static final String SELECT_ACTIVITY_BY_UUID = "SELECT * FROM activities WHERE uuid = ?;";
     private static final String INSERT_ACTIVITY = "INSERT INTO activities (uuid, log_name, description, subject_id, subject_type, causer_id, causer_type, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    private static final String UPDATE_ACTIVITY = "UPDATE activities SET uuid = ?, log_name = ?, description = ?, subject_id = ?, subject_type = ?, causer_id = ?, causer_type = ?, created_at = ?, updated_at = ? WHERE id = ?;";
+    private static final String TRUNCATE_TABLE = "TRUNCATE activities";
+    private static final String SELECT_COUNT_ACTIVITIES_FOR_SUBJECT = "SELECT count(*) AS count FROM activities WHERE subject_id = ? AND subject_type = ?;";
+    private static final String SELECT_COUNT_ACTIVITIES_FOR_SUBJECT_WITHIN_PERIOD = "SELECT count(*) AS count FROM activities WHERE subject_id = ? AND subject_type = ? AND created_at > ? AND created_at < ?;";
 
     public List<Activity> selectAllActivityForSubject(Model subject) {
         List<Activity> activites = new ArrayList<Activity>();
@@ -90,10 +95,6 @@ public class SqlActivityDao extends BaseDao implements ActivityDao {
             logSQLException(e);
         }
 
-        System.out.println("Start and end" + start.format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
-        System.out.println("End and end" + end.format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
-        System.out.println("Activites" + activites.stream().count());
-
         return activites;
     }
 
@@ -115,6 +116,26 @@ public class SqlActivityDao extends BaseDao implements ActivityDao {
         return activity;
     }
 
+    public Optional<Activity> findActivityByUuid(UUID uuid) {
+        Optional<Activity> activity = Optional.empty();
+
+        try (Connection connection = sqlDataStore.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ACTIVITY_BY_UUID);) {
+            preparedStatement.setString(1, uuid.toString());
+            ResultSet result = preparedStatement.executeQuery();
+
+            activity = resolveFirstActivityFromResultSet(result);
+        } catch (SQLException e) {
+            logSQLException(e);
+        }
+
+        if (activity.isPresent()) {
+            return Optional.of(activity.get());
+        }
+
+        return activity;
+    }
+
     public void insertActivity(Activity activity) {
         try (Connection connection = sqlDataStore.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ACTIVITY);) {
@@ -130,6 +151,81 @@ public class SqlActivityDao extends BaseDao implements ActivityDao {
 
             preparedStatement.executeUpdate();
 
+        } catch (SQLException e) {
+            logSQLException(e);
+        }
+    }
+
+    public boolean updateActivity(Activity activity) {
+        boolean rowUpdated = false;
+//        private static final String UPDATE_ACTIVITY = "UPDATE activities SET uuid = ?, log_name = ?, description = ?, subject_id = ?, subject_type = ?, causer_id = ?, causer_type = ?, created_at = ?, updated_at = ? WHERE id = ?;";
+
+        try (Connection connection = sqlDataStore.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ACTIVITY);) {
+            preparedStatement.setString(1, activity.getUuid().toString());
+            preparedStatement.setString(2, activity.getLogName());
+            preparedStatement.setString(3, activity.getDescription());
+            preparedStatement.setLong(4, activity.getSubjectId());
+            preparedStatement.setString(5, activity.getSubjectType());
+            preparedStatement.setLong(6, activity.getCauserId());
+            preparedStatement.setString(7, activity.getCauserType());
+            preparedStatement.setString(8, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+            preparedStatement.setString(9, LocalDateTime.now().format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+            preparedStatement.setLong(10, activity.getId());
+
+            rowUpdated = preparedStatement.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            logSQLException(e);
+        }
+
+        return rowUpdated;
+    }
+
+    public long getTotalActiviesCountForSubject(Model subject) {
+        long activitiesCount = 0;
+
+        try (Connection connection = sqlDataStore.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COUNT_ACTIVITIES_FOR_SUBJECT);) {
+            preparedStatement.setLong(1, subject.getId());
+            preparedStatement.setString(2, subject.getMorphClass());
+            ResultSet result = preparedStatement.executeQuery();
+
+            while (result.next()) {
+                activitiesCount = result.getLong("count");
+            }
+        } catch (SQLException e) {
+            logSQLException(e);
+        }
+
+        return activitiesCount;
+    }
+
+    public long getTotalActiviesCountForSubjectWithinPeriod(Model subject, LocalDateTime start, LocalDateTime end) {
+        long activitiesCount = 0;
+
+        try (Connection connection = sqlDataStore.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_COUNT_ACTIVITIES_FOR_SUBJECT_WITHIN_PERIOD);) {
+            preparedStatement.setLong(1, subject.getId());
+            preparedStatement.setString(2, subject.getMorphClass());
+            preparedStatement.setString(3, start.format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+            preparedStatement.setString(4, end.format(dateTimeFormatters.getMariaDbDateTimeFormatter()));
+            ResultSet result = preparedStatement.executeQuery();
+
+            while (result.next()) {
+                activitiesCount = result.getLong("count");
+            }
+        } catch (SQLException e) {
+            logSQLException(e);
+        }
+
+        return activitiesCount;
+    }
+
+    public void truncate() {
+        try (Connection connection = sqlDataStore.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(TRUNCATE_TABLE);) {
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             logSQLException(e);
         }
